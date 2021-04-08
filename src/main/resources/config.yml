@@ -1,0 +1,526 @@
+#┌------┐ ┌--┐ ┌--┐         ┌--┐              ┌------┐                 ┌-----┐                                     ┌--┐
+#|  ┌┐  | |  | └--┘         |  |              |  ┌┐  |                 |   ┌-┘                                     |  |
+#|  |└--┘ |  | ┌--┐ ┌-----┐ |  | ┌--┐ ┌-----┐ |  └┘  | ┌-----┐ ┌-----┐ |   └-┐ ┌-----┐ ┌-----┐ ┌-----┐ ┌------┐ ┌--┘  |
+#|  |     |  | |  | |  ┌--┘ |  └┘  /  |  ---| |  ┌---┘ |  -  | |  ┌--┘ └--┐  | |  -  | |  ┌--┘ | ┌-┐ | |  ┌┐  | | ┌-┐ |
+#|  |┌--┐ |  | |  | |  |    |  ┌┐  \  └--┐  | |  |     | ┌---┘ |  |       |  | | ┌---┘ |  |    | | | | |  ||  | | | | |
+#|  └┘  | |  | |  | |  └--┐ |  |\   \ ┌--┘  | |  |     | └---┐ |  |    ┌--┘  | | └---┐ |  └--┐ | └-┘ | |  ||  | | └-┘ |
+#└------┘ └--┘ └--┘ └-----┘ └--┘ └--┘ └-----┘ └--┘     └-----┘ └--┘    └-----┘ └-----┘ └-----┘ └-----┘ └--┘└--┘ └-----┘
+#Plugin made by davidcubesvk.
+#
+# ► Don't understand / know how to set up (wanna know how actions work)?
+# All terms and setup process are available on my website. Link is in all of my plugins' descriptions.
+# ► Need any help?
+# Contact me through any of listed methods on my website, I'd like to help!
+#
+# NOTE! If using 1.7 server version, titles are not supported.
+#
+#Updater:
+updates:
+  #Enable checking for updates:
+  check: true
+  #Delay between re-checking (in hours), or -1 to disable (can be decimal number):
+  checkDelay: 1
+  #Join messages sent to players with updater permission:
+  #Placeholders: {version_latest} - latest version of the plugin
+  #              {version_current} - version of the plugin you are using
+  messages:
+    #If there is a new update available:
+    update: "&7[&bCPS&7] New update of &bClicksPerSecond plugin &7has been released (&b{version_latest}&7). You are using &b{version_current}&7."
+    #If using the latest version:
+    latest: "&7[&bCPS&7] You are using the latest version of &bClicksPerSecond plugin &7(&b{version_current}&7)."
+#Data storage used by ClicksPerSecond plugin:
+#- FILE: the scoreboard.yml file
+#- DATABASE: a database (NOTE! Make sure you have configured the connection below.)
+dataStorage: FILE
+#Round CPS to this amount of decimal digits (set to 0 to round to integer):
+roundTo: 1
+#Date and time format in messages (for {date} and {time} placeholders and their aliases):
+format:
+  #Date format:
+  date: "yyyy-MM-dd"
+  #Time format:
+  time: "HH:mm:ss"
+#Replacement for placeholders if their value is null (not available, not found, etc.):
+placeholderReplacement:
+  #{place} placeholder or it's aliases:
+  place: "-"
+  #{player_uuid} placeholder or it's aliases:
+  player_uuid: "-"
+  #{player_name} placeholder or it's aliases:
+  player_name: "-"
+  #{cps_int} placeholder or it's aliases:
+  cps_int: "-"
+  #{cps_decimal} placeholder or it's aliases:
+  cps_decimal: "-"
+  #{date} placeholder or it's aliases:
+  date: "-"
+  #{time} placeholder or it's aliases:
+  time: "-"
+#Delay between each scoreboard refreshment (in milliseconds):
+#INFO! For better performance, plugin caches all scoreboards and uses them everywhere. Setting this to high
+#      value will affect placeholders, statistics, scoreboards.
+#      In each cycle, all scoreboard types are refreshed. This value indicates the delay between the end of
+#      the last and the start of the next cycle.
+refresh: 1000
+#Which way to use to register clicks in a CPS-test:
+#- EVENTS: handle by server's click event
+#- PACKETS: handle using packets (powered by ProtocolLib)
+listenerType: EVENTS
+#-------------------------------------------------------------------------------------------------------
+#                                             DATABASE CONNECTION
+#-------------------------------------------------------------------------------------------------------
+database:
+  #Host:
+  host: ""
+  #Port:
+  port: 3306
+  #Username:
+  username: ""
+  #Password:
+  password: ""
+  #Database:
+  database: ""
+  #SSL mode (encrypted communication):
+  #- DISABLED: establish unencrypted connections
+  #- PREFERRED: establish encrypted connections if the server enabled them (otherwise, unencrypted connections will be established)
+  #- REQUIRED: require encrypted connections
+  #INFO: All modes all listed at https://dev.database.com/doc/connector-j/8.0/en/connector-j-reference-configuration-properties.html#sslMode.
+  sslMode: PREFERRED
+  #Timeout configuration:
+  timeout:
+    #Time for the plugin to connect to the database server until the connection request times out (in milliseconds):
+    #INFO! You can (should) adjust this by the speed of your database (connection). Set to 0 for no timeout.
+    connect: 2000
+    #Time for each operation to finish until it times out (in milliseconds):
+    #INFO! You can (should) adjust this by the speed of your database (connection). Set to 0 for no timeout.
+    socket: 2000
+    #If connection has been unexpectedly closed (internet connection failure etc.), wait for this amount of seconds before connecting again:
+    reconnect: 3
+  #Database table name for each scoreboard:
+  table:
+    #Table name for right scoreboard (if updating from an older version of the plugin, set this to "rightTable"):
+    right: "cps_right"
+    #Table name for left scoreboard (if updating from an older version of the plugin, set this to "leftTable"):
+    left: "cps_left"
+    #Table name for hack scoreboard (if updating from an older version of the plugin, set this to "hackTable"):
+    hack: "cps_hack"
+#-------------------------------------------------------------------------------------------------------
+#                                                 CPS TEST
+#-------------------------------------------------------------------------------------------------------
+test:
+  #Command to use for CPS-test management:
+  command:
+    #Main (base) commands (further referred as /mainCommand), you can also use /cps command (but then make sure that no sub-command matches any built-in /cps sub-command):
+    #INFO! Commands should be written without the first slash ("/").
+    main:
+      - "cpstest"
+    #Sub-commands of the main command to use to manage CPS-test:
+    #INFO! If you leave values in both start, end as [], syntax "/mainCommand" will be used to both start and end (cancel) the test.
+    #      Messages can be configured in command.test section below.
+    sub:
+      #Sub-commands of the main command (syntax: "/mainCommand subCommand") to use to start a new CPS-test:
+      #INFO! To use only "/mainCommand" to start the test, leave the value as [].
+      start: []
+      #Sub-commands of the main command (syntax: "/mainCommand subCommand") to use to cancel the running CPS-test:
+      #INFO! To use only "/mainCommand" to cancel the test, leave the value as [].
+      cancel: []
+  #Duration of CPS-test in ticks (at least 1, not a decimal number):
+  #INFO! Recommended value is >= 20, so better accuracy can be achieved.
+  duration: 100
+  #Enable right clicking test mode (recommended = false):
+  #NOTE! Server can not register right-clicking into air, but can register clicking on a block. However, this is
+  #      cheating while holding mouse button, as client automatically sends click packet every 0.2 seconds (means
+  #      10CPS for doing nothing).
+  enableRightClick: false
+  #Pre-calculate CPS for {cps_int} and {cps_decimal} placeholders and run CPS check once per (in ticks, set to 0 to disable):
+  #NOTE! If set to 0, CPS placeholders will always return 0 during the test and CPS checking during the test (see ,,allowed"
+  #      section below to configure) will not work.
+  calculateCPS: 5
+  #Maximum allowed CPS:
+  allowed:
+    #Maximum CPS:
+    cps: 20
+    #If player has more than configured amount of CPS, these actions will be run:
+    #Placeholders: {clicks} - amount of clicks that have been performed in this test at the time when the action was sent
+    #              {cps_int} - pre-calculated CPS at the time when the action was sent in integer format
+    #              {cps_decimal} - pre-calculated CPS at the time when the action was sent in decimal format
+    actions:
+      - "[COMMAND_CONSOLE]kick {player_name}"
+  #Message sent to player if an error occurred while saving their CPS-test data:
+  writeError:
+    #Database-sided errors (if using DATABASE data storage):
+    database:
+      #If connection has been lost (and the record's writing is queued until it'll reconnect):
+      disconnected: "&7[&bCPS&7] &cAn error occurred while saving your result (ERR_DISCONNECT). We will try again in a while."
+      #An error has occurred (error not caused by disconnection, record failed to save):
+      other: "&7[&bCPS&7] &cAn error occurred while saving your result (ERR_OTHER). Saving failed; please contact staff."
+    #File-sided errors (if using FILE data storage):
+    file:
+      #An error has occurred:
+      error: "&7[&bCPS&7] &cAn error occurred while saving your result (ERR_OTHER). Saving failed; please contact staff."
+  #-------------------------------------------------------------------------------------------------------
+  #                                                   START
+  #Actions to run when player started the CPS-test.
+  #-------------------------------------------------------------------------------------------------------
+  start:
+    #Actions to send once:
+    once:
+      - "[MESSAGE]&7[&bCPS&7] Click to start the test, or use &b/cpstest &7again to cancel the test."
+    #Actions which are sent to player every 1 tick until the player's first click:
+    #NOTE! If using titles, fade-in and stay property should be set as following: fade-in=0, stay=3.
+    permanent:
+      - "[TITLE]&7Waiting...///&bfor the first click.///0///3///20"
+  #-------------------------------------------------------------------------------------------------------
+  #                                                   RUN
+  #Actions to run during the CPS test.
+  #Placeholders: {clicks} - amount of clicks that have been performed in this test at the time when the action was sent
+  #              {cps_int} - pre-calculated CPS at the time when the action was sent in integer format
+  #              {cps_decimal} - pre-calculated CPS at the time when the action was sent in decimal format
+  #-------------------------------------------------------------------------------------------------------
+  run:
+    #Actions per click:
+    perClick:
+      #Right-click mode:
+      right:
+        - ""
+      #Left-click mode:
+      left:
+        - ""
+    #Actions which are sent to player every 1 tick during the CPS-test:
+    #NOTE! If using titles, fade-in and stay property should be set as following: fade-in=0, stay=3.
+    permanent:
+      #Right-click mode:
+      right:
+        - "[TITLE]&b{cps_decimal}CPS///&7&oRight-click///0///3///20"
+      #Left-click mode:
+      left:
+        - "[TITLE]&b{cps_decimal}CPS///&7&oLeft-click///0///3///20"
+  #-------------------------------------------------------------------------------------------------------
+  #                                                END
+  #Actions to run when test ended:
+  #-------------------------------------------------------------------------------------------------------
+  end:
+    #Teleport player back to the location where the player was before the test:
+    teleportBack: false
+    #If the test ended normally, after the time limit:
+    #Placeholders: {clicks} - amount of clicks performed in this test
+    #              {cps_int} - CPS in integer format
+    #              {cps_decimal} - CPS in decimal format
+    #              {cps_best_int} - best CPS achieved till now in integer format
+    #              {cps_best_decimal} - best CPS achieved till now in decimal format
+    normal:
+      #No new best:
+      normal:
+        #Right-click mode:
+        right:
+          - "[TITLE]&b{cps_decimal}CPS///&7&o{clicks} clicks///0///60///20"
+          - "[MESSAGE]&7[&bCPS&7] Test ended. &bResult (mode: right): {cps_decimal}CPS ({clicks} clicks), best: {cps_best_decimal}CPS."
+        #Left-click mode:
+        left:
+          - "[TITLE]&b{cps_decimal}CPS///&7&o{clicks} clicks///0///60///20"
+          - "[MESSAGE]&7[&bCPS&7] Test ended. &bResult (mode: left): {cps_decimal}CPS ({clicks} clicks), best: {cps_best_decimal}CPS."
+      #New best:
+      best:
+        #Right-click mode:
+        right:
+          - "[TITLE]&b{cps_decimal}CPS///&7&o{clicks} clicks///0///60///20"
+          - "[MESSAGE]&7[&bCPS&7] Test ended. &bResult (mode: right): {cps_decimal}CPS ({clicks} clicks). &6&lNEW BEST!"
+        #Left-click mode:
+        left:
+          - "[TITLE]&b{cps_decimal}CPS///&7&o{clicks} clicks///0///60///20"
+          - "[MESSAGE]&7[&bCPS&7] Test ended. &bResult (mode: left): {cps_decimal}CPS ({clicks} clicks). &6&lNEW BEST!"
+    #If the test was cancelled using the CPS-test cancel command:
+    cancel:
+      - "[TITLE]&cTest cancelled!/// ///0///60///20"
+      - "[MESSAGE]&7[&bCPS&7] Test cancelled."
+#-------------------------------------------------------------------------------------------------------
+#                                          COMMAND MESSAGES
+#-------------------------------------------------------------------------------------------------------
+command:
+  #If the command execution was blocked by any of reformatting phases:
+  #INFO! This doesn't apply to command /cps reformat.
+  format:
+    #If the command was run early after the server started and the plugin is currently searching for the format version:
+    #INFO! If format version failed to be read (if so, it will also appear in console), plugin will get stuck in this stage; you need to restart the server.
+    gettingVersion: "&7[&bCPS&7] Please wait, plugin is currently searching for the format version... (if you think it takes too long, please check the console for any errors)"
+    #If the format version is outdated (data need to be reformatted):
+    outdated: "&7[&bCPS&7] &cFormat version is outdated and data need to be reformatted. Please contact staff."
+    #If the reformatting process is currently active:
+    reformatting: "&7[&bCPS&7] &cReformatting process is currently active. Please try again later; contact staff."
+  #If console tries to run command available only for players:
+  onlyPlayer: "&7[&bCPS&7] &7Command available only for players!"
+  #If the sender does not have the required permission to run the command:
+  noPermission: "&7[&bCPS&7] &7You do not have permission to run this command!"
+  #-------------------------------------------------------------------------------------------------------
+  #                              CPS-TEST COMMAND (configure in test.command)
+  #-------------------------------------------------------------------------------------------------------
+  test:
+    #Worlds in which the CPS-test command can be run:
+    world:
+      #Player is not in any of worlds listed below:
+      notAllowedWorld: "&7[&bCPS&7] &7Can not run this command in this world!"
+      #Allowed worlds (or "*" if you want to allow all worlds):
+      worlds:
+        - "*"
+    #If sender uses a wrong usage of the command:
+    invalidFormat: "&7[&bCPS&7] &7Invalid format. Please use &b/cpstest &7to start the CPS test or cancel it."
+    #If trying to start a CPS-test, but it is running already:
+    running: "&7[&bCPS&7] &7CPS test is already running."
+    #If trying to cancel a CPS-test, but there's not any running test to cancel:
+    noRunning: "&7[&bCPS&7] &7You have no running CPS test!"
+  #-------------------------------------------------------------------------------------------------------
+  #                                       MAIN (/cps) COMMAND
+  #-------------------------------------------------------------------------------------------------------
+  main:
+    #If sender uses a wrong usage of the command:
+    invalidFormat: "&7[&bCPS&7] &7Invalid format. Please use &b/cps help&7."
+    #-------------------------------------------------------------------------------------------------------
+    #                               /cps copy <RIGHT|LEFT|HACK> <FILE|DATABASE>
+    #Placeholders: {storage_from} - source data storage (FILE or DATABASE)
+    #              {storage_to} - target data storage (FILE or DATABASE)
+    #-------------------------------------------------------------------------------------------------------
+    copy:
+      #If storage type is not set to DATABASE:
+      databaseRequired: "&7[&bCPS&7] Option &bstorageType&7 must be set to &bDATABASE &7to perform this operation."
+      #Phase messages:
+      phase:
+        #Getting all data from the opposite storage as the target storage:
+        getting: "&7[&bCPS&7] &7Getting all data from {storage_from}..."
+        #If no data found to be copied:
+        nothing: "&7[&bCPS&7] &7No data to copy. &cIf you believe this is an error, check the console."
+        #Writing got records:
+        writing:
+          #Message delay (in ticks), set to -1 to send only once:
+          delay: 20
+          #Message to send per delay:
+          #Placeholders: {write_amount} - amount of written records
+          #              {write_total} - total amount of records to be written
+          #              {write_percent} - indicates in percent how many records have been written against the total amount
+          message: "&7[&bCPS&7] &7Writing data (records)... (&b{write_amount}&7/&b{write_total} &7- &b{write_percent}%&7)"
+      #Error messages:
+      error:
+        #Database-sided messages:
+        database:
+          #If connection has been lost:
+          disconnected: "&7[&bCPS&7] &cConnection to the database has been lost!"
+          #An error has occurred (error not caused by disconnection):
+          other: "&7[&bCPS&7] &cA database error has occurred! Please see the console for more details."
+        #File-sided errors:
+        file:
+          #An error has occurred:
+          error: "&7[&bCPS&7] &cA file error has occurred! Please see the console for more details."
+      #If data have been copied successfully:
+      copied: "&7[&bCPS&7] &7Successfully copied all data!"
+    #-------------------------------------------------------------------------------------------------------
+    #                                             /cps reformat
+    #-------------------------------------------------------------------------------------------------------
+    reformat:
+      #If using the latest data format already:
+      latestFormat: "&7[&bCPS&7] You already have data formatted to the latest format!"
+      #If this command is already active (running):
+      active: "&7[&bCPS&7] This command is already active."
+      #Confirmation:
+      confirmation:
+        #Time to wait for command sender to confirm the operation (in milliseconds):
+        #INFO! If run for the first time, confirmation message will appear. Confirming means running the command again within this timeout.
+        timeout: 20000
+        #Confirmation message:
+        message: "&7[&bCPS&7] &cAre you sure you want to do this? Please make a backup of your data storage and do not turn the system off during the process. If you are using database and another instance of ClicksPerSecond plugin has already reformatted the data, please restart the server or run this command again to recheck the version. If you agree, or you want to recheck the format version, proceed by running this command again within 20 seconds."
+      #Phase messages:
+      #INFO! For more information about the phases and their order, please visit the wiki.
+      phase:
+        #Started to recheck the format version:
+        rechecking: "&7[&bCPS&7] &7Re-checking the format version, please wait."
+        #Getting all data from a scoreboard:
+        #Placeholders: {scoreboard} - the scoreboard that's being reformatted (RIGHT, LEFT or HACK)
+        getting: "&7[&bCPS&7] &7Getting all data from scoreboard {scoreboard}..."
+        #Reformatting scoreboard records:
+        #Placeholders: {scoreboard} - the scoreboard that's being reformatted (RIGHT, LEFT or HACK)
+        reformatting: "&7[&bCPS&7] &7Reformatting scoreboard {scoreboard}..."
+        #No data found in a scoreboard, skipping:
+        #Placeholders: {scoreboard} - the scoreboard that's being reformatted (RIGHT, LEFT or HACK)
+        skipping: "&7[&bCPS&7] &7Skipping scoreboard, nothing to reformat."
+        #Reformatting process was resumed (or trying again) after an error:
+        resumed: "&7[&bCPS&7] &7Reformatting resumed/trying again..."
+        #Database-sided phases (if using DATABASE data storage):
+        database:
+          #Recreating database table for a scoreboard:
+          #Placeholders: {scoreboard} - the scoreboard that's being reformatted (RIGHT, LEFT or HACK)
+          recreatingTable: "&7[&bCPS&7] &7Recreating the database table for scoreboard..."
+          #Writing reformatted records:
+          writing:
+            #Message delay (in ticks), set to -1 to send only on phase's start and end:
+            delay: 20
+            #Message to send per delay:
+            #Placeholders: {scoreboard} - the scoreboard that's being reformatted (RIGHT, LEFT or HACK)
+            #              {write_amount} - amount of written records
+            #              {write_total} - total amount of records to be written
+            #              {write_percent} - indicates in percent how many records have been written against the total amount
+            message: "&7[&bCPS&7] &7Writing data (records)... (&b{write_amount}&7/&b{write_total} &7- &b{write_percent}%&7)"
+        #File-sided phases (if using FILE data storage):
+        file:
+          #Converting reformatted records into strings:
+          converting:
+            #Message delay (in ticks), set to -1 to send only on phase's start and end:
+            delay: 20
+            #Message to send per delay:
+            #Placeholders: {scoreboard} - the scoreboard that's being reformatted (RIGHT, LEFT or HACK)
+            #              {convert_amount} - amount of converted records
+            #              {convert_total} - total amount of records to be converted
+            #              {convert_percent} - indicates in percent how many records have been converted against the total amount
+            message: "&7[&bCPS&7] &7Converting data (records)... (&b{convert_amount}&7/&b{convert_total} &7- &b{convert_percent}%&7)"
+          #Writing the new scoreboard into the file:
+          #Placeholders: {scoreboard} - the scoreboard that's being reformatted (RIGHT, LEFT or HACK)
+          writing: "&7[&bCPS&7] &7Writing data to the scoreboard.yml file..."
+        #Finished reformatting a scoreboard:
+        #Placeholders: {scoreboard} - the scoreboard that has been reformatted (RIGHT, LEFT or HACK)
+        finished: "&7[&bCPS&7] &7Finished reformatting scoreboard {scoreboard}!"
+      #Error messages:
+      error:
+        #Database-sided errors (if using DATABASE data storage):
+        database:
+          #If connection has been lost:
+          disconnected: "&7[&bCPS&7] &cConnection to the database has been lost."
+          #An error has occurred (error not caused by disconnection):
+          other: "&7[&bCPS&7] &cA database error has occurred! Please see the console for more details."
+          #Post-error messages informing about the next steps:
+          post:
+            #The process must be restarted:
+            restart: "&7[&bCPS&7] &cProcess failed and restarting this process is needed. Please use command /cps reformat."
+            #Disconnection error has occurred, process will be resumed when reconnected:
+            #INFO! If you get this message, please don't do anything (restarting...), it will destroy all data.
+            resume: "&7[&bCPS&7] &cProcess failed at risky stage, plugin reload (or server restart) will destroy all data. Please, wait until the plugin reconnects to the database and the process will be resumed."
+            #Other error has occurred, process will retry the last failed task and continue in 5 seconds:
+            #INFO! If you get this message, please don't do anything (restarting...), it will destroy all data.
+            retryWait: "&7[&bCPS&7] &cProcess failed at risky stage, plugin reload (or server restart) will destroy all data. We will try again in 5 seconds."
+        #File-sided errors (if using FILE data storage):
+        file:
+          #An error has occurred:
+          error: "&7[&bCPS&7] &cA file error has occurred! Please see the console for more details."
+      #Reformatting process finished:
+      finished: "&7[&bCPS&7] &aFinished reformatting!"
+    #-------------------------------------------------------------------------------------------------------
+    #                                           /cps reload
+    #-------------------------------------------------------------------------------------------------------
+    reload:
+      #Started reloading:
+      reloading: "&7[&bCPS&7] &7Reloading, please wait (may take a while if using database)..."
+      #Finished reloading:
+      reloaded: "&7[&bCPS&7] &7Plugin successfully reloaded! &oPlease note that several configuration parts were not reloaded as they may cause many internal issues."
+    #-------------------------------------------------------------------------------------------------------
+    #                                      /cps stats <name|uuid>
+    #-------------------------------------------------------------------------------------------------------
+    stats:
+      #If UUID in <uuid> was specified wrongly or player specified by <name> has not played on this server before:
+      #Placeholders: {argument} - <name|uuid> argument
+      uuidInvalidOrNotFound: "&7[&bCPS&7] &7Invalid UUID specification or the player has not played on this server before!"
+      #If no statistics found:
+      #INFO! This may also be a result when an error occurred while processing the request.
+      #Placeholders: {player_uuid} - player's UUID
+      #              {player_name} - player's name, or replacement if has not played on this server before
+      noStatistics: "&7[&bCPS&7] &7No statistics found."
+      #Message:
+      #Placeholders: {player_uuid} - player's UUID
+      #              {player_name} - player's name, or replacement if has not played on this server before
+      #              {right_cps_int} / {left_cps_int} / {hack_cps_int} - player's best CPS achieved in the specific scoreboard (in integer format), or replacement if not found
+      #              {right_cps_decimal} / {left_cps_decimal} / {hack_cps_decimal} - player's best CPS achieved in the specific scoreboard (in decimal format), or replacement if not found
+      #              {right_place} / {left_place} / {hack_place} - player's place in the specific scoreboard (or
+      #                                                            number of the newest record in hacking scoreboard), or replacement if not found
+      #              {right_date} / {left_date} / {hack_date} - date of the best CPS record (or of last record in
+      #                                                         last record in hacking scoreboard), or replacement if not found
+      #              {right_time} / {left_time} / {hack_time} - time of the best CPS record (or of
+      #                                                         last record in hacking scoreboard), or replacement if not found
+      stats:
+        - "&7[&bCPS&7] Statistics of player &b{player_name}&7:"
+        - "&7Best in right click: &b{right_cps_decimal}CPS &7(&b#{right_place}&7)"
+        - "&7Best in left click: &b{left_cps_decimal}CPS &7(&b#{left_place}&7)"
+        - "&7Last hacking record: &b{hack_cps_decimal}CPS &7(&b#{hack_place}&7)"
+    #-------------------------------------------------------------------------------------------------------
+    #                             /cps scoreboard <RIGHT|LEFT|HACK> [page]
+    #-------------------------------------------------------------------------------------------------------
+    scoreboard:
+      #If the page argument is specified, but is not a number, or is smaller than 1:
+      pageNumber: "&7[&bCPS&7] &7Page argument is invalid or smaller than 1!"
+      #If the page argument refers to non-existing page:
+      #Placeholders: {page} - [page] argument or 1 if not specified
+      #              {pages} - pages available to display
+      pageBigger: "&7[&bCPS&7] &7Page index &b{page} &7is too big! There are &b{pages} &7pages only."
+      #If there are no statistics to display:
+      #INFO! This may also be a result when an error occurred while processing the request.
+      noStatistics: "&7[&bCPS&7] &7No statistics found."
+      #Places displayed per page:
+      perPage: 20
+      #Separate message configuration:
+      message:
+        #Message configuration if displaying right scoreboard:
+        right:
+          #Header:
+          #Placeholders: {page} - page that is being displayed
+          #              {pages} - amount of pages available to display
+          top: "&7<------- &bTOP in RightClick &7[{page}/{pages}] ------->"
+          #Record line:
+          #Placeholders: {player_uuid} - player's UUID
+          #              {player_name} - player's name, or replacement if has not played on this server before
+          #              {cps_int} - player's CPS in integer format
+          #              {cps_decimal} - player's CPS in decimal format
+          #              {place} - player's place in the scoreboard
+          #              {date} - date of the record
+          #              {time} - time of the record
+          line: "&b{place}&7. &b{player_name}&7: &b{cps_decimal} &7({date}, {time})"
+          #Footer:
+          #Placeholders: {page} - page that is being displayed
+          #              {pages} - amount of pages available to display
+          bottom: "&7<--------------------------------->"
+        #Message configuration if displaying left scoreboard:
+        left:
+          #Header:
+          #Placeholders: {page} - page that is being displayed
+          #              {pages} - amount of pages available to display
+          top: "&7<------- &bTOP in LeftClick &7[{page}/{pages}] ------->"
+          #Record line:
+          #Placeholders: {player_uuid} - player's UUID
+          #              {player_name} - player's name, or replacement if has not played on this server before
+          #              {cps_int} - player's CPS in integer format
+          #              {cps_decimal} - player's CPS in decimal format
+          #              {place} - player's place in the scoreboard
+          #              {date} - date of the record
+          #              {time} - time of the record
+          line: "&b{place}&7. &b{player_name}&7: &b{cps_decimal} &7({date}, {time})"
+          #Footer:
+          #Placeholders: {page} - page that is being displayed
+          #              {pages} - amount of pages available to display
+          bottom: "&7<--------------------------------->"
+        #Message configuration if displaying hack scoreboard:
+        hack:
+          #Header:
+          #Placeholders: {page} - page that is being displayed
+          #              {pages} - amount of pages available to display
+          top: "&7<-------------- &bLatest hacking players &7[{page}/{pages}] -------------->"
+          #Record line:
+          #Placeholders: {player_uuid} - player's UUID
+          #              {player_name} - player's name, or replacement if has not played on this server before
+          #              {cps_int} - player's CPS in integer format saved in the record
+          #              {cps_decimal} - player's CPS in decimal format saved in the record
+          #              {place} - number (ID, or place) of this hacking record
+          #              {date} - date of the record
+          #              {time} - time of the record
+          line: "&b{place}&7. &b{player_name}&7: &b{cps_decimal} &7({date}, {time})"
+          #Footer:
+          #Placeholders: {page} - page that is being displayed
+          #              {pages} - amount of pages available to display
+          bottom: "&7<------------------------------------------->"
+    #-------------------------------------------------------------------------------------------------------
+    #                                           /cps help
+    #-------------------------------------------------------------------------------------------------------
+    help:
+      - "&7[&bCPS&7]            &b&lClicksPerSecond Help Page"
+      - "&7&o[] - optional argument, <> - required argument"
+      - ""
+      - "&b/cps stats <player|uuid> &7- shows statistics of a player"
+      - "&b/cps scoreboard <RIGHT|LEFT|HACK> [page] &7- displays top players in a scoreboard on the specified page, or on the first page"
+      - "&b/cps copy <RIGHT|LEFT|HACK> <FILE|DATABASE> &7- copies scoreboard to the specified storage (from opposite-type storage)"
+      - "&b/cps reformat &7- reformats all data in all scoreboards to the latest format"
+      - "&b/cps reload &7- reloads the plugin"
+      - "&b/cps help &7- shows this page"
+      - ""
+      - "&cFor detailed documentation, see the wiki."
