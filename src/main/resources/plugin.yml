@@ -1,7 +1,7 @@
 name: ClicksPerSecond
 version: 2.5
-author: davidcubesvk
-main: com.davidcubesvk.clicksPerSecond.ClicksPerSecond
+author: dejvokep
+main: dev.dejvokep.clickspersecond.ClicksPerSecond
 api-version: 1.13
 softdepend:
   - PlaceholderAPI

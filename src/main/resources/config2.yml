@@ -1,0 +1,121 @@
+#┌------┐ ┌--┐ ┌--┐         ┌--┐              ┌------┐                 ┌-----┐                                     ┌--┐
+#|  ┌┐  | |  | └--┘         |  |              |  ┌┐  |                 |   ┌-┘                                     |  |
+#|  |└--┘ |  | ┌--┐ ┌-----┐ |  | ┌--┐ ┌-----┐ |  └┘  | ┌-----┐ ┌-----┐ |   └-┐ ┌-----┐ ┌-----┐ ┌-----┐ ┌------┐ ┌--┘  |
+#|  |     |  | |  | |  ┌--┘ |  └┘  /  |  ---| |  ┌---┘ |  -  | |  ┌--┘ └--┐  | |  -  | |  ┌--┘ | ┌-┐ | |  ┌┐  | | ┌-┐ |
+#|  |┌--┐ |  | |  | |  |    |  ┌┐  \  └--┐  | |  |     | ┌---┘ |  |       |  | | ┌---┘ |  |    | | | | |  ||  | | | | |
+#|  └┘  | |  | |  | |  └--┐ |  |\   \ ┌--┘  | |  |     | └---┐ |  |    ┌--┘  | | └---┐ |  └--┐ | └-┘ | |  ||  | | └-┘ |
+#└------┘ └--┘ └--┘ └-----┘ └--┘ └--┘ └-----┘ └--┘     └-----┘ └--┘    └-----┘ └-----┘ └-----┘ └-----┘ └--┘└--┘ └-----┘
+#Plugin made by davidcubesvk.
+#
+# ► Don't understand / know how to set up (wanna know how actions work)?
+# All terms and setup process are available on my website. Link is in all of my plugins' descriptions.
+# ► Need any help?
+# Contact me through any of listed methods on my website, I'd like to help!
+#
+# NOTE! If using 1.7 server version, titles are not supported.
+#
+config-version: 1
+#Updater:
+updates:
+  check: true
+  delay: 1
+  message: ""
+storage: FILE
+display:
+  title:
+    enabled: false
+    title: ""
+    subtitle: "{cps} CPS"
+    refresh: 20
+  action-bar:
+    enabled: true
+    message: "{cps} CPS"
+    refresh: 20
+  boss-bar:
+    enabled: false
+    color: WHITE
+    style: SOLID
+    message: "{cps} CPS"
+    refresh: 20
+data:
+  sync-rate: 5
+  leaderboard:
+    expiration: 6000
+    limit: 20
+  fetch:
+    # Fetch expiration (the time for which player's cache will be valid before it is needed to be fetched again):
+    expiration: 1200
+    # Request triggering:
+    batch:
+      # Fetch all queued requests when there is at least this amount of them:
+      # - Please note that this is also the amount of requests that can be fetched at once. It is not recommended making
+      #   this any lower, avoiding network round trip.
+      # - This should be equal to the average number of players joining the server per the delay configured below. That is,
+      #   if the delay below is set to 5 and each 5s the server is joined by
+      size: 10
+      # Fetch all queued requests (at maximum) after this delay since the last request:
+      # - The delay can be shorter if the size trigger invokes fetching earlier. This is just a safety check if your
+      #   server does not have big enough network for the trigger above.
+      delay: 5
+
+placeholder:
+  unknown-value: "?"
+  date-format: "yyyy/MM/dd HH:mm"
+
+sampling-rate: 20
+# /cps stats <uuid|name>
+# /cps leaderboard [-f] [page]
+# /cps delete [uuid|name|all]
+# /cps reload
+# /cps help
+
+database:
+  host: ""
+  port: 3306
+  username: ""
+  password: ""
+  database: ""
+  table: ""
+  pool-size: 1
+  connection-timeout:
+    request: 30000
+    keep-alive: 0
+    lifetime: 1800000
+
+
+#-------------------------------------------------------------------------------------------------------
+#                                          COMMAND MESSAGES
+#-------------------------------------------------------------------------------------------------------
+command:
+  operation:
+    waiting: "&7[&bCPS&7] Data request was sent, please wait..."
+    error: "Something went wrong, check the console for more details."
+  stats:
+    not-found: "No data found for player identified by {id}."
+    message: "Best CPS of player {name}: {cps} @ {cps_date_formatted}"
+  leaderboard:
+    invalid-page: "Page number {page} does not exist. There are {pages} pages only."
+    header: "CPS leaderboard ({page}/{pages})"
+    entry: "{place}. {name}: {cps}"
+    footer: "--------------------------------"
+  watch:
+    player-offline: "Player {id} is offline."
+    start: "Started watching CPS of player {name}. Use this command again to toggle off."
+    stop: "Stopped watching player {name}."
+  delete: "Deleted the requested data. Please note that for an absolute data deletion, everyone must be offline and the servers must be restarted."
+  reload: "Plugin reloaded."
+  #-------------------------------------------------------------------------------------------------------
+  #                                           /cps help
+  #-------------------------------------------------------------------------------------------------------
+  help:
+    - "&7[&bCPS&7]            &b&lClicksPerSecond Help Page"
+    - "&7&o[] - optional argument, <> - required argument"
+    - ""
+    - "&b/cps stats <player|uuid> &7- shows statistics of a player"
+    - "&b/cps scoreboard <RIGHT|LEFT|HACK> [page] &7- displays top players in a scoreboard on the specified page, or on the first page"
+    - "&b/cps copy <RIGHT|LEFT|HACK> <FILE|DATABASE> &7- copies scoreboard to the specified storage (from opposite-type storage)"
+    - "&b/cps reformat &7- reformats all data in all scoreboards to the latest format"
+    - "&b/cps reload &7- reloads the plugin"
+    - "&b/cps help &7- shows this page"
+    - ""
+    - "&cFor detailed documentation, see the wiki."

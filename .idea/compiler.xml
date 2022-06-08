@@ -9,5 +9,8 @@
         <module name="ClicksPerSecond" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="clicks-per-second" target="8" />
+    </bytecodeTargetLevel>
   </component>
 </project>
