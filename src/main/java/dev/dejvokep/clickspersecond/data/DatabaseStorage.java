@@ -275,6 +275,11 @@ public class DatabaseStorage extends DataStorage {
         });
     }
 
+    @Override
+    public boolean isInstantFetch() {
+        return false;
+    }
+
     private synchronized void refresh(PlayerInfo info) {
         cache.put(info.getUniqueId(), info);
         expirationQueue.add(info);
