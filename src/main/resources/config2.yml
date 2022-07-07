@@ -87,7 +87,7 @@ database:
 #                                          COMMAND MESSAGES
 #-------------------------------------------------------------------------------------------------------
 command:
-  no-permission: "&7[&bCPS&7] "
+  no-permission: "&cI'm sorry, but you do not have permission to perform this command. Please contact the server administrators if you believe that this is an error."
   data-request:
     in-progress: "&7[&bCPS&7] Data request already pending, please try again in a moment..."
     sent: "&7[&bCPS&7] Data request was sent, please wait..."
@@ -98,6 +98,7 @@ command:
     message: "Best CPS of player {name}: {cps} @ {cps_date_formatted}"
   leaderboard:
     invalid-page: "Page number {page} does not exist. There are {pages} pages only."
+    entries-per-page: 20
     header: "CPS leaderboard ({page}/{pages})"
     entry: "{place}. {name}: {cps}"
     footer: "--------------------------------"

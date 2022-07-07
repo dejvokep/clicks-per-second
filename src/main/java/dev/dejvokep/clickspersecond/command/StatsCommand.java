@@ -66,7 +66,7 @@ public class StatsCommand extends PluginCommand {
 
             // If not instant fetch and no permission
             if (!plugin.getDataStorage().isInstantFetch() && !context.hasPermission("cps.stats.fetch")) {
-                context.getSender().sendMessage("No permission.");
+                send(context, MESSAGE_NO_PERMISSION);
                 return;
             }
 
@@ -74,25 +74,23 @@ public class StatsCommand extends PluginCommand {
             send(context, MESSAGE_REQUEST_SENT);
 
             // Fetch
-            plugin.getDataStorage().fetchSingle(uuid).whenComplete((info, exception) -> {
-                Bukkit.getScheduler().runTask(plugin, () -> {
-                    // If an error
-                    if (exception != null) {
-                        send(context, MESSAGE_REQUEST_ERROR);
-                        plugin.getLogger().log(Level.SEVERE, "An error occurred whilst fetching player data!", exception);
-                        return;
-                    }
+            plugin.getDataStorage().fetchSingle(uuid).whenComplete((info, exception) -> Bukkit.getScheduler().runTask(plugin, () -> {
+                // If an error
+                if (exception != null) {
+                    send(context, MESSAGE_REQUEST_ERROR);
+                    plugin.getLogger().log(Level.SEVERE, "An error occurred whilst fetching player data!", exception);
+                    return;
+                }
 
-                    // Empty
-                    if (info.isEmpty()) {
-                        send(context, MESSAGE_PREFIX + "stats.not-found");
-                        return;
-                    }
+                // Empty
+                if (info.isEmpty()) {
+                    send(context, MESSAGE_PREFIX + "stats.not-found");
+                    return;
+                }
 
-                    // Send
-                    send(context, MESSAGE_PREFIX + "stats.message", message -> plugin.getPlaceholderReplacer().replace(info, message));
-                });
-            });
+                // Send
+                send(context, MESSAGE_PREFIX + "stats.message", message -> plugin.getPlaceholderReplacer().replace(info, message));
+            }));
         }).build());
     }
 

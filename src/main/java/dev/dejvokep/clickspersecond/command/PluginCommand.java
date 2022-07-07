@@ -11,6 +11,7 @@ public class PluginCommand {
 
     public static final String MESSAGE_PREFIX = "command.";
 
+    public static final String MESSAGE_NO_PERMISSION = MESSAGE_PREFIX + "no-permission";
     public static final String MESSAGE_REQUEST_PENDING = MESSAGE_PREFIX + "data-operation.pending";
     public static final String MESSAGE_REQUEST_SENT = MESSAGE_PREFIX + "data-operation.sent";
     public static final String MESSAGE_REQUEST_ERROR = MESSAGE_PREFIX + "data-operation.error";
@@ -32,4 +33,7 @@ public class PluginCommand {
         context.getSender().sendMessage(replacer == null ? message : replacer.apply(message));
     }
 
+    public ClicksPerSecond getPlugin() {
+        return plugin;
+    }
 }

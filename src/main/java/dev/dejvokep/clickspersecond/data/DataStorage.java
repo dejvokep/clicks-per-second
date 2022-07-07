@@ -59,14 +59,7 @@ public abstract class DataStorage {
             if (!ready)
                 return;
 
-            // Fetch
-            fetchLeaderboard(leaderboardLimit).whenComplete((data, ex) -> {
-                // An error occurred
-                if (ex != null)
-                    plugin.getLogger().log(Level.SEVERE, "Failed to fetch leaderboard data!", ex);
-                else
-                    Bukkit.getScheduler().runTask(plugin, () -> leaderboard = data);
-            });
+            fetchBoard(leaderboardLimit);
         }, 0L, Math.max(plugin.getConfiguration().getLong("data.leaderboard.expiration"), 1L));
     }
 
@@ -88,6 +81,22 @@ public abstract class DataStorage {
         ready = true;
         // Reload
         reload();
+    }
+
+    public CompletableFuture<List<PlayerInfo>> fetchBoard(int limit) {
+        // Fetch
+        CompletableFuture<List<PlayerInfo>> board = fetchBoard(limit);
+        // Run internal logic
+        board.whenComplete((data, ex) -> {
+            // An error occurred
+            if (ex != null)
+                plugin.getLogger().log(Level.SEVERE, "Failed to fetch leaderboard data!", ex);
+            else
+                Bukkit.getScheduler().runTask(plugin, () -> leaderboard = data);
+        });
+
+        // Return
+        return board;
     }
 
     public abstract boolean isInstantFetch();
