@@ -1,5 +1,8 @@
 package dev.dejvokep.clickspersecond;
 
+import cloud.commandframework.bukkit.BukkitCommandManager;
+import cloud.commandframework.execution.CommandExecutionCoordinator;
+import dev.dejvokep.clickspersecond.command.StatsCommand;
 import dev.dejvokep.clickspersecond.data.DataStorage;
 import dev.dejvokep.clickspersecond.data.DatabaseStorage;
 import dev.dejvokep.clickspersecond.data.FileStorage;
@@ -26,6 +29,7 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.logging.Level;
 
 /**
@@ -69,6 +73,12 @@ public class ClicksPerSecond extends JavaPlugin implements Listener {
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
             new StatsExpansion(this).register();
             getLogger().info("Registered plugin's placeholders to PlaceholderAPI.");
+        }
+
+        try {
+            new StatsCommand(this, new BukkitCommandManager<>(this, CommandExecutionCoordinator.simpleCoordinator(), Function.identity(), Function.identity()));
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
 
         // Run async

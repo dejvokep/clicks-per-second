@@ -9,7 +9,6 @@ import dev.dejvokep.boostedyaml.block.implementation.Section;
 import dev.dejvokep.clickspersecond.ClicksPerSecond;
 import dev.dejvokep.clickspersecond.display.Display;
 import dev.dejvokep.clickspersecond.utils.Placeholders;
-import dev.dejvokep.boostedyaml.YamlDocument;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -69,7 +68,7 @@ public class ActionBarDisplay implements Display {
         }
 
         // If disabled
-        if (!config.getBoolean("enabled"))
+        if (!config.getBoolean("enabled") || !Bukkit.getPluginManager().isPluginEnabled("ProtocolLib"))
             return;
 
         // Set

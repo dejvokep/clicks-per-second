@@ -5,9 +5,4 @@ main: dev.dejvokep.clickspersecond.ClicksPerSecond
 api-version: 1.13
 softdepend:
   - PlaceholderAPI
-depend:
   - ProtocolLib
-commands:
-  cps:
-    description: "Main command of ClicksPerSecond plugin."
-    usage: /cps
