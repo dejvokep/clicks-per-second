@@ -76,7 +76,6 @@ public class ClicksPerSecond extends JavaPlugin implements Listener {
             dataStorage = config.getString("storage").equalsIgnoreCase("FILE") ? new FileStorage(this) : new DatabaseStorage(this);
             // Register listeners
             Bukkit.getScheduler().runTask(this, () -> Bukkit.getPluginManager().registerEvents(new ConnectionListener(this), this));
-
         });
     }
 

@@ -1,6 +1,5 @@
 package dev.dejvokep.clickspersecond.data;
 
-import com.sun.xml.internal.ws.util.CompletedFuture;
 import dev.dejvokep.clickspersecond.ClicksPerSecond;
 import dev.dejvokep.clickspersecond.utils.PlayerInfo;
 import org.bukkit.Bukkit;

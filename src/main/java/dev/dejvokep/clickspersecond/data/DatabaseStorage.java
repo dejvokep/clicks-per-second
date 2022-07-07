@@ -75,7 +75,7 @@ public class DatabaseStorage extends DataStorage {
         Bukkit.getScheduler().runTaskTimer(plugin, () -> {
             // While expired
             while (expirationQueue.size() > 0 && expirationQueue.peek().getFetchTime() + fetchExpiration < System.currentTimeMillis())
-                cache.remove(expirationQueue.poll().getUniqueId());
+                cache.remove(expirationQueue.remove().getUniqueId());
         }, CACHE_CLEAR_DELAY, CACHE_CLEAR_DELAY);
 
         // Schedule fetch task
