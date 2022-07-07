@@ -38,6 +38,7 @@ public class ClicksPerSecond extends JavaPlugin implements Listener {
 
     private YamlDocument config;
     private DataStorage dataStorage;
+    private PlaceholderReplacer placeholderReplacer;
 
     @Override
     public void onEnable() {
@@ -52,12 +53,12 @@ public class ClicksPerSecond extends JavaPlugin implements Listener {
             return;
         }
 
-        // The sampling rate
+        // Initialize
+        placeholderReplacer = new PlaceholderReplacer(this);
+
+        // Handlers
         int samplingRate = Math.max(config.getInt("sampling-rate"), 0);
-        // Set
-        clickHandler = samplingRate == 0 ? new ImmediateHandler(this) : new RatedHandler(this);
-        // Start
-        clickHandler.start(samplingRate);
+        clickHandler = samplingRate == 0 ? new ImmediateHandler(this) : new RatedHandler(this, samplingRate);
 
         // Add displays
         displays.add(new ActionBarDisplay(this));
@@ -99,5 +100,8 @@ public class ClicksPerSecond extends JavaPlugin implements Listener {
         return displays;
     }
 
+    public PlaceholderReplacer getPlaceholderReplacer() {
+        return placeholderReplacer;
+    }
 
 }

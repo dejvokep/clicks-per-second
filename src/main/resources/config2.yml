@@ -87,10 +87,13 @@ database:
 #                                          COMMAND MESSAGES
 #-------------------------------------------------------------------------------------------------------
 command:
-  operation:
-    waiting: "&7[&bCPS&7] Data request was sent, please wait..."
+  no-permission: "&7[&bCPS&7] "
+  data-request:
+    in-progress: "&7[&bCPS&7] Data request already pending, please try again in a moment..."
+    sent: "&7[&bCPS&7] Data request was sent, please wait..."
     error: "Something went wrong, check the console for more details."
   stats:
+    invalid-name: "Could not obtain UUID from player {id}, has he played on the server already?"
     not-found: "No data found for player identified by {id}."
     message: "Best CPS of player {name}: {cps} @ {cps_date_formatted}"
   leaderboard:

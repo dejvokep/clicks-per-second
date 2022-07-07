@@ -19,21 +19,22 @@ public class RatedHandler implements ClickHandler {
     private BukkitTask task;
     private final ClicksPerSecond plugin;
 
-    private boolean running = false;
     private int rate;
 
-    public RatedHandler(ClicksPerSecond plugin) {
+    public RatedHandler(ClicksPerSecond plugin, int rate) {
         this.plugin = plugin;
+        reload(rate);
     }
 
     @Override
-    public void start(int rate) {
-        // If running
-        if (running)
-            return;
-
+    public void reload(int rate) {
         // Set
         this.rate = rate;
+
+        // Cancel
+        if (task != null)
+            task.cancel();
+
         // Schedule
         task = Bukkit.getScheduler().runTaskTimer(plugin, () -> samplers.forEach((uuid, sampler) -> {
             // Reset
@@ -42,29 +43,10 @@ public class RatedHandler implements ClickHandler {
             if (updated != null)
                 plugin.getDataStorage().update(updated);
         }), rate, rate);
-        // Running
-        running = true;
-    }
-
-    @Override
-    public void stop() {
-        // If not running
-        if (!running)
-            return;
-
-        // Cancel
-        task.cancel();
-        // Not running
-        running = false;
-        // Clear
-        samplers.clear();
     }
 
     @Override
     public void add(Player player) {
-        // If not running
-        if (!running)
-            return;
         // Add
         samplers.put(player.getUniqueId(), new RatedSampler(rate, PlayerInfo.initial(player.getUniqueId())));
         // Fetch
@@ -94,20 +76,16 @@ public class RatedHandler implements ClickHandler {
 
     @Override
     public void processClick(Player player) {
-        // If not running
-        if (!running)
-            return;
-
-        // Add click
         samplers.get(player.getUniqueId()).addClick();
     }
 
     @Override
-    public int getCPS(Player player) {
-        // If not running
-        if (!running)
-            return -1;
+    public Sampler getSampler(UUID uuid) {
+        return samplers.get(uuid);
+    }
 
+    @Override
+    public int getCPS(Player player) {
         // Sampler
         RatedSampler sampler = samplers.get(player.getUniqueId());
         // Return

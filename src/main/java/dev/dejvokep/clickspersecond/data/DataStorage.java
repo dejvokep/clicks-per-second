@@ -90,6 +90,8 @@ public abstract class DataStorage {
         reload();
     }
 
+    public abstract boolean isInstantFetch();
+
     public abstract void queueFetch(UUID uuid);
 
     public abstract void skipFetch(UUID uuid);

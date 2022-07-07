@@ -8,24 +8,17 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
 public class StatsExpansion extends PlaceholderExpansion {
 
     private final ClicksPerSecond plugin;
-    private String unknownValue;
-    private SimpleDateFormat dateFormat;
+    private final PlaceholderReplacer replacer;
 
     public StatsExpansion(ClicksPerSecond plugin) {
         this.plugin = plugin;
-        reload();
-    }
-
-    public void reload() {
-        this.unknownValue = plugin.getConfiguration().getString("placeholder.unknown-value");
-        this.dateFormat = new SimpleDateFormat(plugin.getConfiguration().getString("placeholder.date-format"));
+        this.replacer = plugin.getPlaceholderReplacer();
     }
 
     @Override
@@ -36,21 +29,21 @@ public class StatsExpansion extends PlaceholderExpansion {
 
         // Requesting current CPS
         if (params.equals("now"))
-            return player.isOnline() ? convertToUnknown(plugin.getClickHandler().getCPS((Player) player), -1) : unknownValue;
+            return player.isOnline() ? convertToUnknown(plugin.getClickHandler().getCPS((Player) player), -1) : replacer.getUnknownValue();
 
         // Requesting best CPS
         if (params.startsWith("best")) {
             PlayerInfo info = plugin.getClickHandler().getInfo(player.getUniqueId());
-            if (info == null || info.isLoading())
-                return unknownValue;
+            if (info.isLoading())
+                return replacer.getUnknownValue();
 
             if (params.equals("best_cps"))
                 return String.valueOf(info.getCPS());
             if (params.equals("best_date_millis"))
                 return String.valueOf(info.getTime());
             if (params.equals("best_date_formatted"))
-                return dateFormat.format(new Date(info.getTime()));
-            return unknownValue;
+                return replacer.getDateFormat().format(new Date(info.getTime()));
+            return replacer.getUnknownValue();
         }
 
         // Requesting leaderboard
@@ -61,19 +54,19 @@ public class StatsExpansion extends PlaceholderExpansion {
 
             // Insufficient length
             if (identifiers.length < 3 || identifiers.length > 4)
-                return unknownValue;
+                return replacer.getUnknownValue();
 
             // Parse place
             int place;
             try {
                 place = Integer.parseInt(identifiers[1]);
             } catch (NumberFormatException ignored) {
-                return unknownValue;
+                return replacer.getUnknownValue();
             }
 
             // Unknown place
             if (place < 1 || place > leaderboard.size())
-                return unknownValue;
+                return replacer.getUnknownValue();
 
             // Info
             PlayerInfo info = leaderboard.get(place - 1);
@@ -91,9 +84,9 @@ public class StatsExpansion extends PlaceholderExpansion {
                     case "name":
                         return convertToUnknown(Bukkit.getOfflinePlayer(info.getUniqueId()).getName(), 0);
                     case "date":
-                        return dateFormat.format(new Date(info.getTime()));
+                        return replacer.getDateFormat().format(new Date(info.getTime()));
                     default:
-                        return unknownValue;
+                        return replacer.getUnknownValue();
                 }
             }
 
@@ -103,16 +96,16 @@ public class StatsExpansion extends PlaceholderExpansion {
                 if (identifiers[3].equalsIgnoreCase("millis"))
                     return String.valueOf(info.getCPS());
                 else if (identifiers[3].equalsIgnoreCase("formatted"))
-                    return dateFormat.format(new Date(info.getTime()));
+                    return replacer.getDateFormat().format(new Date(info.getTime()));
             }
         }
 
         // Unknown request
-        return unknownValue;
+        return replacer.getUnknownValue();
     }
 
     private <T> String convertToUnknown(@Nullable T value, @NotNull T condition) {
-        return value == null || value.equals(condition) ? unknownValue : value.toString();
+        return value == null || value.equals(condition) ? replacer.getUnknownValue() : value.toString();
     }
 
     @Override

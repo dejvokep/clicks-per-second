@@ -83,6 +83,10 @@ public class PlayerInfo {
         return toggleUpdated;
     }
 
+    public boolean isEmpty() {
+        return cps == 0 && time == 0;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -105,6 +105,11 @@ public class FileStorage extends DataStorage {
         return CompletableFuture.completedFuture(file.getStoredValue().values().stream().map(block -> (PlayerInfo) block.getStoredValue()).sorted(Comparator.comparingInt(PlayerInfo::getCPS)).collect(Collectors.toList()));
     }
 
+    @Override
+    public boolean isInstantFetch() {
+        return true;
+    }
+
     static {
         // Register adapters
         StandardSerializer.getDefault().register(PlayerInfo.class, new TypeAdapter<PlayerInfo>() {

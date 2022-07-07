@@ -7,7 +7,6 @@ import dev.dejvokep.clickspersecond.utils.PlayerInfo;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scheduler.BukkitTask;
 
 import java.util.Map;
 import java.util.Objects;
@@ -17,53 +16,27 @@ import java.util.concurrent.ConcurrentHashMap;
 public class ImmediateHandler implements ClickHandler {
 
     private final Map<UUID, ImmediateSampler> samplers = new ConcurrentHashMap<>();
-    private BukkitTask task;
     private final ClicksPerSecond plugin;
-
-    private boolean running = false;
 
     public ImmediateHandler(ClicksPerSecond plugin) {
         this.plugin = plugin;
-    }
 
-    @Override
-    public void start(int rate) {
-        // If running
-        if (running)
-            return;
-
-        // Running
-        running = true;
-        // Schedule
-        task = new BukkitRunnable() {
+        new BukkitRunnable() {
             @Override
             public void run() {
-                while (running)
+                while (true)
                     samplers.forEach((player, sampler) -> sampler.clear());
             }
-        }.runTaskAsynchronously(plugin);
+        }.runTask(plugin);
     }
 
     @Override
-    public void stop() {
-        // If not running
-        if (!running)
-            return;
-
-        // Cancel
-        task.cancel();
-        task = null;
-        // Not running
-        running = false;
-        // Clear
-        samplers.clear();
+    public void reload(int rate) {
+        // Unused
     }
 
     @Override
     public void add(Player player) {
-        // If not running
-        if (!running)
-            return;
         // Add
         samplers.put(player.getUniqueId(), new ImmediateSampler(PlayerInfo.initial(player.getUniqueId())));
         // Fetch
@@ -93,10 +66,6 @@ public class ImmediateHandler implements ClickHandler {
 
     @Override
     public void processClick(Player player) {
-        // If not running
-        if (!running)
-            return;
-
         // Add click
         PlayerInfo updated = samplers.get(player.getUniqueId()).addClick();
         // No update
@@ -108,11 +77,12 @@ public class ImmediateHandler implements ClickHandler {
     }
 
     @Override
-    public int getCPS(Player player) {
-        // If not running
-        if (!running)
-            return -1;
+    public Sampler getSampler(UUID uuid) {
+        return samplers.get(uuid);
+    }
 
+    @Override
+    public int getCPS(Player player) {
         // Sampler
         ImmediateSampler sampler = samplers.get(player.getUniqueId());
         // Return
