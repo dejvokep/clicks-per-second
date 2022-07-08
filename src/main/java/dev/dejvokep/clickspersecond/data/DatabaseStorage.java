@@ -266,6 +266,7 @@ public class DatabaseStorage extends DataStorage {
                 resultSet.close();
             } catch (SQLException ex) {
                 getPlugin().getLogger().log(Level.SEVERE, "Failed to fetch leaderboard information!", ex);
+                return null;
             }
 
             // Sort

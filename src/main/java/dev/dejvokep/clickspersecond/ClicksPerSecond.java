@@ -1,7 +1,10 @@
 package dev.dejvokep.clickspersecond;
 
+import cloud.commandframework.CommandManager;
 import cloud.commandframework.bukkit.BukkitCommandManager;
 import cloud.commandframework.execution.CommandExecutionCoordinator;
+import dev.dejvokep.clickspersecond.command.DeleteCommand;
+import dev.dejvokep.clickspersecond.command.LeaderboardCommand;
 import dev.dejvokep.clickspersecond.command.StatsCommand;
 import dev.dejvokep.clickspersecond.data.DataStorage;
 import dev.dejvokep.clickspersecond.data.DatabaseStorage;
@@ -21,6 +24,7 @@ import dev.dejvokep.boostedyaml.settings.general.GeneralSettings;
 import dev.dejvokep.boostedyaml.settings.loader.LoaderSettings;
 import dev.dejvokep.boostedyaml.settings.updater.UpdaterSettings;
 import org.bukkit.Bukkit;
+import org.bukkit.command.CommandSender;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -76,7 +80,10 @@ public class ClicksPerSecond extends JavaPlugin implements Listener {
         }
 
         try {
-            new StatsCommand(this, new BukkitCommandManager<>(this, CommandExecutionCoordinator.simpleCoordinator(), Function.identity(), Function.identity()));
+            CommandManager<CommandSender> commandManager = new BukkitCommandManager<>(this, CommandExecutionCoordinator.simpleCoordinator(), Function.identity(), Function.identity());
+            new StatsCommand(this, commandManager);
+            new LeaderboardCommand(this, commandManager);
+            new DeleteCommand(this, commandManager);
         } catch (Exception ex) {
             ex.printStackTrace();
         }

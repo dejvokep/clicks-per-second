@@ -85,14 +85,14 @@ public abstract class DataStorage {
 
     public CompletableFuture<List<PlayerInfo>> fetchBoard(int limit) {
         // Fetch
-        CompletableFuture<List<PlayerInfo>> board = fetchBoard(limit);
+        CompletableFuture<List<PlayerInfo>> board = fetchLeaderboard(limit);
         // Run internal logic
         board.whenComplete((data, ex) -> {
             // An error occurred
             if (ex != null)
                 plugin.getLogger().log(Level.SEVERE, "Failed to fetch leaderboard data!", ex);
             else
-                Bukkit.getScheduler().runTask(plugin, () -> leaderboard = data);
+                Bukkit.getScheduler().runTask(plugin, () -> leaderboard = data == null ? Collections.emptyList() : data);
         });
 
         // Return

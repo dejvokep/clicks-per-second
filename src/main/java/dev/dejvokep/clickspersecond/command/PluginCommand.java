@@ -12,6 +12,7 @@ public class PluginCommand {
     public static final String MESSAGE_PREFIX = "command.";
 
     public static final String MESSAGE_NO_PERMISSION = MESSAGE_PREFIX + "no-permission";
+    public static final String MESSAGE_INVALID_NAME = MESSAGE_PREFIX + "invalid-name";
     public static final String MESSAGE_REQUEST_PENDING = MESSAGE_PREFIX + "data-operation.pending";
     public static final String MESSAGE_REQUEST_SENT = MESSAGE_PREFIX + "data-operation.sent";
     public static final String MESSAGE_REQUEST_ERROR = MESSAGE_PREFIX + "data-operation.error";

@@ -20,46 +20,48 @@ public class LeaderboardCommand extends PluginCommand {
         manager.command(manager.commandBuilder("cps", "clickspersecond").literal("leaderboard").permission("cps.leaderboard")
                 .argument(IntegerArgument.optional("page", 1))
                 .flag(manager.flagBuilder("fetch").withAliases("f").withDescription(ArgumentDescription.of("fetch if not available"))).handler(context -> {
+                    // Leaderboard
                     List<PlayerInfo> leaderboard = plugin.getDataStorage().getLeaderboard();
+                    // Page indexes
                     int perPage = plugin.getConfiguration().getInt(MESSAGE_PREFIX + "leaderboard.entries-per-page"), page = context.get("page"), pages = (int) Math.ceil((double) leaderboard.size() / perPage);
                     Function<String, String> pageReplacer = message -> message.replace("{page}", String.valueOf(page)).replace("{pages}", String.valueOf(pages));
 
+                    // Invalid page
                     if (page < 1) {
                         send(context, MESSAGE_PREFIX + "leaderboard.invalid-page", pageReplacer);
                         return;
                     }
 
+                    // Display
                     if (displayBoard(context, leaderboard, perPage, page, pages, pageReplacer))
                         return;
 
-                    if (context.flags().isPresent("fetch")) {
-                        if (!context.hasPermission("cps.leaderboard.fetch")) {
-                            send(context, MESSAGE_NO_PERMISSION);
-                            return;
-                        }
+                    // Fetch not present
+                    if (!context.flags().isPresent("fetch"))
+                        return;
 
-                        send(context, MESSAGE_REQUEST_SENT);
-
-                        // Fetch
-                        plugin.getDataStorage().fetchBoard(perPage * page).whenComplete((board, exception) -> Bukkit.getScheduler().runTask(plugin, () -> {
-                            // If an error
-                            if (exception != null) {
-                                send(context, MESSAGE_REQUEST_ERROR);
-                                return;
-                            }
-
-                            int newPages = (int) Math.ceil((double) board.size() / perPage);
-                            Function<String, String> newPageReplacer = message -> message.replace("{page}", String.valueOf(page)).replace("{pages}", String.valueOf(pages));
-
-                            if (displayBoard(context, board, perPage, page, newPages, newPageReplacer))
-                                return;
-
-                            send(context, MESSAGE_PREFIX + "leaderboard.invalid-page", newPageReplacer);
-                        }));
+                    // Does not have permission
+                    if (!context.hasPermission("cps.leaderboard.fetch")) {
+                        send(context, MESSAGE_NO_PERMISSION);
                         return;
                     }
 
-                    send(context, MESSAGE_PREFIX + "leaderboard.invalid-page", pageReplacer);
+                    // Fetch
+                    send(context, MESSAGE_REQUEST_SENT);
+                    plugin.getDataStorage().fetchBoard(perPage * page).whenComplete((board, exception) -> Bukkit.getScheduler().runTask(plugin, () -> {
+                        // If an error
+                        if (board == null) {
+                            send(context, MESSAGE_REQUEST_ERROR);
+                            return;
+                        }
+
+                        // New indexes
+                        int newPages = (int) Math.ceil((double) board.size() / perPage);
+                        Function<String, String> newPageReplacer = message -> message.replace("{page}", String.valueOf(page)).replace("{pages}", String.valueOf(pages));
+
+                        // Display
+                        displayBoard(context, board, perPage, page, newPages, newPageReplacer);
+                    }));
                 }).build());
     }
 
@@ -74,6 +76,7 @@ public class LeaderboardCommand extends PluginCommand {
             return true;
         }
 
+        send(context, MESSAGE_PREFIX + "leaderboard.invalid-page", pageReplacer);
         return false;
     }
 
