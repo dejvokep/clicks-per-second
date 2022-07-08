@@ -7,6 +7,7 @@ import com.comphenix.protocol.wrappers.EnumWrappers;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import dev.dejvokep.clickspersecond.ClicksPerSecond;
 import dev.dejvokep.clickspersecond.display.Display;
+import dev.dejvokep.clickspersecond.handler.sampler.Sampler;
 import dev.dejvokep.clickspersecond.utils.Placeholders;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -87,8 +88,9 @@ public class TitleDisplay implements Display {
     @SuppressWarnings("deprecated")
     public void send(Player player) {
         // Replace
-        String title = Placeholders.set(player, this.title).replace("{cps}", String.valueOf(plugin.getClickHandler().getCPS(player)));
-        String subtitle = Placeholders.set(player, this.subtitle).replace("{cps}", String.valueOf(plugin.getClickHandler().getCPS(player)));
+        Sampler sampler = plugin.getClickHandler().getSampler(player.getUniqueId());
+        String title = plugin.getPlaceholderReplacer().replace(sampler, this.title);
+        String subtitle = plugin.getPlaceholderReplacer().replace(sampler, this.subtitle);
 
         // If to not use packets
         if (!USE_PACKETS) {

@@ -85,7 +85,7 @@ public class ActionBarDisplay implements Display {
             packet.getBytes().writeSafely(0, (byte) 2);
             packet.getChatTypes().write(0, EnumWrappers.ChatType.GAME_INFO);
             // Write the message
-            packet.getChatComponents().write(0, WrappedChatComponent.fromText(Placeholders.set(player, message).replace("{cps}", String.valueOf(plugin.getClickHandler().getCPS(player)))));
+            packet.getChatComponents().write(0, WrappedChatComponent.fromText(plugin.getPlaceholderReplacer().replace(plugin.getClickHandler().getSampler(player.getUniqueId()), message)));
             // Send
             ProtocolLibrary.getProtocolManager().sendServerPacket(player, packet);
         } catch (InvocationTargetException ex) {
