@@ -93,6 +93,9 @@ command:
     in-progress: "&7[&bCPS&7] Data request already pending, please try again in a moment..."
     sent: "&7[&bCPS&7] Data request was sent, please wait..."
     error: "Something went wrong, check the console for more details."
+  confirm:
+    required: "Confirmation required! Please use /cps confirm within 20 seconds to confirm the operation."
+    no-pending: "There are not any pending confirmations."
   stats:
     not-found: "No data found for player identified by {id}."
     message: "Best CPS of player {name}: {cps} @ {cps_date_formatted}"

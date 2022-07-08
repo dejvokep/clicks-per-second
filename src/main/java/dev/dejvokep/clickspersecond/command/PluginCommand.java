@@ -13,6 +13,8 @@ public class PluginCommand {
 
     public static final String MESSAGE_NO_PERMISSION = MESSAGE_PREFIX + "no-permission";
     public static final String MESSAGE_INVALID_NAME = MESSAGE_PREFIX + "invalid-name";
+    public static final String MESSAGE_CONFIRM_REQUIRED = MESSAGE_PREFIX + "confirm.required";
+    public static final String MESSAGE_CONFIRM_NO_PENDING = MESSAGE_PREFIX + "confirm.no-pending";
     public static final String MESSAGE_REQUEST_PENDING = MESSAGE_PREFIX + "data-operation.pending";
     public static final String MESSAGE_REQUEST_SENT = MESSAGE_PREFIX + "data-operation.sent";
     public static final String MESSAGE_REQUEST_ERROR = MESSAGE_PREFIX + "data-operation.error";
@@ -27,11 +29,19 @@ public class PluginCommand {
         send(context, messageId, null);
     }
 
+    public void send(CommandSender sender, String messageId) {
+        send(sender, messageId, null);
+    }
+
     public void send(CommandContext<CommandSender> context, String messageId, Function<String, String> replacer) {
-        if (context.getSender() instanceof Player && !((Player) context.getSender()).isOnline())
+        send(context.getSender(), messageId, replacer);
+    }
+
+    public void send(CommandSender sender, String messageId, Function<String, String> replacer) {
+        if (sender instanceof Player && !((Player) sender).isOnline())
             return;
         String message = plugin.getConfiguration().getString(messageId);
-        context.getSender().sendMessage(replacer == null ? message : replacer.apply(message));
+        sender.sendMessage(replacer == null ? message : replacer.apply(message));
     }
 
     public ClicksPerSecond getPlugin() {
