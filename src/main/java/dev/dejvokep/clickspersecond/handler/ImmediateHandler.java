@@ -31,11 +31,6 @@ public class ImmediateHandler implements ClickHandler {
     }
 
     @Override
-    public void reload(int rate) {
-        // Unused
-    }
-
-    @Override
     public void add(Player player) {
         // Add
         samplers.put(player.getUniqueId(), new ImmediateSampler(PlayerInfo.initial(player.getUniqueId())));

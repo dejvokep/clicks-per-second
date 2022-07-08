@@ -9,8 +9,6 @@ import java.util.UUID;
 
 public interface ClickHandler extends PlayerContainer {
 
-    void reload(int rate);
-
     void setFetchedInfo(PlayerInfo info);
     PlayerInfo getInfo(UUID uuid);
     Sampler getSampler(UUID uuid);

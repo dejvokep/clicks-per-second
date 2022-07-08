@@ -5,6 +5,7 @@ import cloud.commandframework.bukkit.BukkitCommandManager;
 import cloud.commandframework.execution.CommandExecutionCoordinator;
 import dev.dejvokep.clickspersecond.command.DeleteCommand;
 import dev.dejvokep.clickspersecond.command.LeaderboardCommand;
+import dev.dejvokep.clickspersecond.command.ReloadCommand;
 import dev.dejvokep.clickspersecond.command.StatsCommand;
 import dev.dejvokep.clickspersecond.data.DataStorage;
 import dev.dejvokep.clickspersecond.data.DatabaseStorage;
@@ -84,6 +85,7 @@ public class ClicksPerSecond extends JavaPlugin implements Listener {
             new StatsCommand(this, commandManager);
             new LeaderboardCommand(this, commandManager);
             new DeleteCommand(this, commandManager);
+            new ReloadCommand(this, commandManager);
         } catch (Exception ex) {
             ex.printStackTrace();
         }

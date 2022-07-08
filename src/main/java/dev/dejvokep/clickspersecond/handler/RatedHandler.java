@@ -16,27 +16,16 @@ import java.util.UUID;
 public class RatedHandler implements ClickHandler {
 
     private final Map<UUID, RatedSampler> samplers = new HashMap<>();
-    private BukkitTask task;
     private final ClicksPerSecond plugin;
 
-    private int rate;
+    private final int rate;
 
     public RatedHandler(ClicksPerSecond plugin, int rate) {
         this.plugin = plugin;
-        reload(rate);
-    }
-
-    @Override
-    public void reload(int rate) {
-        // Set
         this.rate = rate;
 
-        // Cancel
-        if (task != null)
-            task.cancel();
-
         // Schedule
-        task = Bukkit.getScheduler().runTaskTimer(plugin, () -> samplers.forEach((uuid, sampler) -> {
+        Bukkit.getScheduler().runTaskTimer(plugin, () -> samplers.forEach((uuid, sampler) -> {
             // Reset
             PlayerInfo updated = sampler.reset();
             // Update
