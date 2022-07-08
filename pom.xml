@@ -34,6 +34,14 @@
                             <pattern>com.zaxxer.hikari</pattern>
                             <shadedPattern>dev.dejvokep.clickspersecond.libs.com.zaxxer.hikari</shadedPattern>
                         </relocation>
+                        <relocation>
+                            <pattern>cloud.commandframework</pattern>
+                            <shadedPattern>dev.dejvokep.clickspersecond.libs.cloud.commandframework</shadedPattern> <!-- Replace this -->
+                        </relocation>
+                        <relocation>
+                            <pattern>io.leangen.geantyref</pattern>
+                            <shadedPattern>dev.dejvokep.clickspersecond.libs.io.leangen.geantyref</shadedPattern> <!-- Replace this -->
+                        </relocation>
                     </relocations>
                 </configuration>
                 <executions>
@@ -42,6 +50,9 @@
                         <goals>
                             <goal>shade</goal>
                         </goals>
+                        <configuration>
+                            <createDependencyReducedPom>false</createDependencyReducedPom>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
@@ -73,19 +84,16 @@
 
     <!-- Dependencies -->
     <dependencies>
+        <!-- BoostedYAML -->
         <dependency>
             <groupId>dev.dejvokep</groupId>
             <artifactId>boosted-yaml</artifactId>
             <version>1.2</version>
         </dependency>
+        <!-- Cloud -->
         <dependency>
             <groupId>cloud.commandframework</groupId>
             <artifactId>cloud-bukkit</artifactId>
-            <version>1.7.0</version>
-        </dependency>
-        <dependency>
-            <groupId>cloud.commandframework</groupId>
-            <artifactId>cloud-minecraft-extras</artifactId>
             <version>1.7.0</version>
         </dependency>
         <!-- Placeholder API -->
@@ -108,6 +116,7 @@
             <artifactId>ProtocolLib</artifactId>
             <version>4.8.0</version>
         </dependency>
+        <!-- HikariCP (4.0.3 is for JRE 8) -->
         <dependency>
             <groupId>com.zaxxer</groupId>
             <artifactId>HikariCP</artifactId>
