@@ -22,7 +22,9 @@ public class PlaceholderReplacer {
 
     public String replace(UUID uuid, String message) {
         OfflinePlayer player = Bukkit.getOfflinePlayer(uuid);
-        return message.replace("{uuid}", uuid.toString()).replace("{name}", player.getName() == null ? unknownValue : player.getName());
+        return message.replace("{uuid}", uuid.toString())
+                .replace("{name}", player.getName() == null ? unknownValue : player.getName())
+                .replace("{id}", player.getName() == null ? uuid.toString() : player.getName());
     }
 
     public String replace(PlayerInfo info, String message) {
