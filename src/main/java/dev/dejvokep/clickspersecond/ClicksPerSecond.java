@@ -46,6 +46,7 @@ public class ClicksPerSecond extends JavaPlugin implements Listener {
     private DataStorage dataStorage;
     private PlaceholderReplacer placeholderReplacer;
     private Watchers watchers;
+    private Messenger messenger;
 
     @Override
     public void onEnable() {
@@ -63,6 +64,7 @@ public class ClicksPerSecond extends JavaPlugin implements Listener {
         // Initialize
         placeholderReplacer = new PlaceholderReplacer(this);
         watchers = new Watchers();
+        messenger = new Messenger(this);
 
         // Handlers
         int samplingRate = Math.max(config.getInt("sampling-rate"), 0);
@@ -126,5 +128,9 @@ public class ClicksPerSecond extends JavaPlugin implements Listener {
 
     public Watchers getWatchers() {
         return watchers;
+    }
+
+    public Messenger getMessenger() {
+        return messenger;
     }
 }
