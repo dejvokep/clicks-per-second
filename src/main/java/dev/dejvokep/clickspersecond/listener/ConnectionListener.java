@@ -1,6 +1,8 @@
 package dev.dejvokep.clickspersecond.listener;
 
 import dev.dejvokep.clickspersecond.ClicksPerSecond;
+import dev.dejvokep.clickspersecond.command.Messenger;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
@@ -25,10 +27,24 @@ public class ConnectionListener implements Listener {
 
     @EventHandler
     public void onQuit(PlayerQuitEvent event) {
+        // Player
+        Player player = event.getPlayer();
         // Remove
-        plugin.getClickHandler().remove(event.getPlayer());
-        plugin.getDataStorage().skipFetch(event.getPlayer().getUniqueId());
-        plugin.getDisplays().forEach(display -> display.remove(event.getPlayer()));
+        plugin.getClickHandler().remove(player);
+        plugin.getDataStorage().skipFetch(player.getUniqueId());
+        plugin.getDisplays().forEach(display -> display.remove(player));
+
+        // Watcher
+        Player watcher = plugin.getWatchers().getWatcher(player);
+        // If watched
+        if (watcher != null) {
+            // Stop
+            plugin.getWatchers().stop(watcher);
+            plugin.getMessenger().send(watcher, Messenger.MESSAGE_PREFIX + "watch.disconnected", message -> plugin.getPlaceholderReplacer().player(player.getUniqueId(), message));
+        }
+
+        // If watching
+        plugin.getWatchers().stop(player);
     }
 
     @EventHandler
