@@ -68,18 +68,24 @@ public class LeaderboardCommand extends PluginCommand {
     }
 
     private boolean displayBoard(CommandContext<CommandSender> context, List<PlayerInfo> board, int perPage, int page, int pages, Function<String, String> pageReplacer) {
-        if (page <= pages) {
-            send(context, MESSAGE_PREFIX + "leaderboard.header", pageReplacer);
-            for (int i = perPage * (page - 1); i < perPage * page && i < board.size(); i++) {
-                int finalIndex = i;
-                send(context, MESSAGE_PREFIX + "leaderboard.entry", message -> getPlugin().getPlaceholderReplacer().replace(board.get(finalIndex), message.replace("{place}", String.valueOf(finalIndex + 1))));
-            }
-            send(context, MESSAGE_PREFIX + "leaderboard.footer", pageReplacer);
-            return true;
+        // Invalid page number
+        if (page > pages) {
+            send(context, MESSAGE_PREFIX + "leaderboard.invalid-page", pageReplacer);
+            return false;
         }
 
-        send(context, MESSAGE_PREFIX + "leaderboard.invalid-page", pageReplacer);
-        return false;
+        // Send header
+        send(context, MESSAGE_PREFIX + "leaderboard.header", pageReplacer);
+
+        // Send entries
+        for (int i = perPage * (page - 1); i < perPage * page && i < board.size(); i++) {
+            int finalIndex = i;
+            send(context, MESSAGE_PREFIX + "leaderboard.entry", message -> getPlugin().getPlaceholderReplacer().replace(board.get(finalIndex), message.replace("{place}", String.valueOf(finalIndex + 1))));
+        }
+
+        // Send footer
+        send(context, MESSAGE_PREFIX + "leaderboard.footer", pageReplacer);
+        return true;
     }
 
 }
