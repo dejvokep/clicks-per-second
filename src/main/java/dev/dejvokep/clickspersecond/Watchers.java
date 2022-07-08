@@ -19,4 +19,8 @@ public class Watchers {
         return watchers.remove(watcher);
     }
 
+    public Player getWatched(Player watcher) {
+        return watchers.get(watcher);
+    }
+
 }
