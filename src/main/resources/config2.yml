@@ -24,18 +24,26 @@ storage: FILE
 display:
   title:
     enabled: false
-    title: ""
-    subtitle: "{cps} CPS"
+    normal:
+      title: ""
+      subtitle: "{cps} CPS"
+    watching:
+      title: ""
+      subtitle: ""
     refresh: 20
   action-bar:
     enabled: true
-    message: "{cps} CPS"
+    message:
+      normal: "{cps} CPS"
+      watching: ""
     refresh: 20
   boss-bar:
     enabled: false
     color: WHITE
     style: SOLID
-    message: "{cps} CPS"
+    message:
+      normal: "{cps} CPS"
+      watching: ""
     refresh: 20
 data:
   sync-rate: 5
