@@ -7,9 +7,9 @@ import org.bukkit.entity.Player;
 
 import java.util.function.Function;
 
-public class PluginCommand {
+public class Messenger {
 
-    public static final String MESSAGE_PREFIX = "command.";
+    public static final String MESSAGE_PREFIX = "messages.";
 
     public static final String MESSAGE_NO_PERMISSION = MESSAGE_PREFIX + "no-permission";
     public static final String MESSAGE_PLAYERS_ONLY = MESSAGE_PREFIX + "players-only";
@@ -22,7 +22,7 @@ public class PluginCommand {
 
     private final ClicksPerSecond plugin;
 
-    public PluginCommand(ClicksPerSecond plugin) {
+    public Messenger(ClicksPerSecond plugin) {
         this.plugin = plugin;
     }
 
