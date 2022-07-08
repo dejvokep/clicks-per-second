@@ -45,6 +45,7 @@ public class ClicksPerSecond extends JavaPlugin implements Listener {
     private YamlDocument config;
     private DataStorage dataStorage;
     private PlaceholderReplacer placeholderReplacer;
+    private Watchers watchers;
 
     @Override
     public void onEnable() {
@@ -61,6 +62,7 @@ public class ClicksPerSecond extends JavaPlugin implements Listener {
 
         // Initialize
         placeholderReplacer = new PlaceholderReplacer(this);
+        watchers = new Watchers();
 
         // Handlers
         int samplingRate = Math.max(config.getInt("sampling-rate"), 0);
@@ -82,6 +84,7 @@ public class ClicksPerSecond extends JavaPlugin implements Listener {
             new StatsCommand(this, commandManager);
             new LeaderboardCommand(this, commandManager);
             new DeleteCommand(this, commandManager);
+            new WatchCommand(this, commandManager);
             new ReloadCommand(this, commandManager);
             new ConfirmCommand(this, commandManager);
         } catch (Exception ex) {
@@ -121,4 +124,7 @@ public class ClicksPerSecond extends JavaPlugin implements Listener {
         return placeholderReplacer;
     }
 
+    public Watchers getWatchers() {
+        return watchers;
+    }
 }
