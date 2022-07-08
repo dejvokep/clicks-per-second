@@ -40,12 +40,12 @@ public class StatsCommand extends PluginCommand {
 
                         // Empty
                         if (sampler.getInfo().isEmpty()) {
-                            send(context, MESSAGE_PREFIX + "stats.not-found", message -> plugin.getPlaceholderReplacer().replace(uuid, message));
+                            send(context, MESSAGE_PREFIX + "stats.not-found", message -> plugin.getPlaceholderReplacer().player(uuid, message));
                             return;
                         }
 
                         // Success
-                        send(context, MESSAGE_PREFIX + "stats.online", message -> plugin.getPlaceholderReplacer().replace(sampler, message));
+                        send(context, MESSAGE_PREFIX + "stats.online", message -> plugin.getPlaceholderReplacer().all(sampler, message));
                         return;
                     }
 
@@ -66,12 +66,12 @@ public class StatsCommand extends PluginCommand {
 
                         // Empty
                         if (info.isEmpty()) {
-                            send(context, MESSAGE_PREFIX + "stats.not-found", message -> plugin.getPlaceholderReplacer().replace(uuid, message));
+                            send(context, MESSAGE_PREFIX + "stats.not-found", message -> plugin.getPlaceholderReplacer().player(uuid, message));
                             return;
                         }
 
                         // Success
-                        send(context, MESSAGE_PREFIX + "stats.offline", message -> plugin.getPlaceholderReplacer().replace(info, message));
+                        send(context, MESSAGE_PREFIX + "stats.offline", message -> plugin.getPlaceholderReplacer().info(info, message));
                     }));
                 }).build());
     }

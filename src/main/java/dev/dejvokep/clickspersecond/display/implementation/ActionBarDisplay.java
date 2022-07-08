@@ -7,8 +7,8 @@ import com.comphenix.protocol.wrappers.EnumWrappers;
 import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import dev.dejvokep.clickspersecond.ClicksPerSecond;
+import dev.dejvokep.clickspersecond.VariableMessage;
 import dev.dejvokep.clickspersecond.display.Display;
-import dev.dejvokep.clickspersecond.utils.Placeholders;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -25,7 +25,7 @@ public class ActionBarDisplay implements Display {
     private final ClicksPerSecond plugin;
 
     private BukkitTask task;
-    private String message;
+    private VariableMessage<String> message;
 
     public ActionBarDisplay(ClicksPerSecond plugin) {
         this.plugin = plugin;
@@ -72,9 +72,9 @@ public class ActionBarDisplay implements Display {
             return;
 
         // Set
-        message = ChatColor.translateAlternateColorCodes('&', config.getString("message"));
+        message = VariableMessage.of(plugin, config.getSection("message"));
         // Schedule
-        task = Bukkit.getScheduler().runTaskTimer(plugin, () -> players.forEach(player -> send(player, message)), 0L, Math.max(config.getInt("refresh"), plugin.getClickHandler().getDisplayRate()));
+        task = Bukkit.getScheduler().runTaskTimer(plugin, () -> players.forEach(player -> send(player, message.get(player, (message, target) -> plugin.getPlaceholderReplacer().all(target, message)))), 0L, Math.max(config.getInt("refresh"), plugin.getClickHandler().getDisplayRate()));
     }
 
     private void send(Player player, String message) {
@@ -85,7 +85,7 @@ public class ActionBarDisplay implements Display {
             packet.getBytes().writeSafely(0, (byte) 2);
             packet.getChatTypes().write(0, EnumWrappers.ChatType.GAME_INFO);
             // Write the message
-            packet.getChatComponents().write(0, WrappedChatComponent.fromText(plugin.getPlaceholderReplacer().replace(plugin.getClickHandler().getSampler(player.getUniqueId()), message)));
+            packet.getChatComponents().write(0, WrappedChatComponent.fromText(message));
             // Send
             ProtocolLibrary.getProtocolManager().sendServerPacket(player, packet);
         } catch (InvocationTargetException ex) {

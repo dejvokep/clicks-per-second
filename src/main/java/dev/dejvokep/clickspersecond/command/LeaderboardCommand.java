@@ -80,7 +80,7 @@ public class LeaderboardCommand extends PluginCommand {
         // Send entries
         for (int i = perPage * (page - 1); i < perPage * page && i < board.size(); i++) {
             int finalIndex = i;
-            send(context, MESSAGE_PREFIX + "leaderboard.entry", message -> getPlugin().getPlaceholderReplacer().replace(board.get(finalIndex), message.replace("{place}", String.valueOf(finalIndex + 1))));
+            send(context, MESSAGE_PREFIX + "leaderboard.entry", message -> getPlugin().getPlaceholderReplacer().info(board.get(finalIndex), message.replace("{place}", String.valueOf(finalIndex + 1))));
         }
 
         // Send footer

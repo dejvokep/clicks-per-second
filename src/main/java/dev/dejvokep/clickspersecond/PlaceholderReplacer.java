@@ -4,6 +4,7 @@ import dev.dejvokep.clickspersecond.handler.sampler.Sampler;
 import dev.dejvokep.clickspersecond.utils.PlayerInfo;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Player;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -20,22 +21,26 @@ public class PlaceholderReplacer {
         reload();
     }
 
-    public String replace(UUID uuid, String message) {
+    public String player(UUID uuid, String message) {
         OfflinePlayer player = Bukkit.getOfflinePlayer(uuid);
         return message.replace("{uuid}", uuid.toString())
                 .replace("{name}", player.getName() == null ? unknownValue : player.getName())
                 .replace("{id}", player.getName() == null ? uuid.toString() : player.getName());
     }
 
-    public String replace(PlayerInfo info, String message) {
-        return replace(info.getUniqueId(), message)
+    public String info(PlayerInfo info, String message) {
+        return player(info.getUniqueId(), message)
                 .replace("{cps_best}", String.valueOf(info.getCPS()))
                 .replace("{cps_best_date_millis}", String.valueOf(info.getTime()))
                 .replace("{cps_best_date_formatted}", dateFormat.format(new Date(info.getTime())));
     }
 
-    public String replace(Sampler sampler, String message) {
-        return replace(sampler.getInfo(), message).replace("{cps_now}", String.valueOf(sampler.getCPS()));
+    public String all(Sampler sampler, String message) {
+        return info(sampler.getInfo(), message).replace("{cps_now}", String.valueOf(sampler.getCPS()));
+    }
+
+    public String all(Player player, String message) {
+        return all(plugin.getClickHandler().getSampler(player.getUniqueId()), message);
     }
 
     public void reload() {

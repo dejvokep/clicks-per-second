@@ -6,9 +6,8 @@ import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.wrappers.EnumWrappers;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import dev.dejvokep.clickspersecond.ClicksPerSecond;
+import dev.dejvokep.clickspersecond.VariableMessage;
 import dev.dejvokep.clickspersecond.display.Display;
-import dev.dejvokep.clickspersecond.handler.sampler.Sampler;
-import dev.dejvokep.clickspersecond.utils.Placeholders;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -21,7 +20,6 @@ import java.util.logging.Level;
 
 public class TitleDisplay implements Display {
 
-    private static final boolean TITLES_SUPPORTED = !Bukkit.getBukkitVersion().contains("1.7");
     private static final boolean USE_PACKETS = Bukkit.getBukkitVersion().contains("1.8");
 
     private final Set<Player> players = new HashSet<>();
@@ -29,7 +27,7 @@ public class TitleDisplay implements Display {
     private final ClicksPerSecond plugin;
 
     private BukkitTask task;
-    private String title, subtitle;
+    private VariableMessage<TitleMessages> message;
     private int refresh;
 
     public TitleDisplay(ClicksPerSecond plugin) {
@@ -74,23 +72,22 @@ public class TitleDisplay implements Display {
         }
 
         // If disabled
-        if (!config.getBoolean("enabled") || !TITLES_SUPPORTED)
+        if (!config.getBoolean("enabled") || (USE_PACKETS && !Bukkit.getPluginManager().isPluginEnabled("ProtocolLib")))
             return;
 
         // Set
-        title = ChatColor.translateAlternateColorCodes('&', config.getString("title"));
-        subtitle = ChatColor.translateAlternateColorCodes('&', config.getString("subtitle"));
+        message = VariableMessage.of(plugin, new TitleMessages(config.getSection("normal")), new TitleMessages(config.getSection("watching")));
         refresh = Math.max(config.getInt("refresh"), plugin.getClickHandler().getDisplayRate());
         // Schedule
         task = Bukkit.getScheduler().runTaskTimer(plugin, () -> players.forEach(this::send), 0L, refresh);
     }
 
-    @SuppressWarnings("deprecated")
+    @SuppressWarnings("deprecation")
     public void send(Player player) {
         // Replace
-        Sampler sampler = plugin.getClickHandler().getSampler(player.getUniqueId());
-        String title = plugin.getPlaceholderReplacer().replace(sampler, this.title);
-        String subtitle = plugin.getPlaceholderReplacer().replace(sampler, this.subtitle);
+        TitleMessages messages = message.get(player);
+        String title = messages.getTitle(player);
+        String subtitle = messages.getSubtitle(player);
 
         // If to not use packets
         if (!USE_PACKETS) {
@@ -115,9 +112,26 @@ public class TitleDisplay implements Display {
         }
     }
 
-    @SuppressWarnings("deprecated")
+    @SuppressWarnings("deprecation")
     public void clear(Player player) {
         player.sendTitle("", "");
+    }
+
+    private class TitleMessages {
+        private final String title, subtitle;
+
+        private TitleMessages(Section config) {
+            title = ChatColor.translateAlternateColorCodes('&', config.getString("title"));
+            subtitle = ChatColor.translateAlternateColorCodes('&', config.getString("subtitle"));
+        }
+
+        public String getTitle(Player player) {
+            return plugin.getPlaceholderReplacer().all(player, title);
+        }
+
+        public String getSubtitle(Player player) {
+            return plugin.getPlaceholderReplacer().all(player, subtitle);
+        }
     }
 
 }

@@ -2,6 +2,7 @@ package dev.dejvokep.clickspersecond.display.implementation;
 
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import dev.dejvokep.clickspersecond.ClicksPerSecond;
+import dev.dejvokep.clickspersecond.VariableMessage;
 import dev.dejvokep.clickspersecond.display.Display;
 import dev.dejvokep.clickspersecond.utils.Placeholders;
 import org.bukkit.Bukkit;
@@ -33,7 +34,7 @@ public class BossBarDisplay implements Display {
     private BarStyle style;
     private BarFlag[] flags;
     private double progress;
-    private String message;
+    private VariableMessage<String> message;
 
     public BossBarDisplay(ClicksPerSecond plugin) {
         this.plugin = plugin;
@@ -47,7 +48,7 @@ public class BossBarDisplay implements Display {
             return;
 
         // Create bar
-        BossBar bossBar = Bukkit.createBossBar(Placeholders.set(player, message), color, style, flags);
+        BossBar bossBar = Bukkit.createBossBar(message.get(player), color, style, flags);
         // Set progress
         bossBar.setProgress(progress);
         // Add
@@ -92,13 +93,13 @@ public class BossBarDisplay implements Display {
             return;
 
         // Set
-        message = ChatColor.translateAlternateColorCodes('&', config.getString("message"));
+        message = VariableMessage.of(plugin, config.getSection("message"));
         color = map(() -> BarColor.valueOf(config.getString("color").toUpperCase()), BarColor.WHITE, "Boss bar color is invalid!");
         style = map(() -> BarStyle.valueOf(config.getString("style").toUpperCase()), BarStyle.SOLID, "Boss bar style is invalid!");
         flags = config.getStringList("flags").stream().map(flag -> map(() -> BarFlag.valueOf(flag.toUpperCase()), null, "Bar flag is invalid!")).filter(Objects::nonNull).toArray(BarFlag[]::new);
         progress = clamp(config.getDouble("progress"), 0, 1);
         // Schedule
-        task = Bukkit.getScheduler().runTaskTimer(plugin, () -> bossBars.forEach((player, bossBar) -> bossBar.setTitle(plugin.getPlaceholderReplacer().replace(plugin.getClickHandler().getSampler(player.getUniqueId()), message))), 0L, Math.max(config.getInt("refresh"), plugin.getClickHandler().getDisplayRate()));
+        task = Bukkit.getScheduler().runTaskTimer(plugin, () -> bossBars.forEach((player, bossBar) -> bossBar.setTitle(message.get(player, (message, target) -> plugin.getPlaceholderReplacer().all(target, message)))), 0L, Math.max(config.getInt("refresh"), plugin.getClickHandler().getDisplayRate()));
     }
 
     private <T> T map(Supplier<T> supplier, T def, String message) {
