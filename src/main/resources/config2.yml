@@ -88,6 +88,7 @@ database:
 #-------------------------------------------------------------------------------------------------------
 command:
   no-permission: "&cI'm sorry, but you do not have permission to perform this command. Please contact the server administrators if you believe that this is an error."
+  # {name}
   invalid-name: "Could not obtain UUID from player {name}, has he played on the server already?"
   data-request:
     in-progress: "&7[&bCPS&7] Data request already pending, please try again in a moment..."
@@ -97,13 +98,24 @@ command:
     required: "Confirmation required! Please use /cps confirm within 20 seconds to confirm the operation."
     no-pending: "There are not any pending confirmations."
   stats:
-    not-found: "No data found for player identified by {id}."
-    message: "Best CPS of player {name}: {cps} @ {cps_date_formatted}"
+    # {uuid}
+    # {name}
+    not-found: "No data found for player identified by {name} ({uuid})."
+    # {name} (name or unknown)
+    # {cps_now}
+    # {cps_best}
+    # {cps_best_date_millis} / {cps_best_date_formatted}
+    offline: "Best CPS of player {name}: {cps_best} @ {cps_best_date_formatted}"
+    online: "Best CPS of player {name}: {cps_best} @ {cps_date_formatted}"
   leaderboard:
+    # {page}, {pages}
     invalid-page: "Page number {page} does not exist. There are {pages} pages only."
     entries-per-page: 20
+    # {page}, {pages}
     header: "CPS leaderboard ({page}/{pages})"
+    # {place}, {name}, {uuid}, {cps_best_date_millis}, {cps_best_date_formatted}
     entry: "{place}. {name}: {cps}"
+    # {page}, {pages}
     footer: "--------------------------------"
   watch:
     player-offline: "Player {id} is offline."
@@ -111,18 +123,3 @@ command:
     stop: "Stopped watching player {name}."
   delete: "Deleted the requested data. Please note that for an absolute data deletion, everyone must be offline and the servers must be restarted."
   reload: "Plugin reloaded."
-  #-------------------------------------------------------------------------------------------------------
-  #                                           /cps help
-  #-------------------------------------------------------------------------------------------------------
-  help:
-    - "&7[&bCPS&7]            &b&lClicksPerSecond Help Page"
-    - "&7&o[] - optional argument, <> - required argument"
-    - ""
-    - "&b/cps stats <player|uuid> &7- shows statistics of a player"
-    - "&b/cps scoreboard <RIGHT|LEFT|HACK> [page] &7- displays top players in a scoreboard on the specified page, or on the first page"
-    - "&b/cps copy <RIGHT|LEFT|HACK> <FILE|DATABASE> &7- copies scoreboard to the specified storage (from opposite-type storage)"
-    - "&b/cps reformat &7- reformats all data in all scoreboards to the latest format"
-    - "&b/cps reload &7- reloads the plugin"
-    - "&b/cps help &7- shows this page"
-    - ""
-    - "&cFor detailed documentation, see the wiki."

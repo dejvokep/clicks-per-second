@@ -35,7 +35,7 @@ public class DeleteCommand extends PluginCommand {
                     // Parse UUID
                     UUID uuid = UUIDFactory.fromArgument(target);
                     if (uuid == null) {
-                        send(context, MESSAGE_INVALID_NAME);
+                        send(context, MESSAGE_INVALID_NAME, message -> message.replace("{name}", target));
                         return;
                     }
 

@@ -21,9 +21,10 @@ public class StatsCommand extends PluginCommand {
                 .meta(CommandMeta.DESCRIPTION, "Displays player statistics either by name or UUID.")
                 .handler(context -> {
                     // Parse UUID
-                    UUID uuid = UUIDFactory.fromArgument(context.get("id"));
+                    String id = context.get("id");
+                    UUID uuid = UUIDFactory.fromArgument(id);
                     if (uuid == null) {
-                        send(context, MESSAGE_INVALID_NAME);
+                        send(context, MESSAGE_INVALID_NAME, message -> message.replace("{name}", id));
                         return;
                     }
 
@@ -39,12 +40,12 @@ public class StatsCommand extends PluginCommand {
 
                         // Empty
                         if (sampler.getInfo().isEmpty()) {
-                            send(context, MESSAGE_PREFIX + "stats.not-found");
+                            send(context, MESSAGE_PREFIX + "stats.not-found", message -> plugin.getPlaceholderReplacer().replace(uuid, message));
                             return;
                         }
 
                         // Success
-                        send(context, MESSAGE_PREFIX + "stats.message", message -> plugin.getPlaceholderReplacer().replace(sampler, message));
+                        send(context, MESSAGE_PREFIX + "stats.online", message -> plugin.getPlaceholderReplacer().replace(sampler, message));
                         return;
                     }
 
@@ -65,12 +66,12 @@ public class StatsCommand extends PluginCommand {
 
                         // Empty
                         if (info.isEmpty()) {
-                            send(context, MESSAGE_PREFIX + "stats.not-found");
+                            send(context, MESSAGE_PREFIX + "stats.not-found", message -> plugin.getPlaceholderReplacer().replace(uuid, message));
                             return;
                         }
 
                         // Success
-                        send(context, MESSAGE_PREFIX + "stats.message", message -> plugin.getPlaceholderReplacer().replace(info, message));
+                        send(context, MESSAGE_PREFIX + "stats.offline", message -> plugin.getPlaceholderReplacer().replace(info, message));
                     }));
                 }).build());
     }
