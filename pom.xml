@@ -83,6 +83,11 @@
             <artifactId>cloud-bukkit</artifactId>
             <version>1.7.0</version>
         </dependency>
+        <dependency>
+            <groupId>cloud.commandframework</groupId>
+            <artifactId>cloud-minecraft-extras</artifactId>
+            <version>1.7.0</version>
+        </dependency>
         <!-- Placeholder API -->
         <dependency>
             <groupId>me.clip</groupId>
