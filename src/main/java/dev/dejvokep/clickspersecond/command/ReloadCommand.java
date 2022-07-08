@@ -3,6 +3,7 @@ package dev.dejvokep.clickspersecond.command;
 import cloud.commandframework.CommandManager;
 import cloud.commandframework.arguments.standard.StringArgument;
 import cloud.commandframework.context.CommandContext;
+import cloud.commandframework.meta.CommandMeta;
 import dev.dejvokep.clickspersecond.ClicksPerSecond;
 import dev.dejvokep.clickspersecond.UUIDFactory;
 import dev.dejvokep.clickspersecond.display.Display;
@@ -19,20 +20,22 @@ public class ReloadCommand extends PluginCommand {
         super(plugin);
 
         // Register
-        manager.command(manager.commandBuilder("cps", "clickspersecond").literal("reload").permission("cps.reload").handler(context -> {
-            // Reload
-            try {
-                plugin.getConfiguration().reload();
-            } catch (IOException ex) {
-                plugin.getLogger().log(Level.SEVERE, "An error occurred whilst reloading plugin configuration!", ex);
-            }
-            plugin.getDataStorage().reload();
-            plugin.getPlaceholderReplacer().reload();
-            plugin.getDisplays().forEach(Display::reload);
+        manager.command(manager.commandBuilder("cps", "clickspersecond").literal("reload").permission("cps.reload")
+                .meta(CommandMeta.DESCRIPTION, "Reloads the plugin.")
+                .handler(context -> {
+                    // Reload
+                    try {
+                        plugin.getConfiguration().reload();
+                    } catch (IOException ex) {
+                        plugin.getLogger().log(Level.SEVERE, "An error occurred whilst reloading plugin configuration!", ex);
+                    }
+                    plugin.getDataStorage().reload();
+                    plugin.getPlaceholderReplacer().reload();
+                    plugin.getDisplays().forEach(Display::reload);
 
-            // Success
-            send(context, MESSAGE_PREFIX + "reload");
-        }).build());
+                    // Success
+                    send(context, MESSAGE_PREFIX + "reload");
+                }).build());
     }
 
 }

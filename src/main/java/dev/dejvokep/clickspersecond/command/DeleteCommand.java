@@ -3,6 +3,8 @@ package dev.dejvokep.clickspersecond.command;
 import cloud.commandframework.CommandManager;
 import cloud.commandframework.arguments.standard.StringArgument;
 import cloud.commandframework.context.CommandContext;
+import cloud.commandframework.extra.confirmation.CommandConfirmationManager;
+import cloud.commandframework.meta.CommandMeta;
 import dev.dejvokep.clickspersecond.ClicksPerSecond;
 import dev.dejvokep.clickspersecond.UUIDFactory;
 import org.bukkit.Bukkit;
@@ -17,27 +19,29 @@ public class DeleteCommand extends PluginCommand {
 
         // Register
         manager.command(manager.commandBuilder("cps", "clickspersecond").literal("delete").permission("cps.delete")
-                .argument(StringArgument.single("target")).handler(context -> {
-            // The target
-            String target = context.get("target");
+                .argument(StringArgument.single("target"))
+                .meta(CommandMeta.DESCRIPTION, "Deletes all or individual player data (identified by name or UUID) from the currently used data source.")
+                .meta(CommandConfirmationManager.META_CONFIRMATION_REQUIRED, true).handler(context -> {
+                    // The target
+                    String target = context.get("target");
 
-            // Delete all
-            if (target.equals("*") || target.equals("all")) {
-                send(context, MESSAGE_REQUEST_SENT);
-                plugin.getDataStorage().deleteAll().whenComplete((result, exception) -> handleResult(result, context));
-                return;
-            }
+                    // Delete all
+                    if (target.equals("*") || target.equals("all")) {
+                        send(context, MESSAGE_REQUEST_SENT);
+                        plugin.getDataStorage().deleteAll().whenComplete((result, exception) -> handleResult(result, context));
+                        return;
+                    }
 
-            // Parse UUID
-            UUID uuid = UUIDFactory.fromArgument(target);
-            if (uuid == null) {
-                send(context, MESSAGE_INVALID_NAME);
-                return;
-            }
+                    // Parse UUID
+                    UUID uuid = UUIDFactory.fromArgument(target);
+                    if (uuid == null) {
+                        send(context, MESSAGE_INVALID_NAME);
+                        return;
+                    }
 
-            // Delete single
-            plugin.getDataStorage().delete(uuid).whenComplete((result, exception) -> handleResult(result, context));
-        }).build());
+                    // Delete single
+                    plugin.getDataStorage().delete(uuid).whenComplete((result, exception) -> handleResult(result, context));
+                }).build());
     }
 
     private void handleResult(boolean result, CommandContext<CommandSender> context) {

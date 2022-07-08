@@ -4,6 +4,7 @@ import cloud.commandframework.ArgumentDescription;
 import cloud.commandframework.CommandManager;
 import cloud.commandframework.arguments.standard.IntegerArgument;
 import cloud.commandframework.context.CommandContext;
+import cloud.commandframework.meta.CommandMeta;
 import dev.dejvokep.clickspersecond.ClicksPerSecond;
 import dev.dejvokep.clickspersecond.utils.PlayerInfo;
 import org.bukkit.Bukkit;
@@ -19,6 +20,7 @@ public class LeaderboardCommand extends PluginCommand {
 
         manager.command(manager.commandBuilder("cps", "clickspersecond").literal("leaderboard").permission("cps.leaderboard")
                 .argument(IntegerArgument.optional("page", 1))
+                .meta(CommandMeta.DESCRIPTION, "Displays leaderboard information.")
                 .flag(manager.flagBuilder("fetch").withAliases("f").withDescription(ArgumentDescription.of("fetch if not available"))).handler(context -> {
                     // Leaderboard
                     List<PlayerInfo> leaderboard = plugin.getDataStorage().getLeaderboard();

@@ -2,6 +2,7 @@ package dev.dejvokep.clickspersecond.command;
 
 import cloud.commandframework.CommandManager;
 import cloud.commandframework.arguments.standard.StringArgument;
+import cloud.commandframework.meta.CommandMeta;
 import dev.dejvokep.clickspersecond.ClicksPerSecond;
 import dev.dejvokep.clickspersecond.UUIDFactory;
 import dev.dejvokep.clickspersecond.handler.sampler.Sampler;
@@ -16,7 +17,9 @@ public class StatsCommand extends PluginCommand {
         super(plugin);
 
         manager.command(manager.commandBuilder("cps", "clickspersecond").literal("stats").permission("cps.stats")
-                .argument(StringArgument.single("id")).handler(context -> {
+                .argument(StringArgument.single("id"))
+                .meta(CommandMeta.DESCRIPTION, "Displays player statistics either by name or UUID.")
+                .handler(context -> {
                     // Parse UUID
                     UUID uuid = UUIDFactory.fromArgument(context.get("id"));
                     if (uuid == null) {
