@@ -23,7 +23,7 @@ public class FileStorage extends DataStorage {
     // File
     private YamlDocument file;
 
-    public FileStorage(ClicksPerSecond plugin) {
+    public FileStorage(@NotNull ClicksPerSecond plugin) {
         // Call
         super(plugin, "player-data.yml file");
 
@@ -38,7 +38,7 @@ public class FileStorage extends DataStorage {
     }
 
     @Override
-    public void sync(Set<PlayerInfo> queued) {
+    public void sync(@NotNull Set<PlayerInfo> queued) {
         // For each
         // Note: No need to worry about delayed sync as fetching is immediate.
         queued.forEach(info -> file.set(info.getUniqueId().toString(), info));
@@ -52,22 +52,24 @@ public class FileStorage extends DataStorage {
     }
 
     @Override
-    public void queueFetch(UUID uuid) {
+    public void queueFetch(@NotNull UUID uuid) {
         cache(file.getAsOptional(uuid.toString(), PlayerInfo.class).orElseGet(() -> PlayerInfo.empty(uuid)));
     }
 
     @Override
-    public void skipFetch(UUID uuid) {
+    public void skipFetch(@NotNull UUID uuid) {
         // Unused
     }
 
+    @NotNull
     @Override
-    public CompletableFuture<PlayerInfo> fetchSingle(UUID uuid) {
+    public CompletableFuture<PlayerInfo> fetchSingle(@NotNull UUID uuid) {
         return CompletableFuture.completedFuture(file.getAs(uuid.toString(), PlayerInfo.class, null));
     }
 
+    @NotNull
     @Override
-    public CompletableFuture<Boolean> delete(UUID uuid) {
+    public CompletableFuture<Boolean> delete(@NotNull UUID uuid) {
         // Delete
         file.remove(uuid.toString());
 
@@ -83,6 +85,7 @@ public class FileStorage extends DataStorage {
         return CompletableFuture.completedFuture(true);
     }
 
+    @NotNull
     @Override
     public CompletableFuture<Boolean> deleteAll() {
         // Clear
@@ -100,6 +103,7 @@ public class FileStorage extends DataStorage {
         return CompletableFuture.completedFuture(true);
     }
 
+    @NotNull
     @Override
     public CompletableFuture<List<PlayerInfo>> fetchLeaderboard(int limit) {
         return CompletableFuture.completedFuture(file.getStoredValue().values().stream().map(block -> (PlayerInfo) block.getStoredValue()).sorted(Comparator.comparingInt(PlayerInfo::getCPS)).collect(Collectors.toList()));

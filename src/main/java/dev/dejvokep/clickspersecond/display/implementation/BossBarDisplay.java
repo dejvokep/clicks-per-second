@@ -11,6 +11,8 @@ import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -34,13 +36,13 @@ public class BossBarDisplay implements Display {
     private double progress;
     private VariableMessage<String> message;
 
-    public BossBarDisplay(ClicksPerSecond plugin) {
+    public BossBarDisplay(@NotNull ClicksPerSecond plugin) {
         this.plugin = plugin;
         reload();
     }
 
     @Override
-    public void add(Player player) {
+    public void add(@NotNull Player player) {
         // If the task is not running
         if (task == null)
             return;
@@ -55,7 +57,7 @@ public class BossBarDisplay implements Display {
     }
 
     @Override
-    public void remove(Player player) {
+    public void remove(@NotNull Player player) {
         // If the task is not running
         if (task == null)
             return;
@@ -100,7 +102,8 @@ public class BossBarDisplay implements Display {
         task = Bukkit.getScheduler().runTaskTimer(plugin, () -> bossBars.forEach((player, bossBar) -> bossBar.setTitle(message.get(player, (message, target) -> plugin.getPlaceholderReplacer().all(target, message)))), 0L, Math.max(config.getInt("refresh"), plugin.getClickHandler().getDisplayRate()));
     }
 
-    private <T> T map(Supplier<T> supplier, T def, String message) {
+    @Nullable
+    private <T> T map(@NotNull Supplier<T> supplier, @Nullable T def, @NotNull String message) {
         // Try
         try {
             return supplier.get();

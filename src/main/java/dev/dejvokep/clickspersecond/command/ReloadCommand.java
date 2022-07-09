@@ -5,6 +5,7 @@ import cloud.commandframework.meta.CommandMeta;
 import dev.dejvokep.clickspersecond.ClicksPerSecond;
 import dev.dejvokep.clickspersecond.display.Display;
 import org.bukkit.command.CommandSender;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.util.logging.Level;
@@ -13,7 +14,7 @@ import static dev.dejvokep.clickspersecond.utils.messaging.Messenger.MESSAGE_PRE
 
 public class ReloadCommand {
 
-    public ReloadCommand(ClicksPerSecond plugin, CommandManager<CommandSender> manager) {
+    public ReloadCommand(@NotNull ClicksPerSecond plugin, @NotNull CommandManager<CommandSender> manager) {
         // Register
         manager.command(manager.commandBuilder("cps", "clickspersecond").literal("reload").permission("cps.reload")
                 .meta(CommandMeta.DESCRIPTION, "Reloads the plugin.")

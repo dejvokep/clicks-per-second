@@ -10,6 +10,7 @@ import dev.dejvokep.clickspersecond.utils.messaging.Messenger;
 import dev.dejvokep.clickspersecond.utils.PlayerInfo;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.function.Function;
@@ -21,7 +22,7 @@ public class LeaderboardCommand {
     private final ClicksPerSecond plugin;
     private final Messenger messenger;
 
-    public LeaderboardCommand(ClicksPerSecond plugin, CommandManager<CommandSender> manager) {
+    public LeaderboardCommand(@NotNull ClicksPerSecond plugin, @NotNull CommandManager<CommandSender> manager) {
         this.plugin = plugin;
         this.messenger = plugin.getMessenger();
 

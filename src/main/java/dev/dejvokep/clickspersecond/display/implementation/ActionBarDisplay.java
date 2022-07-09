@@ -12,6 +12,7 @@ import dev.dejvokep.clickspersecond.display.Display;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashSet;
@@ -26,13 +27,13 @@ public class ActionBarDisplay implements Display {
     private BukkitTask task;
     private VariableMessage<String> message;
 
-    public ActionBarDisplay(ClicksPerSecond plugin) {
+    public ActionBarDisplay(@NotNull ClicksPerSecond plugin) {
         this.plugin = plugin;
         reload();
     }
 
     @Override
-    public void add(Player player) {
+    public void add(@NotNull Player player) {
         // If the task is not running
         if (task == null)
             return;
@@ -41,7 +42,7 @@ public class ActionBarDisplay implements Display {
     }
 
     @Override
-    public void remove(Player player) {
+    public void remove(@NotNull Player player) {
         // If the task is not running
         if (task == null)
             return;
@@ -76,7 +77,7 @@ public class ActionBarDisplay implements Display {
         task = Bukkit.getScheduler().runTaskTimer(plugin, () -> players.forEach(player -> send(player, message.get(player, (message, target) -> plugin.getPlaceholderReplacer().all(target, message)))), 0L, Math.max(config.getInt("refresh"), plugin.getClickHandler().getDisplayRate()));
     }
 
-    private void send(Player player, String message) {
+    private void send(@NotNull Player player, @NotNull String message) {
         try {
             // Create
             PacketContainer packet = new PacketContainer(PacketType.Play.Server.CHAT);

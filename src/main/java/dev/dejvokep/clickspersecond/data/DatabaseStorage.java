@@ -6,6 +6,7 @@ import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import org.bukkit.Bukkit;
+import org.jetbrains.annotations.NotNull;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -37,7 +38,7 @@ public class DatabaseStorage extends DataStorage {
 
     private Set<UUID> fetch = new HashSet<>();
 
-    public DatabaseStorage(ClicksPerSecond plugin) {
+    public DatabaseStorage(@NotNull ClicksPerSecond plugin) {
         // Call
         super(plugin, "database");
         // Configure
@@ -84,7 +85,7 @@ public class DatabaseStorage extends DataStorage {
     }
 
     @Override
-    public void sync(Set<PlayerInfo> queued) {
+    public void sync(@NotNull Set<PlayerInfo> queued) {
         Bukkit.getScheduler().runTaskAsynchronously(getPlugin(), () -> {
             // Connection
             try (Connection connection = dataSource.getConnection(); PreparedStatement statement = connection.prepareStatement(String.format(SQL_SYNC, table))) {
@@ -106,7 +107,7 @@ public class DatabaseStorage extends DataStorage {
         });
     }
 
-    public void queueFetch(UUID uuid) {
+    public void queueFetch(@NotNull UUID uuid) {
         if (cache.containsKey(uuid)) {
             cache(cache.get(uuid));
             return;
@@ -119,12 +120,13 @@ public class DatabaseStorage extends DataStorage {
             fetchAll();
     }
 
-    public void skipFetch(UUID uuid) {
+    public void skipFetch(@NotNull UUID uuid) {
         fetch.remove(uuid);
     }
 
+    @NotNull
     @Override
-    public CompletableFuture<PlayerInfo> fetchSingle(UUID uuid) {
+    public CompletableFuture<PlayerInfo> fetchSingle(@NotNull UUID uuid) {
         // If cached
         if (cache.containsKey(uuid))
             return CompletableFuture.completedFuture(cache.get(uuid));
@@ -151,8 +153,9 @@ public class DatabaseStorage extends DataStorage {
         });
     }
 
+    @NotNull
     @Override
-    public CompletableFuture<Boolean> delete(UUID uuid) {
+    public CompletableFuture<Boolean> delete(@NotNull UUID uuid) {
         return CompletableFuture.supplyAsync(() -> {
             // Connection
             try (Connection connection = dataSource.getConnection(); PreparedStatement statement = connection.prepareStatement(String.format(SQL_DELETE, table))) {
@@ -168,6 +171,7 @@ public class DatabaseStorage extends DataStorage {
         });
     }
 
+    @NotNull
     @Override
     public CompletableFuture<Boolean> deleteAll() {
         return CompletableFuture.supplyAsync(() -> {
@@ -237,6 +241,7 @@ public class DatabaseStorage extends DataStorage {
         });
     }
 
+    @NotNull
     @Override
     public CompletableFuture<List<PlayerInfo>> fetchLeaderboard(int limit) {
         return CompletableFuture.supplyAsync(() -> {
@@ -281,7 +286,7 @@ public class DatabaseStorage extends DataStorage {
         return false;
     }
 
-    private synchronized void refresh(PlayerInfo info) {
+    private synchronized void refresh(@NotNull PlayerInfo info) {
         cache.put(info.getUniqueId(), info);
         expirationQueue.add(info);
         cache(info);

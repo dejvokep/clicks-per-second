@@ -9,12 +9,13 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.jetbrains.annotations.NotNull;
 
 public class ConnectionListener implements Listener {
 
     private final ClicksPerSecond plugin;
 
-    public ConnectionListener(ClicksPerSecond plugin) {
+    public ConnectionListener(@NotNull ClicksPerSecond plugin) {
         this.plugin = plugin;
     }
 

@@ -29,6 +29,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
@@ -110,30 +111,37 @@ public class ClicksPerSecond extends JavaPlugin implements Listener {
     public void onDisable() {
     }
 
+    @NotNull
     public YamlDocument getConfiguration() {
         return config;
     }
 
+    @NotNull
     public DataStorage getDataStorage() {
         return dataStorage;
     }
 
+    @NotNull
     public ClickHandler getClickHandler() {
         return clickHandler;
     }
 
+    @NotNull
     public Set<Display> getDisplays() {
         return displays;
     }
 
+    @NotNull
     public PlaceholderReplacer getPlaceholderReplacer() {
         return placeholderReplacer;
     }
 
+    @NotNull
     public Watchers getWatchers() {
         return watchers;
     }
 
+    @NotNull
     public Messenger getMessenger() {
         return messenger;
     }

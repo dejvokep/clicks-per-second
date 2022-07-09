@@ -12,6 +12,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashSet;
@@ -30,13 +31,13 @@ public class TitleDisplay implements Display {
     private VariableMessage<TitleMessages> message;
     private int refresh;
 
-    public TitleDisplay(ClicksPerSecond plugin) {
+    public TitleDisplay(@NotNull ClicksPerSecond plugin) {
         this.plugin = plugin;
         reload();
     }
 
     @Override
-    public void add(Player player) {
+    public void add(@NotNull Player player) {
         // If the task is not running
         if (task == null)
             return;
@@ -45,7 +46,7 @@ public class TitleDisplay implements Display {
     }
 
     @Override
-    public void remove(Player player) {
+    public void remove(@NotNull Player player) {
         // If the task is not running
         if (task == null)
             return;
@@ -83,7 +84,7 @@ public class TitleDisplay implements Display {
     }
 
     @SuppressWarnings("deprecation")
-    public void send(Player player) {
+    public void send(@NotNull Player player) {
         // Replace
         TitleMessages messages = message.get(player);
         String title = messages.getTitle(player);
@@ -113,23 +114,25 @@ public class TitleDisplay implements Display {
     }
 
     @SuppressWarnings("deprecation")
-    public void clear(Player player) {
+    public void clear(@NotNull Player player) {
         player.sendTitle("", "");
     }
 
     private class TitleMessages {
         private final String title, subtitle;
 
-        private TitleMessages(Section config) {
+        private TitleMessages(@NotNull Section config) {
             title = ChatColor.translateAlternateColorCodes('&', config.getString("title"));
             subtitle = ChatColor.translateAlternateColorCodes('&', config.getString("subtitle"));
         }
 
-        public String getTitle(Player player) {
+        @NotNull
+        public String getTitle(@NotNull Player player) {
             return plugin.getPlaceholderReplacer().all(player, title);
         }
 
-        public String getSubtitle(Player player) {
+        @NotNull
+        public String getSubtitle(@NotNull Player player) {
             return plugin.getPlaceholderReplacer().all(player, subtitle);
         }
     }

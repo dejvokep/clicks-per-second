@@ -4,6 +4,7 @@ import dev.dejvokep.clickspersecond.ClicksPerSecond;
 import dev.dejvokep.clickspersecond.utils.PlayerInfo;
 import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitTask;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
@@ -21,7 +22,7 @@ public abstract class DataStorage {
 
     private boolean ready = false;
 
-    public DataStorage(ClicksPerSecond plugin, String type) {
+    public DataStorage(@NotNull ClicksPerSecond plugin, @NotNull String type) {
         // Set
         this.plugin = plugin;
         // Log
@@ -63,11 +64,11 @@ public abstract class DataStorage {
         }, 0L, Math.max(plugin.getConfiguration().getLong("data.leaderboard.expiration"), 1L));
     }
 
-    protected void cache(PlayerInfo info) {
+    protected void cache(@NotNull PlayerInfo info) {
         plugin.getClickHandler().setFetchedInfo(info);
     }
 
-    public void update(PlayerInfo info) {
+    public void update(@NotNull PlayerInfo info) {
         sync.remove(info);
         sync.add(info);
     }
@@ -101,24 +102,30 @@ public abstract class DataStorage {
 
     public abstract boolean isInstantFetch();
 
-    public abstract void queueFetch(UUID uuid);
+    public abstract void queueFetch(@NotNull UUID uuid);
 
-    public abstract void skipFetch(UUID uuid);
+    public abstract void skipFetch(@NotNull UUID uuid);
 
-    public abstract CompletableFuture<PlayerInfo> fetchSingle(UUID uuid);
+    @NotNull
+    public abstract CompletableFuture<PlayerInfo> fetchSingle(@NotNull UUID uuid);
 
-    public abstract CompletableFuture<Boolean> delete(UUID uuid);
+    @NotNull
+    public abstract CompletableFuture<Boolean> delete(@NotNull UUID uuid);
 
+    @NotNull
     public abstract CompletableFuture<Boolean> deleteAll();
 
+    @NotNull
     protected abstract CompletableFuture<List<PlayerInfo>> fetchLeaderboard(int limit);
 
-    protected abstract void sync(Set<PlayerInfo> queued);
+    protected abstract void sync(@NotNull Set<PlayerInfo> queued);
 
+    @NotNull
     public List<PlayerInfo> getLeaderboard() {
         return leaderboard;
     }
 
+    @NotNull
     public ClicksPerSecond getPlugin() {
         return plugin;
     }

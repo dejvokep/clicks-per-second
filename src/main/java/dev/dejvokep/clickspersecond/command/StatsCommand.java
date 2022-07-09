@@ -9,6 +9,7 @@ import dev.dejvokep.clickspersecond.utils.uuid.UUIDFactory;
 import dev.dejvokep.clickspersecond.handler.sampler.Sampler;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
@@ -16,7 +17,7 @@ import static dev.dejvokep.clickspersecond.utils.messaging.Messenger.*;
 
 public class StatsCommand {
 
-    public StatsCommand(ClicksPerSecond plugin, CommandManager<CommandSender> manager) {
+    public StatsCommand(@NotNull ClicksPerSecond plugin, @NotNull CommandManager<CommandSender> manager) {
         Messenger messenger = plugin.getMessenger();
 
         manager.command(manager.commandBuilder("cps", "clickspersecond").literal("stats").permission("cps.stats")

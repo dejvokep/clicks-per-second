@@ -4,6 +4,8 @@ import cloud.commandframework.context.CommandContext;
 import dev.dejvokep.clickspersecond.ClicksPerSecond;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Function;
 
@@ -22,30 +24,27 @@ public class Messenger {
 
     private final ClicksPerSecond plugin;
 
-    public Messenger(ClicksPerSecond plugin) {
+    public Messenger(@NotNull ClicksPerSecond plugin) {
         this.plugin = plugin;
     }
 
-    public void send(CommandContext<CommandSender> context, String messageId) {
+    public void send(@NotNull CommandContext<CommandSender> context, @NotNull String messageId) {
         send(context, messageId, null);
     }
 
-    public void send(CommandSender sender, String messageId) {
+    public void send(@NotNull CommandSender sender, @NotNull String messageId) {
         send(sender, messageId, null);
     }
 
-    public void send(CommandContext<CommandSender> context, String messageId, Function<String, String> replacer) {
+    public void send(@NotNull CommandContext<CommandSender> context, @NotNull String messageId, @Nullable Function<String, String> replacer) {
         send(context.getSender(), messageId, replacer);
     }
 
-    public void send(CommandSender sender, String messageId, Function<String, String> replacer) {
+    public void send(@NotNull CommandSender sender, @NotNull String messageId, @Nullable Function<String, String> replacer) {
         if (sender instanceof Player && !((Player) sender).isOnline())
             return;
         String message = plugin.getConfiguration().getString(messageId);
         sender.sendMessage(replacer == null ? message : replacer.apply(message));
     }
 
-    public ClicksPerSecond getPlugin() {
-        return plugin;
-    }
 }

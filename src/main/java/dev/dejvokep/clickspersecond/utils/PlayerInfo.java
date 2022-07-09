@@ -1,5 +1,7 @@
 package dev.dejvokep.clickspersecond.utils;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Objects;
 import java.util.UUID;
 
@@ -13,7 +15,7 @@ public class PlayerInfo {
 
     private final boolean loading, toggleUpdated;
 
-    private PlayerInfo(UUID uuid) {
+    private PlayerInfo(@NotNull UUID uuid) {
         this.uuid = uuid;
         this.cps = 0;
         this.time = 0;
@@ -23,11 +25,11 @@ public class PlayerInfo {
         this.toggleUpdated = false;
     }
 
-    private PlayerInfo(UUID uuid, int cps, long time, boolean toggle, boolean toggleUpdated) {
+    private PlayerInfo(@NotNull UUID uuid, int cps, long time, boolean toggle, boolean toggleUpdated) {
         this(uuid, cps, time, toggle, System.currentTimeMillis(), toggleUpdated);
     }
 
-    private PlayerInfo(UUID uuid, int cps, long time, boolean toggle, long fetchTime, boolean toggleUpdated) {
+    private PlayerInfo(@NotNull UUID uuid, int cps, long time, boolean toggle, long fetchTime, boolean toggleUpdated) {
         this.uuid = uuid;
         this.cps = cps;
         this.time = time;
@@ -45,13 +47,13 @@ public class PlayerInfo {
         return new PlayerInfo(uuid, cps, time, toggle, fetchTime, toggleUpdated);
     }
 
-    public static PlayerInfo initial(UUID uuid) {
+    public static PlayerInfo initial(@NotNull UUID uuid) {
         return new PlayerInfo(uuid);
     }
-    public static PlayerInfo empty(UUID uuid) {
+    public static PlayerInfo empty(@NotNull UUID uuid) {
         return new PlayerInfo(uuid, 0, 0, true, false);
     }
-    public static PlayerInfo from(UUID uuid, int cps, long time, boolean toggle) {
+    public static PlayerInfo from(@NotNull UUID uuid, int cps, long time, boolean toggle) {
         return new PlayerInfo(uuid, cps, time, toggle, false);
     }
 
@@ -59,6 +61,7 @@ public class PlayerInfo {
         return fetchTime;
     }
 
+    @NotNull
     public UUID getUniqueId() {
         return uuid;
     }

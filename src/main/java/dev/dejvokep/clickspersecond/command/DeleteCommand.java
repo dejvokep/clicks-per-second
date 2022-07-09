@@ -9,6 +9,7 @@ import dev.dejvokep.clickspersecond.ClicksPerSecond;
 import dev.dejvokep.clickspersecond.utils.uuid.UUIDFactory;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
@@ -18,7 +19,7 @@ public class DeleteCommand {
 
     private final ClicksPerSecond plugin;
 
-    public DeleteCommand(ClicksPerSecond plugin, CommandManager<CommandSender> manager) {
+    public DeleteCommand(@NotNull ClicksPerSecond plugin, @NotNull CommandManager<CommandSender> manager) {
         this.plugin = plugin;
 
         // Register

@@ -11,13 +11,14 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 public class StatsExpansion extends PlaceholderExpansion {
 
     private final ClicksPerSecond plugin;
     private final PlaceholderReplacer replacer;
 
-    public StatsExpansion(ClicksPerSecond plugin) {
+    public StatsExpansion(@NotNull ClicksPerSecond plugin) {
         this.plugin = plugin;
         this.replacer = plugin.getPlaceholderReplacer();
     }
@@ -34,7 +35,7 @@ public class StatsExpansion extends PlaceholderExpansion {
 
         // Requesting best CPS
         if (params.startsWith("best")) {
-            PlayerInfo info = plugin.getClickHandler().getInfo(player.getUniqueId());
+            PlayerInfo info = Objects.requireNonNull(plugin.getClickHandler().getInfo(player.getUniqueId()));
             if (info.isLoading())
                 return replacer.getUnknownValue();
 

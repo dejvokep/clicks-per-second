@@ -8,6 +8,7 @@ import dev.dejvokep.clickspersecond.utils.messaging.Messenger;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Function;
 
@@ -16,7 +17,7 @@ import static dev.dejvokep.clickspersecond.utils.messaging.Messenger.MESSAGE_PRE
 
 public class WatchCommand {
 
-    public WatchCommand(ClicksPerSecond plugin, CommandManager<CommandSender> manager) {
+    public WatchCommand(@NotNull ClicksPerSecond plugin, @NotNull CommandManager<CommandSender> manager) {
         Messenger messenger = plugin.getMessenger();
 
         // Register
