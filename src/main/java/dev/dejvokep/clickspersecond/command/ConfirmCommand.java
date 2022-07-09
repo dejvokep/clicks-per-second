@@ -8,14 +8,15 @@ import org.bukkit.command.CommandSender;
 
 import java.util.concurrent.TimeUnit;
 
-public class ConfirmCommand extends PluginCommand {
+import static dev.dejvokep.clickspersecond.Messenger.MESSAGE_CONFIRM_NO_PENDING;
+import static dev.dejvokep.clickspersecond.Messenger.MESSAGE_CONFIRM_REQUIRED;
+
+public class ConfirmCommand {
 
     public ConfirmCommand(ClicksPerSecond plugin, CommandManager<CommandSender> manager) {
-        super(plugin);
-
         // Confirmation manager
         CommandConfirmationManager<CommandSender> confirmationManager = new CommandConfirmationManager<>(20L, TimeUnit.SECONDS, context ->
-                send(context.getCommandContext(), MESSAGE_CONFIRM_REQUIRED), sender -> send(sender, MESSAGE_CONFIRM_NO_PENDING));
+                plugin.getMessenger().send(context.getCommandContext(), MESSAGE_CONFIRM_REQUIRED), sender -> plugin.getMessenger().send(sender, MESSAGE_CONFIRM_NO_PENDING));
 
         // Register
         manager.command(manager.commandBuilder("cps", "clickspersecond").literal("confirm")

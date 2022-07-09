@@ -4,16 +4,20 @@ import cloud.commandframework.CommandManager;
 import cloud.commandframework.arguments.standard.StringArgument;
 import cloud.commandframework.meta.CommandMeta;
 import dev.dejvokep.clickspersecond.ClicksPerSecond;
+import dev.dejvokep.clickspersecond.Messenger;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.function.Function;
 
-public class WatchCommand extends PluginCommand {
+import static dev.dejvokep.clickspersecond.Messenger.MESSAGE_PLAYERS_ONLY;
+import static dev.dejvokep.clickspersecond.Messenger.MESSAGE_PREFIX;
+
+public class WatchCommand {
 
     public WatchCommand(ClicksPerSecond plugin, CommandManager<CommandSender> manager) {
-        super(plugin);
+        Messenger messenger = plugin.getMessenger();
 
         // Register
         manager.command(manager.commandBuilder("cps", "clickspersecond").literal("watch").permission("cps.watch")
@@ -22,7 +26,7 @@ public class WatchCommand extends PluginCommand {
                 .handler(context -> {
                     // Not a player
                     if (!(context.getSender() instanceof Player)) {
-                        send(context, MESSAGE_PLAYERS_ONLY);
+                        messenger.send(context, MESSAGE_PLAYERS_ONLY);
                         return;
                     }
 
@@ -31,11 +35,11 @@ public class WatchCommand extends PluginCommand {
                     // No name
                     if (!context.contains("name")) {
                         // Stop
-                        Player watched = getPlugin().getWatchers().stop(sender);
+                        Player watched = plugin.getWatchers().stop(sender);
                         if (watched == null)
-                            send(context, MESSAGE_PREFIX + "watch.error.not-watching");
+                            messenger.send(context, MESSAGE_PREFIX + "watch.error.not-watching");
                         else
-                            send(context, MESSAGE_PREFIX + "watch.stop", message -> message.replace("{name}", watched.getName()));
+                            messenger.send(context, MESSAGE_PREFIX + "watch.stop", message -> message.replace("{name}", watched.getName()));
                         return;
                     }
 
@@ -46,20 +50,20 @@ public class WatchCommand extends PluginCommand {
                     // Player
                     Player watched = Bukkit.getPlayerExact(context.get("name"));
                     if (watched == null) {
-                        send(context, MESSAGE_PREFIX + "watch.error.player-offline", nameReplacer);
+                        messenger.send(context, MESSAGE_PREFIX + "watch.error.player-offline", nameReplacer);
                         return;
                     }
 
                     // Trying to watch themselves
                     if (watched == sender) {
-                        send(context, MESSAGE_PREFIX + "watch.error.yourself", nameReplacer);
+                        messenger.send(context, MESSAGE_PREFIX + "watch.error.yourself", nameReplacer);
                         return;
                     }
 
                     // Start
-                    getPlugin().getWatchers().start(sender, watched);
+                    plugin.getWatchers().start(sender, watched);
                     // Success
-                    send(context, MESSAGE_PREFIX + "watch.start", nameReplacer);
+                    messenger.send(context, MESSAGE_PREFIX + "watch.start", nameReplacer);
                 }).build());
     }
 

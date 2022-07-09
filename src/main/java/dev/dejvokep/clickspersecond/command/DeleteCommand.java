@@ -12,10 +12,14 @@ import org.bukkit.command.CommandSender;
 
 import java.util.UUID;
 
-public class DeleteCommand extends PluginCommand {
+import static dev.dejvokep.clickspersecond.Messenger.*;
+
+public class DeleteCommand {
+
+    private final ClicksPerSecond plugin;
 
     public DeleteCommand(ClicksPerSecond plugin, CommandManager<CommandSender> manager) {
-        super(plugin);
+        this.plugin = plugin;
 
         // Register
         manager.command(manager.commandBuilder("cps", "clickspersecond").literal("delete").permission("cps.delete")
@@ -27,7 +31,7 @@ public class DeleteCommand extends PluginCommand {
 
                     // Delete all
                     if (target.equals("*") || target.equals("all")) {
-                        send(context, MESSAGE_REQUEST_SENT);
+                        plugin.getMessenger().send(context, MESSAGE_REQUEST_SENT);
                         plugin.getDataStorage().deleteAll().whenComplete((result, exception) -> handleResult(result, context));
                         return;
                     }
@@ -35,7 +39,7 @@ public class DeleteCommand extends PluginCommand {
                     // Parse UUID
                     UUID uuid = UUIDFactory.fromArgument(target);
                     if (uuid == null) {
-                        send(context, MESSAGE_INVALID_NAME, message -> message.replace("{name}", target));
+                        plugin.getMessenger().send(context, MESSAGE_INVALID_NAME, message -> message.replace("{name}", target));
                         return;
                     }
 
@@ -45,15 +49,15 @@ public class DeleteCommand extends PluginCommand {
     }
 
     private void handleResult(boolean result, CommandContext<CommandSender> context) {
-        Bukkit.getScheduler().runTask(getPlugin(), () -> {
+        Bukkit.getScheduler().runTask(plugin, () -> {
             // If an error
             if (!result) {
-                send(context, MESSAGE_REQUEST_ERROR);
+                plugin.getMessenger().send(context, MESSAGE_REQUEST_ERROR);
                 return;
             }
 
             // Success
-            send(context, MESSAGE_PREFIX + "delete");
+            plugin.getMessenger().send(context, MESSAGE_PREFIX + "delete");
         });
     }
 
