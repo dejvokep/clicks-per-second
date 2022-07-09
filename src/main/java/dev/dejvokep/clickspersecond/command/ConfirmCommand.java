@@ -8,8 +8,8 @@ import org.bukkit.command.CommandSender;
 
 import java.util.concurrent.TimeUnit;
 
-import static dev.dejvokep.clickspersecond.Messenger.MESSAGE_CONFIRM_NO_PENDING;
-import static dev.dejvokep.clickspersecond.Messenger.MESSAGE_CONFIRM_REQUIRED;
+import static dev.dejvokep.clickspersecond.utils.messaging.Messenger.MESSAGE_CONFIRM_NO_PENDING;
+import static dev.dejvokep.clickspersecond.utils.messaging.Messenger.MESSAGE_CONFIRM_REQUIRED;
 
 public class ConfirmCommand {
 

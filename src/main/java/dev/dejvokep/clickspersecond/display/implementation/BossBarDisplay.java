@@ -2,11 +2,9 @@ package dev.dejvokep.clickspersecond.display.implementation;
 
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import dev.dejvokep.clickspersecond.ClicksPerSecond;
-import dev.dejvokep.clickspersecond.VariableMessage;
+import dev.dejvokep.clickspersecond.utils.watcher.VariableMessage;
 import dev.dejvokep.clickspersecond.display.Display;
-import dev.dejvokep.clickspersecond.utils.Placeholders;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarFlag;
 import org.bukkit.boss.BarStyle;

@@ -6,13 +6,13 @@ import cloud.commandframework.context.CommandContext;
 import cloud.commandframework.extra.confirmation.CommandConfirmationManager;
 import cloud.commandframework.meta.CommandMeta;
 import dev.dejvokep.clickspersecond.ClicksPerSecond;
-import dev.dejvokep.clickspersecond.UUIDFactory;
+import dev.dejvokep.clickspersecond.utils.uuid.UUIDFactory;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 
 import java.util.UUID;
 
-import static dev.dejvokep.clickspersecond.Messenger.*;
+import static dev.dejvokep.clickspersecond.utils.messaging.Messenger.*;
 
 public class DeleteCommand {
 

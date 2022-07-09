@@ -1,7 +1,7 @@
 package dev.dejvokep.clickspersecond.handler;
 
 import dev.dejvokep.clickspersecond.handler.sampler.Sampler;
-import dev.dejvokep.clickspersecond.utils.PlayerContainer;
+import dev.dejvokep.clickspersecond.utils.container.PlayerContainer;
 import dev.dejvokep.clickspersecond.utils.PlayerInfo;
 import org.bukkit.entity.Player;
 

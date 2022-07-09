@@ -1,4 +1,4 @@
-package dev.dejvokep.clickspersecond.utils;
+package dev.dejvokep.clickspersecond.utils.container;
 
 import org.bukkit.entity.Player;
 

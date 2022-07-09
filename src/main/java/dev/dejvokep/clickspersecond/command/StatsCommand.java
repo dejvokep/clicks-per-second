@@ -4,15 +4,15 @@ import cloud.commandframework.CommandManager;
 import cloud.commandframework.arguments.standard.StringArgument;
 import cloud.commandframework.meta.CommandMeta;
 import dev.dejvokep.clickspersecond.ClicksPerSecond;
-import dev.dejvokep.clickspersecond.Messenger;
-import dev.dejvokep.clickspersecond.UUIDFactory;
+import dev.dejvokep.clickspersecond.utils.messaging.Messenger;
+import dev.dejvokep.clickspersecond.utils.uuid.UUIDFactory;
 import dev.dejvokep.clickspersecond.handler.sampler.Sampler;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 
 import java.util.UUID;
 
-import static dev.dejvokep.clickspersecond.Messenger.*;
+import static dev.dejvokep.clickspersecond.utils.messaging.Messenger.*;
 
 public class StatsCommand {
 

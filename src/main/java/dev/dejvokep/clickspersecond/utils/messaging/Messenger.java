@@ -1,4 +1,4 @@
-package dev.dejvokep.clickspersecond;
+package dev.dejvokep.clickspersecond.utils.messaging;
 
 import cloud.commandframework.context.CommandContext;
 import dev.dejvokep.clickspersecond.ClicksPerSecond;

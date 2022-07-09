@@ -1,5 +1,6 @@
-package dev.dejvokep.clickspersecond;
+package dev.dejvokep.clickspersecond.utils.placeholders;
 
+import dev.dejvokep.clickspersecond.ClicksPerSecond;
 import dev.dejvokep.clickspersecond.handler.sampler.Sampler;
 import dev.dejvokep.clickspersecond.utils.PlayerInfo;
 import org.bukkit.Bukkit;

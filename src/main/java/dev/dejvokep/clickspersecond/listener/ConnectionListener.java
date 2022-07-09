@@ -1,7 +1,7 @@
 package dev.dejvokep.clickspersecond.listener;
 
 import dev.dejvokep.clickspersecond.ClicksPerSecond;
-import dev.dejvokep.clickspersecond.Messenger;
+import dev.dejvokep.clickspersecond.utils.messaging.Messenger;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

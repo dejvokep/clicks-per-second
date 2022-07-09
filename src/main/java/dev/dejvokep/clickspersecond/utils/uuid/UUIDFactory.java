@@ -1,4 +1,4 @@
-package dev.dejvokep.clickspersecond;
+package dev.dejvokep.clickspersecond.utils.uuid;
 
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;

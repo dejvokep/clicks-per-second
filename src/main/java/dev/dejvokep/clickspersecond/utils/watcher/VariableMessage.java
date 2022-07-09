@@ -1,6 +1,7 @@
-package dev.dejvokep.clickspersecond;
+package dev.dejvokep.clickspersecond.utils.watcher;
 
 import dev.dejvokep.boostedyaml.block.implementation.Section;
+import dev.dejvokep.clickspersecond.ClicksPerSecond;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 

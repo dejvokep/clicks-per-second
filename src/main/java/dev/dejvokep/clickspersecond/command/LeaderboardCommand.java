@@ -6,7 +6,7 @@ import cloud.commandframework.arguments.standard.IntegerArgument;
 import cloud.commandframework.context.CommandContext;
 import cloud.commandframework.meta.CommandMeta;
 import dev.dejvokep.clickspersecond.ClicksPerSecond;
-import dev.dejvokep.clickspersecond.Messenger;
+import dev.dejvokep.clickspersecond.utils.messaging.Messenger;
 import dev.dejvokep.clickspersecond.utils.PlayerInfo;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -14,7 +14,7 @@ import org.bukkit.command.CommandSender;
 import java.util.List;
 import java.util.function.Function;
 
-import static dev.dejvokep.clickspersecond.Messenger.*;
+import static dev.dejvokep.clickspersecond.utils.messaging.Messenger.*;
 
 public class LeaderboardCommand {
 
