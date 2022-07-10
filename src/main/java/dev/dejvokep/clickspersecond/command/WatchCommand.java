@@ -30,20 +30,22 @@ public class WatchCommand {
                     }
 
                     Player sender = (Player) context.getSender();
+                    Player watched = plugin.getWatchers().getWatched(sender);
 
                     // No name
-                    if (!context.contains("name")) {
+                    if (!context.contains("name") || (watched != null && watched.getName().equals(context.get("name")))) {
                         // Stop
-                        Player watched = plugin.getWatchers().stop(sender);
+                        final Player finalWatched = watched;
+                        plugin.getWatchers().stop(sender);
                         if (watched == null)
                             messenger.send(context, MESSAGE_PREFIX + "watch.error.not-watching");
                         else
-                            messenger.send(context, MESSAGE_PREFIX + "watch.stop", message -> plugin.getPlaceholderReplacer().player(watched, message));
+                            messenger.send(context, MESSAGE_PREFIX + "watch.stop", message -> plugin.getPlaceholderReplacer().player(finalWatched, message));
                         return;
                     }
 
                     // Player
-                    Player watched = Bukkit.getPlayerExact(context.get("name"));
+                    watched = Bukkit.getPlayerExact(context.get("name"));
                     if (watched == null) {
                         messenger.send(context, MESSAGE_PREFIX + "watch.error.player-offline", message -> message.replace("{name}", context.get("name")));
                         return;
@@ -56,9 +58,10 @@ public class WatchCommand {
                     }
 
                     // Start
+                    final Player finalWatched = watched;
                     plugin.getWatchers().start(sender, watched);
                     // Success
-                    messenger.send(context, MESSAGE_PREFIX + "watch.start", message -> plugin.getPlaceholderReplacer().player(watched, message));
+                    messenger.send(context, MESSAGE_PREFIX + "watch.start", message -> plugin.getPlaceholderReplacer().player(finalWatched, message));
                 }).build());
     }
 
