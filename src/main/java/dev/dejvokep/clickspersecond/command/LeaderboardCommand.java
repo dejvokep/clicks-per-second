@@ -47,8 +47,10 @@ public class LeaderboardCommand {
                         return;
 
                     // Fetch not present
-                    if (!context.flags().isPresent("fetch"))
+                    if (!context.flags().isPresent("fetch")) {
+                        messenger.send(context, MESSAGE_PREFIX + "leaderboard.invalid-page", pageReplacer);
                         return;
+                    }
 
                     // Does not have permission
                     if (!context.hasPermission("cps.leaderboard.fetch")) {
