@@ -64,7 +64,7 @@ data:
       # Fetch all queued requests (at maximum) after this delay since the last request:
       # - The delay can be shorter if the size trigger invokes fetching earlier. This is just a safety check if your
       #   server does not have big enough network for the trigger above.
-      delay: 5
+      rate: 5
 
 placeholder:
   allow-placeholder-api: false
@@ -85,7 +85,8 @@ database:
   password: ""
   database: ""
   table: ""
-  pool-size: 1
+  encoding: "utf8"
+  max-pool-size: 10
   connection-timeout:
     request: 30000
     keep-alive: 0
@@ -101,7 +102,7 @@ messages:
   # {name}
   invalid-name: "&7[&bCPS&7] &cCould not obtain UUID from player '{name}', has he played on the server already?"
   data-request:
-    in-progress: "&7[&bCPS&7] &cData request already pending, please try again in a moment..."
+    pending: "&7[&bCPS&7] &cData request already pending, please try again in a moment..."
     sent: "&7[&bCPS&7] &7Data request was sent, please wait..."
     error: "&7[&bCPS&7] &cSomething went wrong, check the console for more details."
   confirm:
