@@ -99,17 +99,23 @@ public class ClicksPerSecond extends JavaPlugin implements Listener {
             ex.printStackTrace();
         }
 
-        // Storage
-        dataStorage = config.getString("storage").equalsIgnoreCase("FILE") ? new FileStorage(this) : new DatabaseStorage(this);
-        // Register listeners
-        Bukkit.getScheduler().runTask(this, () -> Bukkit.getPluginManager().registerEvents(new EventListener(this), this));
+        // Run async
+        Bukkit.getScheduler().runTaskAsynchronously(this, () -> {
+            // Storage
+            dataStorage = config.getString("storage").equalsIgnoreCase("FILE") ? new FileStorage(this) : new DatabaseStorage(this);
 
-        // Add all online players
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            clickHandler.add(player);
-            displays.forEach(display -> display.add(player));
-        }
+            // Back to sync
+            Bukkit.getScheduler().runTask(this, () -> {
+                // Register listeners
+                Bukkit.getScheduler().runTask(this, () -> Bukkit.getPluginManager().registerEvents(new EventListener(this), this));
 
+                // Add all online players
+                for (Player player : Bukkit.getOnlinePlayers()) {
+                    clickHandler.add(player);
+                    displays.forEach(display -> display.add(player));
+                }
+            });
+        });
     }
 
     @Override
