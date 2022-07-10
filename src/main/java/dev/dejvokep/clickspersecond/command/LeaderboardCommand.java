@@ -69,7 +69,7 @@ public class LeaderboardCommand {
 
                         // New indexes
                         int newPages = (int) Math.ceil((double) board.size() / perPage);
-                        Function<String, String> newPageReplacer = message -> message.replace("{page}", String.valueOf(page)).replace("{pages}", String.valueOf(pages));
+                        Function<String, String> newPageReplacer = message -> message.replace("{page}", String.valueOf(page)).replace("{pages}", String.valueOf(newPages));
 
                         // Display
                         if (!displayBoard(context, board, perPage, page, newPages, newPageReplacer))
