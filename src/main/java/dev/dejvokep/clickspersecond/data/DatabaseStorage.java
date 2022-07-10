@@ -44,13 +44,23 @@ public class DatabaseStorage extends DataStorage {
         // Configure
         Section section = plugin.getConfiguration().getSection("database");
         HikariConfig config = new HikariConfig();
-        config.setJdbcUrl(String.format("jdbc:mysql://%s:%d/%s", section.getString("host"), section.getInt("port"), section.getString("database")));
+        config.setDriverClassName("com.mysql.jdbc.Driver");
+        config.setJdbcUrl(String.format("jdbc:mysql://%s:%d/%s?characterEncoding=%s", section.getString("host"), section.getInt("port"), section.getString("database"), section.getString("encoding")));
         config.setUsername(section.getString("username"));
         config.setPassword(section.getString("password"));
-        config.setMaximumPoolSize(section.getInt("pool-size"));
+        config.setMaximumPoolSize(section.getInt("max-pool-size"));
         config.setConnectionTimeout(section.getInt("connection-timeout.request"));
         config.setKeepaliveTime(section.getInt("connection-timeout.keep-alive"));
         config.setMaxLifetime(section.getInt("connection-timeout.lifetime"));
+        // Properties
+        config.addDataSourceProperty("cachePrepStmts", true);
+        config.addDataSourceProperty("prepStmtCacheSize", 250);
+        config.addDataSourceProperty("prepStmtCacheSqlLimit", 2048);
+        config.addDataSourceProperty("useServerPrepStmts", true);
+        config.addDataSourceProperty("useLocalSessionState", true);
+        config.addDataSourceProperty("rewriteBatchedStatements", true);
+        config.addDataSourceProperty("cacheResultSetMetadata", true);
+        config.addDataSourceProperty("maintainTimeStats", false);
         // Set
         this.table = section.getString("table");
         this.fetchExpiration = plugin.getConfiguration().getLong("data.fetch.expiration");
@@ -64,11 +74,10 @@ public class DatabaseStorage extends DataStorage {
             try (Connection connection = dataSource.getConnection(); PreparedStatement statement = connection.prepareStatement(String.format(SQL_CREATE_TABLE, table))) {
                 // Execute
                 statement.executeUpdate();
-
                 // Ready
                 ready();
             } catch (SQLException ex) {
-                plugin.getLogger().log(Level.SEVERE, "Failed to create database table!", ex);
+                plugin.getLogger().log(Level.SEVERE, "Failed to create the database table!", ex);
             }
         });
 
@@ -102,7 +111,7 @@ public class DatabaseStorage extends DataStorage {
                 // Execute all
                 statement.executeBatch();
             } catch (SQLException ex) {
-                getPlugin().getLogger().log(Level.SEVERE, "Failed to execute batch statement!", ex);
+                getPlugin().getLogger().log(Level.SEVERE, "Failed to execute a batch statement!", ex);
             }
         });
     }
@@ -211,7 +220,7 @@ public class DatabaseStorage extends DataStorage {
         }
 
         // Nothing to fetch
-        if (fetch.size() == 0)
+        if (queued.size() == 0)
             return;
 
         Bukkit.getScheduler().runTaskAsynchronously(getPlugin(), () -> {
