@@ -105,21 +105,21 @@ messages:
     sent: "&7[&bCPS&7] &7Data request was sent, please wait..."
     error: "&7[&bCPS&7] &cSomething went wrong, check the console for more details."
   confirm:
-    required: "&7Confirmation required! Please use &b/cps confirm &7within &b20 seconds &7to confirm the operation."
-    not-pending: "&cThere are not any pending confirmations."
+    required: "&7[&bCPS&7] &7Confirmation required! Please use &b/cps confirm &7within &b20 seconds &7to confirm the operation."
+    not-pending: "&7[&bCPS&7] &cThere are not any pending confirmations."
   stats:
     # {uuid}
     # {name}
-    not-found: "&cNo data found for player identified by {name} ({uuid})."
+    not-found: "&7[&bCPS&7] &cNo data found for player identified by {name} ({uuid})."
     # {name} (name or unknown)
     # {cps_now}
     # {cps_best}
     # {cps_best_date_millis} / {cps_best_date_formatted}
-    offline: "&7Statistics of player &b{id}&7: best &b{cps_best} CPS &7at {cps_best_date_formatted}"
-    online: "&7Statistics of player &b{name}&7: now &b{cps_now} CPS&7, best &b{cps_best} CPS &7at {cps_best_date_formatted}"
+    offline: "&7[&bCPS&7] &7Statistics of player &b{id}&7: best &b{cps_best} CPS &7at {cps_best_date_formatted}"
+    online: "&7[&bCPS&7] &7Statistics of player &b{name}&7: now &b{cps_now} CPS&7, best &b{cps_best} CPS &7at {cps_best_date_formatted}"
   leaderboard:
     # {page}, {pages}
-    invalid-page: "&cPage number {page} does not exist. There are {pages} pages only."
+    invalid-page: "&7[&bCPS&7] &cPage number {page} does not exist. There are {pages} pages only."
     entries-per-page: 20
     # {page}, {pages}
     header: "-- &bCPS leaderboard &7({page}/{pages}) --"
@@ -130,14 +130,14 @@ messages:
   watch:
     error:
       # {name}
-      player-offline: "&cPlayer {name} is offline."
-      yourself: "&cYou cannot watch yourself."
-      not-watching: "&cYou are not watching anyone."
+      player-offline: "&7[&bCPS&7] &cPlayer {name} is offline."
+      yourself: "&7[&bCPS&7] &cYou cannot watch yourself."
+      not-watching: "&7[&bCPS&7] &cYou are not watching anyone."
     # player
-    start: "&bStarted &7watching player &b{name}&7. Use this command again to toggle off."
+    start: "&7[&bCPS&7] &bStarted &7watching player &b{name}&7. Use this command again to toggle off."
     # player
-    stop: "&bStopped &7watching player &b{name}&7."
+    stop: "&7[&bCPS&7] &bStopped &7watching player &b{name}&7."
     # player
-    disconnected: "&bStopped &7watching player &b{name} &7- player disconnected."
-  delete: "&7Deleted the requested data. Please note that for an absolute data deletion, everyone must be offline and the servers must be restarted."
-  reload: "&7Plugin reloaded."
+    disconnected: "&7[&bCPS&7] &bStopped &7watching player &b{name} &7- player disconnected."
+  delete: "&7[&bCPS&7] &7Deleted the requested data."
+  reload: "&7[&bCPS&7] &7Plugin reloaded."
