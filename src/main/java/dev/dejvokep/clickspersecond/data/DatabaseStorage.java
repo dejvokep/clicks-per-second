@@ -156,6 +156,9 @@ public class DatabaseStorage extends DataStorage {
     @NotNull
     @Override
     public CompletableFuture<Boolean> delete(@NotNull UUID uuid) {
+        // Delete from cache
+        cache.remove(uuid);
+
         return CompletableFuture.supplyAsync(() -> {
             // Connection
             try (Connection connection = dataSource.getConnection(); PreparedStatement statement = connection.prepareStatement(String.format(SQL_DELETE, table))) {
@@ -174,6 +177,10 @@ public class DatabaseStorage extends DataStorage {
     @NotNull
     @Override
     public CompletableFuture<Boolean> deleteAll() {
+        // Clear caches
+        cache.clear();
+        expirationQueue.clear();
+
         return CompletableFuture.supplyAsync(() -> {
             // Connection
             try (Connection connection = dataSource.getConnection(); PreparedStatement statement = connection.prepareStatement(String.format(SQL_DELETE_ALL, table))) {
