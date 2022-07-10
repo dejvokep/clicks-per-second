@@ -2,6 +2,7 @@ package dev.dejvokep.clickspersecond.utils.messaging;
 
 import cloud.commandframework.context.CommandContext;
 import dev.dejvokep.clickspersecond.ClicksPerSecond;
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -18,9 +19,9 @@ public class Messenger {
     public static final String MESSAGE_INVALID_NAME = MESSAGE_PREFIX + "invalid-name";
     public static final String MESSAGE_CONFIRM_REQUIRED = MESSAGE_PREFIX + "confirm.required";
     public static final String MESSAGE_CONFIRM_NO_PENDING = MESSAGE_PREFIX + "confirm.not-pending";
-    public static final String MESSAGE_REQUEST_PENDING = MESSAGE_PREFIX + "data-operation.pending";
-    public static final String MESSAGE_REQUEST_SENT = MESSAGE_PREFIX + "data-operation.sent";
-    public static final String MESSAGE_REQUEST_ERROR = MESSAGE_PREFIX + "data-operation.error";
+    public static final String MESSAGE_REQUEST_PENDING = MESSAGE_PREFIX + "data-request.pending";
+    public static final String MESSAGE_REQUEST_SENT = MESSAGE_PREFIX + "data-request.sent";
+    public static final String MESSAGE_REQUEST_ERROR = MESSAGE_PREFIX + "data-request.error";
 
     private final ClicksPerSecond plugin;
 
@@ -44,7 +45,9 @@ public class Messenger {
         if (sender instanceof Player && !((Player) sender).isOnline())
             return;
         String message = plugin.getConfiguration().getString(messageId);
-        sender.sendMessage(replacer == null ? message : replacer.apply(message));
+        if (message == null || message.isEmpty())
+            return;
+        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', replacer == null ? message : replacer.apply(message)));
     }
 
 }
