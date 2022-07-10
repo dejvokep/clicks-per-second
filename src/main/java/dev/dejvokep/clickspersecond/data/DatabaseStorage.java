@@ -152,7 +152,7 @@ public class DatabaseStorage extends DataStorage {
                 // Info
                 PlayerInfo info = resultSet.next() ? PlayerInfo.from(uuid, resultSet.getInt(2), resultSet.getLong(3), resultSet.getBoolean(4)) : PlayerInfo.empty(uuid);
                 // Refresh
-                refresh(info);
+                Bukkit.getScheduler().runTask(getPlugin(), () -> refresh(info));
                 return info;
             } catch (SQLException ex) {
                 getPlugin().getLogger().log(Level.SEVERE, String.format("Failed to fetch player information of %s!", uuid), ex);
@@ -239,18 +239,20 @@ public class DatabaseStorage extends DataStorage {
 
                 // Execute
                 ResultSet resultSet = statement.executeQuery();
+                // Fetched
+                List<PlayerInfo> fetched = new LinkedList<>();
+
                 // While has next
                 while (resultSet.next()) {
                     // UUID
                     UUID uuid = UUID.fromString(resultSet.getString(1));
                     queued.remove(uuid);
                     // Construct
-                    refresh(PlayerInfo.from(uuid, resultSet.getInt(2), resultSet.getLong(3), resultSet.getBoolean(4)));
+                    fetched.add(PlayerInfo.from(uuid, resultSet.getInt(2), resultSet.getLong(3), resultSet.getBoolean(4)));
                 }
 
-                // Remaining were not found
-                for (UUID uuid : queued)
-                    refresh(PlayerInfo.empty(uuid));
+                // Refresh sync
+                Bukkit.getScheduler().runTask(getPlugin(), () -> fetched.forEach(this::refresh));
             } catch (SQLException ex) {
                 getPlugin().getLogger().log(Level.SEVERE, "Failed to fetch player information!", ex);
             }
@@ -275,16 +277,20 @@ public class DatabaseStorage extends DataStorage {
 
                 // Execute
                 ResultSet resultSet = statement.executeQuery();
+                // Fetched
+                List<PlayerInfo> fetched = new LinkedList<>();
+
                 // While there's anything available
                 while (resultSet.next()) {
                     // Info
                     PlayerInfo info = PlayerInfo.from(UUID.fromString(resultSet.getString(1)), resultSet.getInt(2), resultSet.getLong(3), resultSet.getBoolean(4));
                     // Refresh
-                    refresh(info);
+                    fetched.add(info);
                     leaderboard.add(info);
                 }
-                // Close
-                resultSet.close();
+
+                // Refresh sync
+                Bukkit.getScheduler().runTask(getPlugin(), () -> fetched.forEach(this::refresh));
             } catch (SQLException ex) {
                 getPlugin().getLogger().log(Level.SEVERE, "Failed to fetch leaderboard information!", ex);
                 return null;
@@ -302,7 +308,7 @@ public class DatabaseStorage extends DataStorage {
         return false;
     }
 
-    private synchronized void refresh(@NotNull PlayerInfo info) {
+    private void refresh(@NotNull PlayerInfo info) {
         cache.put(info.getUniqueId(), info);
         expirationQueue.add(info);
         passToSampler(info);
