@@ -70,17 +70,16 @@ public class LeaderboardCommand {
                         Function<String, String> newPageReplacer = message -> message.replace("{page}", String.valueOf(page)).replace("{pages}", String.valueOf(pages));
 
                         // Display
-                        displayBoard(context, board, perPage, page, newPages, newPageReplacer);
+                        if (!displayBoard(context, board, perPage, page, newPages, newPageReplacer))
+                            messenger.send(context, MESSAGE_PREFIX + "leaderboard.invalid-page", pageReplacer);
                     }));
                 }).build());
     }
 
     private boolean displayBoard(CommandContext<CommandSender> context, List<PlayerInfo> board, int perPage, int page, int pages, Function<String, String> pageReplacer) {
         // Invalid page number
-        if (page > pages) {
-            messenger.send(context, MESSAGE_PREFIX + "leaderboard.invalid-page", pageReplacer);
+        if (page > pages)
             return false;
-        }
 
         // Send header
         messenger.send(context, MESSAGE_PREFIX + "leaderboard.header", pageReplacer);
