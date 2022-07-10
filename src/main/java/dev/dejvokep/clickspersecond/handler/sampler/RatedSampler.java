@@ -46,7 +46,7 @@ public class RatedSampler extends Sampler {
 
         // If going down from peak and the peak was more than the best
         if (cps < prev && prev > info.getCPS())
-            return setInfo(info.setCPS(previous, System.currentTimeMillis()));
+            return setInfo(info.setCPS(prev, System.currentTimeMillis()));
 
         // Nothing new
         return null;

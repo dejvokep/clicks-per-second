@@ -42,6 +42,10 @@ public class ImmediateHandler implements ClickHandler {
 
     @Override
     public void remove(@NotNull Player player) {
+        // If absent
+        if (!samplers.containsKey(player.getUniqueId()))
+            return;
+
         // Remove
         PlayerInfo info = samplers.remove(player.getUniqueId()).close();
         // Update
