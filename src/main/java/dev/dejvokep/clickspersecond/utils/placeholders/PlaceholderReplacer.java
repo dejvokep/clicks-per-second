@@ -33,6 +33,13 @@ public class PlaceholderReplacer {
     }
 
     @NotNull
+    public String player(@NotNull Player player, @NotNull String message) {
+        return message.replace("{uuid}", player.getUniqueId().toString())
+                .replace("{name}", player.getName())
+                .replace("{id}", player.getName());
+    }
+
+    @NotNull
     public String info(@NotNull PlayerInfo info, @NotNull String message) {
         return player(info.getUniqueId(), message)
                 .replace("{cps_best}", String.valueOf(info.getCPS()))

@@ -132,11 +132,11 @@ messages:
       player-offline: "Player {name} is offline."
       yourself: "You cannot watch yourself."
       not-watching: "You are not watching anyone."
-    # {name}
+    # player
     start: "Started watching CPS of player {name}. Use this command again to toggle off."
-    # {name}
+    # player
     stop: "Stopped watching player {name}."
-    # {name}
+    # player
     disconnected: "Stopped watching player {name} - player disconnected."
   delete: "Deleted the requested data. Please note that for an absolute data deletion, everyone must be offline and the servers must be restarted."
   reload: "Plugin reloaded."
