@@ -126,6 +126,7 @@ public class ClicksPerSecond extends JavaPlugin implements Listener {
 
     @Override
     public void onDisable() {
+        dataStorage.close();
     }
 
     /**

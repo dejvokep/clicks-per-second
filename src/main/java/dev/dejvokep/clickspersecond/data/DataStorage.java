@@ -101,6 +101,8 @@ public abstract class DataStorage {
         return leaderboardLimit;
     }
 
+    public abstract void close();
+
     public abstract boolean isInstantFetch();
 
     public abstract void queueFetch(@NotNull UUID uuid);

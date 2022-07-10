@@ -110,6 +110,11 @@ public class FileStorage extends DataStorage {
     }
 
     @Override
+    public void close() {
+        // Unused
+    }
+
+    @Override
     public boolean isInstantFetch() {
         return true;
     }

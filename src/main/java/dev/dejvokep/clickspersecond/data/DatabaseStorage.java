@@ -304,6 +304,12 @@ public class DatabaseStorage extends DataStorage {
     }
 
     @Override
+    public void close() {
+        if (dataSource != null)
+            dataSource.close();
+    }
+
+    @Override
     public boolean isInstantFetch() {
         return false;
     }
