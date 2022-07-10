@@ -6,7 +6,8 @@ import dev.dejvokep.clickspersecond.handler.sampler.Sampler;
 import dev.dejvokep.clickspersecond.utils.PlayerInfo;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitTask;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,7 +21,7 @@ public class RatedHandler implements ClickHandler {
 
     private final int rate;
 
-    public RatedHandler(ClicksPerSecond plugin, int rate) {
+    public RatedHandler(@NotNull ClicksPerSecond plugin, int rate) {
         this.plugin = plugin;
         this.rate = rate;
 
@@ -35,7 +36,7 @@ public class RatedHandler implements ClickHandler {
     }
 
     @Override
-    public void add(Player player) {
+    public void add(@NotNull Player player) {
         // Add
         samplers.put(player.getUniqueId(), new RatedSampler(rate, PlayerInfo.initial(player.getUniqueId())));
         // Fetch
@@ -43,7 +44,7 @@ public class RatedHandler implements ClickHandler {
     }
 
     @Override
-    public void remove(Player player) {
+    public void remove(@NotNull Player player) {
         // Remove
         PlayerInfo info = samplers.remove(player.getUniqueId()).close();
         // Update
@@ -57,24 +58,25 @@ public class RatedHandler implements ClickHandler {
     }
 
     @Override
-    public void setFetchedInfo(PlayerInfo info) {
+    public void setFetchedInfo(@NotNull PlayerInfo info) {
         Sampler sampler = samplers.get(info.getUniqueId());
         if (sampler != null)
             sampler.setFetchedInfo(info);
     }
 
     @Override
-    public void processClick(Player player) {
+    public void processClick(@NotNull Player player) {
         samplers.get(player.getUniqueId()).addClick();
     }
 
     @Override
-    public Sampler getSampler(UUID uuid) {
+    @Nullable
+    public Sampler getSampler(@NotNull UUID uuid) {
         return samplers.get(uuid);
     }
 
     @Override
-    public int getCPS(Player player) {
+    public int getCPS(@NotNull Player player) {
         // Sampler
         RatedSampler sampler = samplers.get(player.getUniqueId());
         // Return
@@ -82,7 +84,8 @@ public class RatedHandler implements ClickHandler {
     }
 
     @Override
-    public PlayerInfo getInfo(UUID uuid) {
+    @Nullable
+    public PlayerInfo getInfo(@NotNull UUID uuid) {
         return samplers.containsKey(uuid) ? samplers.get(uuid).getInfo() : null;
     }
 

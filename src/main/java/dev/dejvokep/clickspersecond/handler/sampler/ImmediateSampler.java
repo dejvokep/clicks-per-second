@@ -1,6 +1,8 @@
 package dev.dejvokep.clickspersecond.handler.sampler;
 
 import dev.dejvokep.clickspersecond.utils.PlayerInfo;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Queue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -10,10 +12,11 @@ public class ImmediateSampler extends Sampler {
     private final Queue<Long> queue = new LinkedBlockingQueue<>();
     private int previous = 0;
 
-    public ImmediateSampler(PlayerInfo info) {
+    public ImmediateSampler(@NotNull PlayerInfo info) {
         super(info);
     }
 
+    @Nullable
     public PlayerInfo addClick() {
         // Add click
         queue.add(System.currentTimeMillis());
@@ -32,6 +35,7 @@ public class ImmediateSampler extends Sampler {
     }
 
     @Override
+    @Nullable
     public PlayerInfo close() {
         return previous > info.getCPS() ? info.setCPS(previous, System.currentTimeMillis()) : null;
     }

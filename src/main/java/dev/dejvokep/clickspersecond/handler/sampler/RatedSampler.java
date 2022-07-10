@@ -1,32 +1,29 @@
 package dev.dejvokep.clickspersecond.handler.sampler;
 
 import dev.dejvokep.clickspersecond.utils.PlayerInfo;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class RatedSampler extends Sampler {
 
     private int clicks = 0, cps = 0, previous = 0;
     private final double rate;
 
-    public RatedSampler(int tickRate, PlayerInfo info) {
+    public RatedSampler(int tickRate, @NotNull PlayerInfo info) {
         super(info);
         rate = (double) tickRate / 20;
     }
 
+    @Nullable
     public PlayerInfo addClick() {
         // Add click
         clicks++;
-
-        // Store
-        int prev = previous;
-        // Reset
-        this.previous = clicks;
-
-
         // Nothing new
         return null;
     }
 
     @Override
+    @Nullable
     public PlayerInfo close() {
         return previous > info.getCPS() ? info.setCPS(previous, System.currentTimeMillis()) : null;
     }
@@ -35,6 +32,7 @@ public class RatedSampler extends Sampler {
         return cps;
     }
 
+    @Nullable
     public PlayerInfo reset() {
         // Store
         int prev = previous;

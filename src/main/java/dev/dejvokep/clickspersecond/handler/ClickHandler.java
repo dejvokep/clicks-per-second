@@ -4,17 +4,23 @@ import dev.dejvokep.clickspersecond.handler.sampler.Sampler;
 import dev.dejvokep.clickspersecond.utils.container.PlayerContainer;
 import dev.dejvokep.clickspersecond.utils.PlayerInfo;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
 public interface ClickHandler extends PlayerContainer {
 
-    void setFetchedInfo(PlayerInfo info);
-    PlayerInfo getInfo(UUID uuid);
-    Sampler getSampler(UUID uuid);
+    void setFetchedInfo(@NotNull PlayerInfo info);
 
-    void processClick(Player player);
-    int getCPS(Player player);
+    @Nullable
+    PlayerInfo getInfo(@NotNull UUID uuid);
+
+    @Nullable
+    Sampler getSampler(@NotNull UUID uuid);
+
+    void processClick(@NotNull Player player);
+    int getCPS(@NotNull Player player);
 
     int getDisplayRate();
 
