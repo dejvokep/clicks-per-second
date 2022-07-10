@@ -27,6 +27,7 @@ import dev.dejvokep.clickspersecond.utils.placeholders.StatsExpansion;
 import dev.dejvokep.clickspersecond.utils.watcher.Watchers;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
@@ -98,13 +99,17 @@ public class ClicksPerSecond extends JavaPlugin implements Listener {
             ex.printStackTrace();
         }
 
-        // Run async
-        Bukkit.getScheduler().runTaskAsynchronously(this, () -> {
-            // Storage
-            dataStorage = config.getString("storage").equalsIgnoreCase("FILE") ? new FileStorage(this) : new DatabaseStorage(this);
-            // Register listeners
-            Bukkit.getScheduler().runTask(this, () -> Bukkit.getPluginManager().registerEvents(new ConnectionListener(this), this));
-        });
+        // Storage
+        dataStorage = config.getString("storage").equalsIgnoreCase("FILE") ? new FileStorage(this) : new DatabaseStorage(this);
+        // Register listeners
+        Bukkit.getScheduler().runTask(this, () -> Bukkit.getPluginManager().registerEvents(new ConnectionListener(this), this));
+
+        // Add all online players
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            clickHandler.add(player);
+            displays.forEach(display -> display.add(player));
+        }
+
     }
 
     @Override
