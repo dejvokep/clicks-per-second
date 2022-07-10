@@ -55,7 +55,7 @@ public class StatsCommand {
 
                     // If not instant fetch and no permission
                     if (!plugin.getDataStorage().isInstantFetch() && !context.hasPermission("cps.stats.fetch")) {
-                        messenger.send(context, MESSAGE_NO_PERMISSION);
+                        messenger.send(context, MESSAGE_PREFIX + "stats.not-found", message -> plugin.getPlaceholderReplacer().player(uuid, message));
                         return;
                     }
 
