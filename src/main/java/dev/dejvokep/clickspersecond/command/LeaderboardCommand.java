@@ -29,7 +29,8 @@ public class LeaderboardCommand {
         manager.command(manager.commandBuilder("cps", "clickspersecond").literal("leaderboard").permission("cps.leaderboard")
                 .argument(IntegerArgument.optional("page", 1))
                 .meta(CommandMeta.DESCRIPTION, "Displays leaderboard information.")
-                .flag(manager.flagBuilder("fetch").withAliases("f").withDescription(ArgumentDescription.of("fetch if not available"))).handler(context -> {
+                .flag(manager.flagBuilder("fetch").withAliases("f").withDescription(ArgumentDescription.of("fetch if not available")))
+                .flag(manager.flagBuilder("refresh").withAliases("r").withDescription(ArgumentDescription.of("initiate full refresh"))).handler(context -> {
                     // Leaderboard
                     List<PlayerInfo> leaderboard = plugin.getDataStorage().getLeaderboard();
                     // Page indexes
@@ -42,25 +43,27 @@ public class LeaderboardCommand {
                         return;
                     }
 
+                    // Booleans
+                    boolean fetch = context.flags().isPresent("fetch"), refresh = context.flags().isPresent("refresh");
                     // Display
-                    if (displayBoard(context, leaderboard, perPage, page, pages, pageReplacer))
+                    if (!refresh && displayBoard(context, leaderboard, perPage, page, pages, pageReplacer))
                         return;
 
-                    // Fetch not present
-                    if (!context.flags().isPresent("fetch")) {
+                    // Not fetching
+                    if (!fetch && !refresh) {
                         messenger.send(context, MESSAGE_PREFIX + "leaderboard.invalid-page", pageReplacer);
                         return;
                     }
 
                     // Does not have permission
-                    if (!context.hasPermission("cps.leaderboard.fetch")) {
+                    if ((refresh && !context.hasPermission("cps.leaderboard.refresh")) || (fetch && !context.hasPermission("cps.leaderboard.fetch"))) {
                         messenger.send(context, MESSAGE_NO_PERMISSION);
                         return;
                     }
 
                     // Fetch
                     messenger.send(context, MESSAGE_REQUEST_SENT);
-                    plugin.getDataStorage().fetchBoard(perPage * page).whenComplete((board, exception) -> Bukkit.getScheduler().runTask(plugin, () -> {
+                    plugin.getDataStorage().fetchBoard(refresh ? Math.max(plugin.getDataStorage().getLeaderboardLimit(), fetch ? perPage * page : 0) : perPage * page).whenComplete((board, exception) -> Bukkit.getScheduler().runTask(plugin, () -> {
                         // If an error
                         if (board == null) {
                             messenger.send(context, MESSAGE_REQUEST_ERROR);
