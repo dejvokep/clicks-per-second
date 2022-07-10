@@ -51,7 +51,7 @@ public class WatchCommand {
 
                     // Trying to watch themselves
                     if (watched == sender) {
-                        messenger.send(context, MESSAGE_PREFIX + "watch.error.yourself", message -> plugin.getPlaceholderReplacer().player(watched, message));
+                        messenger.send(context, MESSAGE_PREFIX + "watch.error.yourself");
                         return;
                     }
 
