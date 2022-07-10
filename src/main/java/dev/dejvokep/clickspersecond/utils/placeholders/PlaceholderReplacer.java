@@ -1,8 +1,10 @@
 package dev.dejvokep.clickspersecond.utils.placeholders;
 
+import dev.dejvokep.boostedyaml.block.implementation.Section;
 import dev.dejvokep.clickspersecond.ClicksPerSecond;
 import dev.dejvokep.clickspersecond.handler.sampler.Sampler;
 import dev.dejvokep.clickspersecond.utils.PlayerInfo;
+import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -15,9 +17,12 @@ import java.util.UUID;
 
 public class PlaceholderReplacer {
 
+    public static final boolean PLACEHOLDER_API_AVAILABLE = Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI");
+
     private final ClicksPerSecond plugin;
     private String unknownValue;
     private SimpleDateFormat dateFormat;
+    private boolean allowPlaceholderApi;
 
     public PlaceholderReplacer(@NotNull ClicksPerSecond plugin) {
         this.plugin = plugin;
@@ -57,9 +62,17 @@ public class PlaceholderReplacer {
         return all(Objects.requireNonNull(plugin.getClickHandler().getSampler(player.getUniqueId())), message);
     }
 
+    @NotNull
+    public String api(@NotNull Player player, @NotNull String message) {
+        message = all(Objects.requireNonNull(plugin.getClickHandler().getSampler(player.getUniqueId())), message);
+        return allowPlaceholderApi && PLACEHOLDER_API_AVAILABLE ? PlaceholderAPI.setPlaceholders(player, message) : message;
+    }
+
     public void reload() {
-        this.unknownValue = plugin.getConfiguration().getString("placeholder.unknown-value");
-        this.dateFormat = new SimpleDateFormat(plugin.getConfiguration().getString("placeholder.date-format"));
+        Section config = plugin.getConfiguration().getSection("placeholder");
+        this.unknownValue = config.getString("unknown-value");
+        this.dateFormat = new SimpleDateFormat(config.getString("date-format"));
+        this.allowPlaceholderApi = config.getBoolean("allow-placeholder-api");
     }
 
     @NotNull

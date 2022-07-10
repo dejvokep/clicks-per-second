@@ -67,6 +67,7 @@ data:
       delay: 5
 
 placeholder:
+  allow-placeholder-api: false
   unknown-value: "?"
   date-format: "yyyy/MM/dd HH:mm"
 

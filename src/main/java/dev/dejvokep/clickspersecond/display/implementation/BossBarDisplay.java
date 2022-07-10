@@ -99,7 +99,7 @@ public class BossBarDisplay implements Display {
         flags = config.getStringList("flags").stream().map(flag -> map(() -> BarFlag.valueOf(flag.toUpperCase()), null, "Bar flag is invalid!")).filter(Objects::nonNull).toArray(BarFlag[]::new);
         progress = clamp(config.getDouble("progress"), 0, 1);
         // Schedule
-        task = Bukkit.getScheduler().runTaskTimer(plugin, () -> bossBars.forEach((player, bossBar) -> bossBar.setTitle(message.get(player, (message, target) -> plugin.getPlaceholderReplacer().all(target, message)))), 0L, Math.max(config.getInt("refresh"), plugin.getClickHandler().getDisplayRate()));
+        task = Bukkit.getScheduler().runTaskTimer(plugin, () -> bossBars.forEach((player, bossBar) -> bossBar.setTitle(message.get(player, (message, target) -> plugin.getPlaceholderReplacer().api(target, message)))), 0L, Math.max(config.getInt("refresh"), plugin.getClickHandler().getDisplayRate()));
     }
 
     @Nullable

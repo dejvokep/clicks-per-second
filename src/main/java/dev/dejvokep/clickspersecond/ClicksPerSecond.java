@@ -81,7 +81,7 @@ public class ClicksPerSecond extends JavaPlugin implements Listener {
         displays.add(new TitleDisplay(this));
 
         // Register placeholders
-        if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
+        if (PlaceholderReplacer.PLACEHOLDER_API_AVAILABLE) {
             new StatsExpansion(this).register();
             getLogger().info("Registered plugin's placeholders to PlaceholderAPI.");
         }

@@ -128,12 +128,12 @@ public class TitleDisplay implements Display {
 
         @NotNull
         public String getTitle(@NotNull Player player) {
-            return plugin.getPlaceholderReplacer().all(player, title);
+            return plugin.getPlaceholderReplacer().api(player, title);
         }
 
         @NotNull
         public String getSubtitle(@NotNull Player player) {
-            return plugin.getPlaceholderReplacer().all(player, subtitle);
+            return plugin.getPlaceholderReplacer().api(player, subtitle);
         }
     }
 

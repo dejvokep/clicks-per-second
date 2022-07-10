@@ -74,7 +74,7 @@ public class ActionBarDisplay implements Display {
         // Set
         message = VariableMessage.of(plugin, config.getSection("message"));
         // Schedule
-        task = Bukkit.getScheduler().runTaskTimer(plugin, () -> players.forEach(player -> send(player, message.get(player, (message, target) -> plugin.getPlaceholderReplacer().all(target, message)))), 0L, Math.max(config.getInt("refresh"), plugin.getClickHandler().getDisplayRate()));
+        task = Bukkit.getScheduler().runTaskTimer(plugin, () -> players.forEach(player -> send(player, message.get(player, (message, target) -> plugin.getPlaceholderReplacer().api(target, message)))), 0L, Math.max(config.getInt("refresh"), plugin.getClickHandler().getDisplayRate()));
     }
 
     private void send(@NotNull Player player, @NotNull String message) {
