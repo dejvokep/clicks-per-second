@@ -7,8 +7,10 @@ import com.comphenix.protocol.wrappers.EnumWrappers;
 import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import dev.dejvokep.clickspersecond.ClicksPerSecond;
-import dev.dejvokep.clickspersecond.utils.watcher.VariableMessage;
 import dev.dejvokep.clickspersecond.display.Display;
+import dev.dejvokep.clickspersecond.utils.watcher.VariableMessage;
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
@@ -20,6 +22,8 @@ import java.util.Set;
 import java.util.logging.Level;
 
 public class ActionBarDisplay implements Display {
+
+    private static final boolean USE_PACKETS = Bukkit.getBukkitVersion().contains("1.8") || Bukkit.getBukkitVersion().contains("1.9");
 
     private final Set<Player> players = new HashSet<>();
     private final ClicksPerSecond plugin;
@@ -68,7 +72,7 @@ public class ActionBarDisplay implements Display {
         }
 
         // If disabled
-        if (!config.getBoolean("enabled") || !Bukkit.getPluginManager().isPluginEnabled("ProtocolLib"))
+        if (!config.getBoolean("enabled") || (USE_PACKETS && !Bukkit.getPluginManager().isPluginEnabled("ProtocolLib")))
             return;
 
         // Set
@@ -78,6 +82,11 @@ public class ActionBarDisplay implements Display {
     }
 
     private void send(@NotNull Player player, @NotNull String message) {
+        if (!USE_PACKETS) {
+            player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(message));
+            return;
+        }
+
         try {
             // Create
             PacketContainer packet = new PacketContainer(PacketType.Play.Server.CHAT);
