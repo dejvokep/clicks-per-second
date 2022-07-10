@@ -43,7 +43,7 @@ public class StatsExpansion extends PlaceholderExpansion {
                 return String.valueOf(info.getCPS());
             if (params.equals("best_date_millis"))
                 return String.valueOf(info.getTime());
-            if (params.equals("best_date_formatted"))
+            if (params.equals("best_date") || params.equals("best_date_formatted"))
                 return replacer.getDateFormat().format(new Date(info.getTime()));
             return replacer.getUnknownValue();
         }
@@ -72,6 +72,7 @@ public class StatsExpansion extends PlaceholderExpansion {
 
             // Info
             PlayerInfo info = leaderboard.get(place - 1);
+            OfflinePlayer target = Bukkit.getOfflinePlayer(info.getUniqueId());
 
             // Return by requested
             String requested = identifiers[2].toLowerCase();
@@ -84,7 +85,9 @@ public class StatsExpansion extends PlaceholderExpansion {
                     case "uuid":
                         return info.getUniqueId().toString();
                     case "name":
-                        return convertToUnknown(Bukkit.getOfflinePlayer(info.getUniqueId()).getName(), 0);
+                        return convertToUnknown(target.getName(), 0);
+                    case "id":
+                        return target.getName() == null ? info.getUniqueId().toString() : target.getName();
                     case "date":
                         return replacer.getDateFormat().format(new Date(info.getTime()));
                     default:
