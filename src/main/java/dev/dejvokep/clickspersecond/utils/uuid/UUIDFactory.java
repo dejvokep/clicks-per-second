@@ -30,7 +30,7 @@ public class UUIDFactory {
 
         // Player
         OfflinePlayer player = Bukkit.getOfflinePlayer(argument);
-        return player.hasPlayedBefore() ? player.getUniqueId() : null;
+        return player.isOnline() || player.hasPlayedBefore() ? player.getUniqueId() : null;
     }
 
 }
