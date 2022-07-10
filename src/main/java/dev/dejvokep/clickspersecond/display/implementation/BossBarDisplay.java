@@ -22,7 +22,7 @@ import java.util.logging.Level;
 
 public class BossBarDisplay implements Display {
 
-    private static final boolean BOSS_BAR_UNAVAILABLE = Bukkit.getBukkitVersion().contains("1.7") || Bukkit.getBukkitVersion().contains("1.8");
+    private static final boolean BOSS_BAR_UNAVAILABLE = Bukkit.getBukkitVersion().contains("1.8");
 
     private final ClicksPerSecond plugin;
 
