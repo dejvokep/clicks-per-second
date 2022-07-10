@@ -1,6 +1,6 @@
 package dev.dejvokep.clickspersecond.handler.sampler;
 
-import dev.dejvokep.clickspersecond.utils.PlayerInfo;
+import dev.dejvokep.clickspersecond.utils.player.PlayerInfo;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

@@ -3,7 +3,7 @@ package dev.dejvokep.clickspersecond.utils.placeholders;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import dev.dejvokep.clickspersecond.ClicksPerSecond;
 import dev.dejvokep.clickspersecond.handler.sampler.Sampler;
-import dev.dejvokep.clickspersecond.utils.PlayerInfo;
+import dev.dejvokep.clickspersecond.utils.player.PlayerInfo;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;

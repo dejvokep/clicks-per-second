@@ -1,7 +1,7 @@
 package dev.dejvokep.clickspersecond.data;
 
 import dev.dejvokep.clickspersecond.ClicksPerSecond;
-import dev.dejvokep.clickspersecond.utils.PlayerInfo;
+import dev.dejvokep.clickspersecond.utils.player.PlayerInfo;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import dev.dejvokep.boostedyaml.block.implementation.Section;

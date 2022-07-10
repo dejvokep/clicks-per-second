@@ -8,7 +8,7 @@ import dev.dejvokep.boostedyaml.settings.general.GeneralSettings;
 import dev.dejvokep.boostedyaml.settings.loader.LoaderSettings;
 import dev.dejvokep.boostedyaml.settings.updater.UpdaterSettings;
 import dev.dejvokep.clickspersecond.ClicksPerSecond;
-import dev.dejvokep.clickspersecond.utils.PlayerInfo;
+import dev.dejvokep.clickspersecond.utils.player.PlayerInfo;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;

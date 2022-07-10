@@ -1,14 +1,13 @@
 package dev.dejvokep.clickspersecond.data;
 
 import dev.dejvokep.clickspersecond.ClicksPerSecond;
-import dev.dejvokep.clickspersecond.utils.PlayerInfo;
+import dev.dejvokep.clickspersecond.utils.player.PlayerInfo;
 import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
-import java.util.logging.Level;
 
 public abstract class DataStorage {
 

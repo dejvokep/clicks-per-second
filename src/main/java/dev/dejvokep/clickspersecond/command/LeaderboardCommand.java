@@ -7,7 +7,7 @@ import cloud.commandframework.context.CommandContext;
 import cloud.commandframework.meta.CommandMeta;
 import dev.dejvokep.clickspersecond.ClicksPerSecond;
 import dev.dejvokep.clickspersecond.utils.messaging.Messenger;
-import dev.dejvokep.clickspersecond.utils.PlayerInfo;
+import dev.dejvokep.clickspersecond.utils.player.PlayerInfo;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
