@@ -36,16 +36,14 @@ public class EventListener implements Listener {
         plugin.getDisplays().forEach(display -> display.remove(player));
 
         // Watcher
-        Player watcher = plugin.getWatchers().getWatcher(player);
-        // If watched
-        if (watcher != null) {
+        plugin.getWatchManager().consumeWatchers(player, watcher -> {
             // Stop
-            plugin.getWatchers().stop(watcher);
+            plugin.getWatchManager().stop(watcher);
             plugin.getMessenger().send(watcher, Messenger.MESSAGE_PREFIX + "watch.disconnected", message -> plugin.getPlaceholderReplacer().player(player.getUniqueId(), message));
-        }
+        });
 
         // If watching
-        plugin.getWatchers().stop(player);
+        plugin.getWatchManager().stop(player);
     }
 
     @EventHandler

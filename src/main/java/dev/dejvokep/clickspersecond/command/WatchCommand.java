@@ -30,13 +30,13 @@ public class WatchCommand {
                     }
 
                     Player sender = (Player) context.getSender();
-                    Player watched = plugin.getWatchers().getWatched(sender);
+                    Player watched = plugin.getWatchManager().getWatched(sender);
 
                     // No name
                     if (!context.contains("name") || (watched != null && watched.getName().equals(context.get("name")))) {
                         // Stop
                         final Player finalWatched = watched;
-                        plugin.getWatchers().stop(sender);
+                        plugin.getWatchManager().stop(sender);
                         if (watched == null)
                             messenger.send(context, MESSAGE_PREFIX + "watch.error.not-watching");
                         else
@@ -59,7 +59,7 @@ public class WatchCommand {
 
                     // Start
                     final Player finalWatched = watched;
-                    plugin.getWatchers().start(sender, watched);
+                    plugin.getWatchManager().start(sender, watched);
                     // Success
                     messenger.send(context, MESSAGE_PREFIX + "watch.start", message -> plugin.getPlaceholderReplacer().player(finalWatched, message));
                 }).build());

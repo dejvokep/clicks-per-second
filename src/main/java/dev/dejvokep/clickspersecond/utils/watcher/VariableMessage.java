@@ -10,11 +10,11 @@ import java.util.function.BiFunction;
 
 public class VariableMessage<T> {
 
-    private final Watchers watchers;
+    private final WatchManager watchManager;
     private final T normal, watching;
 
     private VariableMessage(@NotNull ClicksPerSecond plugin, @NotNull T normal, @NotNull T watching) {
-        this.watchers = plugin.getWatchers();
+        this.watchManager = plugin.getWatchManager();
         this.normal = normal;
         this.watching = watching;
     }
@@ -26,7 +26,7 @@ public class VariableMessage<T> {
 
     @NotNull
     public <R> R get(@NotNull Player player, @NotNull BiFunction<T, Player, R> mapper) {
-        Player watched = watchers.getWatched(player);
+        Player watched = watchManager.getWatched(player);
         T message = watched == null ? normal : watching;
         return mapper.apply(message, watched == null ? player : watched);
     }
