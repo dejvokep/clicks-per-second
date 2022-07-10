@@ -109,7 +109,7 @@ public class DatabaseStorage extends DataStorage {
 
     public void queueFetch(@NotNull UUID uuid) {
         if (cache.containsKey(uuid)) {
-            cache(cache.get(uuid));
+            passToSampler(cache.get(uuid));
             return;
         }
 
@@ -198,7 +198,7 @@ public class DatabaseStorage extends DataStorage {
             // If cached
             PlayerInfo info = cache.get(iterator.next());
             if (info != null) {
-                cache(info);
+                passToSampler(info);
                 iterator.remove();
             }
         }
@@ -289,6 +289,6 @@ public class DatabaseStorage extends DataStorage {
     private synchronized void refresh(@NotNull PlayerInfo info) {
         cache.put(info.getUniqueId(), info);
         expirationQueue.add(info);
-        cache(info);
+        passToSampler(info);
     }
 }

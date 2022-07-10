@@ -53,7 +53,7 @@ public class FileStorage extends DataStorage {
 
     @Override
     public void queueFetch(@NotNull UUID uuid) {
-        cache(file.getAsOptional(uuid.toString(), PlayerInfo.class).orElseGet(() -> PlayerInfo.empty(uuid)));
+        passToSampler(file.getAsOptional(uuid.toString(), PlayerInfo.class).orElseGet(() -> PlayerInfo.empty(uuid)));
     }
 
     @Override

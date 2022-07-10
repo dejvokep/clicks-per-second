@@ -64,7 +64,7 @@ public abstract class DataStorage {
         }, 0L, Math.max(plugin.getConfiguration().getLong("data.leaderboard.expiration"), 1L));
     }
 
-    protected void cache(@NotNull PlayerInfo info) {
+    protected void passToSampler(@NotNull PlayerInfo info) {
         plugin.getClickHandler().setFetchedInfo(info);
     }
 
