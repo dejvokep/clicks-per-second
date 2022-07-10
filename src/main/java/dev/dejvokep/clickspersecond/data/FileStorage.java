@@ -106,7 +106,7 @@ public class FileStorage extends DataStorage {
     @NotNull
     @Override
     public CompletableFuture<List<PlayerInfo>> fetchLeaderboard(int limit) {
-        return CompletableFuture.completedFuture(file.getStoredValue().values().stream().map(block -> (PlayerInfo) block.getStoredValue()).sorted(Comparator.comparingInt(PlayerInfo::getCPS)).collect(Collectors.toList()));
+        return CompletableFuture.completedFuture(file.getStoredValue().values().stream().map(block -> (PlayerInfo) block.getStoredValue()).sorted(Comparator.comparingInt(PlayerInfo::getCPS).reversed()).collect(Collectors.toList()));
     }
 
     @Override

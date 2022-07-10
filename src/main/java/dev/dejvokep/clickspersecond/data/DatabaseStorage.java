@@ -291,7 +291,7 @@ public class DatabaseStorage extends DataStorage {
             }
 
             // Sort
-            leaderboard.sort(Comparator.comparingInt(PlayerInfo::getCPS));
+            leaderboard.sort(Comparator.comparingInt(PlayerInfo::getCPS).reversed());
             // Return
             return leaderboard;
         });
