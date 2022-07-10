@@ -84,6 +84,10 @@ public abstract class DataStorage {
         reload();
     }
 
+    public CompletableFuture<List<PlayerInfo>> fetchBoard() {
+        return fetchBoard(leaderboardLimit);
+    }
+
     public CompletableFuture<List<PlayerInfo>> fetchBoard(int limit) {
         // Fetch
         CompletableFuture<List<PlayerInfo>> board = fetchLeaderboard(limit);
@@ -98,6 +102,10 @@ public abstract class DataStorage {
 
         // Return
         return board;
+    }
+
+    public int getLeaderboardLimit() {
+        return leaderboardLimit;
     }
 
     public abstract boolean isInstantFetch();
