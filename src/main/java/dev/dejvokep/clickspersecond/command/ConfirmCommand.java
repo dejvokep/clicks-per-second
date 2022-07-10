@@ -18,6 +18,7 @@ public class ConfirmCommand {
         // Confirmation manager
         CommandConfirmationManager<CommandSender> confirmationManager = new CommandConfirmationManager<>(20L, TimeUnit.SECONDS, context ->
                 plugin.getMessenger().send(context.getCommandContext(), MESSAGE_CONFIRM_REQUIRED), sender -> plugin.getMessenger().send(sender, MESSAGE_CONFIRM_NO_PENDING));
+        confirmationManager.registerConfirmationProcessor(manager);
 
         // Register
         manager.command(manager.commandBuilder("cps", "clickspersecond").literal("confirm")
