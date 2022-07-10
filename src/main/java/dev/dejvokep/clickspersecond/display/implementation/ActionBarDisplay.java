@@ -8,7 +8,7 @@ import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import dev.dejvokep.clickspersecond.ClicksPerSecond;
 import dev.dejvokep.clickspersecond.display.Display;
-import dev.dejvokep.clickspersecond.utils.watcher.VariableMessage;
+import dev.dejvokep.clickspersecond.utils.watcher.VariableMessages;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
@@ -29,7 +29,7 @@ public class ActionBarDisplay implements Display {
     private final ClicksPerSecond plugin;
 
     private BukkitTask task;
-    private VariableMessage<String> message;
+    private VariableMessages<String> message;
 
     public ActionBarDisplay(@NotNull ClicksPerSecond plugin) {
         this.plugin = plugin;
@@ -76,7 +76,7 @@ public class ActionBarDisplay implements Display {
             return;
 
         // Set
-        message = VariableMessage.of(plugin, config.getSection("message"));
+        message = VariableMessages.of(plugin, config.getSection("message"));
         // Schedule
         task = Bukkit.getScheduler().runTaskTimer(plugin, () -> players.forEach(player -> send(player, message.get(player, (message, target) -> plugin.getPlaceholderReplacer().api(target, message)))), 0L, Math.max(config.getInt("refresh"), plugin.getClickHandler().getDisplayRate()));
     }

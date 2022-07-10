@@ -6,7 +6,7 @@ import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.wrappers.EnumWrappers;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import dev.dejvokep.clickspersecond.ClicksPerSecond;
-import dev.dejvokep.clickspersecond.utils.watcher.VariableMessage;
+import dev.dejvokep.clickspersecond.utils.watcher.VariableMessages;
 import dev.dejvokep.clickspersecond.display.Display;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -28,7 +28,7 @@ public class TitleDisplay implements Display {
     private final ClicksPerSecond plugin;
 
     private BukkitTask task;
-    private VariableMessage<TitleMessages> message;
+    private VariableMessages<TitleMessages> message;
     private int refresh;
 
     public TitleDisplay(@NotNull ClicksPerSecond plugin) {
@@ -77,7 +77,7 @@ public class TitleDisplay implements Display {
             return;
 
         // Set
-        message = VariableMessage.of(plugin, new TitleMessages(config.getSection("normal")), new TitleMessages(config.getSection("watching")));
+        message = VariableMessages.of(plugin, new TitleMessages(config.getSection("normal")), new TitleMessages(config.getSection("watching")));
         refresh = Math.max(config.getInt("refresh"), plugin.getClickHandler().getDisplayRate());
         // Schedule
         task = Bukkit.getScheduler().runTaskTimer(plugin, () -> players.forEach(this::send), 0L, refresh);

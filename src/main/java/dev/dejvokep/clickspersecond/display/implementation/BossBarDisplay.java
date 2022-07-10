@@ -2,7 +2,7 @@ package dev.dejvokep.clickspersecond.display.implementation;
 
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import dev.dejvokep.clickspersecond.ClicksPerSecond;
-import dev.dejvokep.clickspersecond.utils.watcher.VariableMessage;
+import dev.dejvokep.clickspersecond.utils.watcher.VariableMessages;
 import dev.dejvokep.clickspersecond.display.Display;
 import org.bukkit.Bukkit;
 import org.bukkit.boss.BarColor;
@@ -34,7 +34,7 @@ public class BossBarDisplay implements Display {
     private BarStyle style;
     private BarFlag[] flags;
     private double progress;
-    private VariableMessage<String> message;
+    private VariableMessages<String> message;
 
     public BossBarDisplay(@NotNull ClicksPerSecond plugin) {
         this.plugin = plugin;
@@ -93,7 +93,7 @@ public class BossBarDisplay implements Display {
             return;
 
         // Set
-        message = VariableMessage.of(plugin, config.getSection("message"));
+        message = VariableMessages.of(plugin, config.getSection("message"));
         color = map(() -> BarColor.valueOf(config.getString("color").toUpperCase()), BarColor.WHITE, "Boss bar color is invalid!");
         style = map(() -> BarStyle.valueOf(config.getString("style").toUpperCase()), BarStyle.SOLID, "Boss bar style is invalid!");
         flags = config.getStringList("flags").stream().map(flag -> map(() -> BarFlag.valueOf(flag.toUpperCase()), null, "Bar flag is invalid!")).filter(Objects::nonNull).toArray(BarFlag[]::new);
