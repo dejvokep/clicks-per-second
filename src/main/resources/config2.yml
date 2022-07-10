@@ -122,9 +122,9 @@ messages:
     invalid-page: "&cPage number {page} does not exist. There are {pages} pages only."
     entries-per-page: 20
     # {page}, {pages}
-    header: "&bCPS leaderboard &7({page}/{pages})"
+    header: "-- &bCPS leaderboard &7({page}/{pages}) --"
     # {place}, {name}, {uuid}, {cps_best_date_millis}, {cps_best_date_formatted}
-    entry: "&7{place}. &b{id}&7: &b{cps_best} CPS"
+    entry: "&7{place}. &b{id}&7: &b{cps_best} &7CPS"
     # {page}, {pages}
     footer: "&7---------- ({page}/{pages}) ----------"
   watch:
