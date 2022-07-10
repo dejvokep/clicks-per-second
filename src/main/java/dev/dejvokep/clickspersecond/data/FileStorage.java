@@ -64,7 +64,7 @@ public class FileStorage extends DataStorage {
     @NotNull
     @Override
     public CompletableFuture<PlayerInfo> fetchSingle(@NotNull UUID uuid) {
-        return CompletableFuture.completedFuture(file.getAs(uuid.toString(), PlayerInfo.class, null));
+        return CompletableFuture.completedFuture(file.getAs(uuid.toString(), PlayerInfo.class, PlayerInfo.empty(uuid)));
     }
 
     @NotNull
