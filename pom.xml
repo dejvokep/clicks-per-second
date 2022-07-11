@@ -5,11 +5,27 @@
     <modelVersion>4.0.0</modelVersion>
 
     <!-- Artifact data -->
-    <groupId>com.davidcubesvk</groupId>
+    <groupId>dev.dejvokep</groupId>
     <artifactId>ClicksPerSecond</artifactId>
-    <version>2.5</version>
-    <!-- Build -->
+    <version>2.6</version>
+    <developers>
+        <developer>
+            <name>dejvokep</name>
+            <email>admin@dejvokep.dev</email>
+            <timezone>CET</timezone>
+            <url>https://dejvokep.dev</url>
+        </developer>
+    </developers>
+
+    <!-- Build configuration -->
     <build>
+        <resources>
+            <resource>
+                <targetPath>.</targetPath>
+                <filtering>true</filtering>
+                <directory>${basedir}/src/main/resources</directory>
+            </resource>
+        </resources>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -57,6 +73,34 @@
                         <configuration>
                             <createDependencyReducedPom>false</createDependencyReducedPom>
                         </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>com.mycila</groupId>
+                <artifactId>license-maven-plugin</artifactId>
+                <version>4.1</version>
+                <configuration>
+                    <properties>
+                        <owner>dejvokep</owner>
+                        <email>admin@dejvokep.dev</email>
+                    </properties>
+                    <header>${basedir}/LICENSE-header.txt</header>
+                    <excludes>
+                        <exclude>**/README</exclude>
+                    </excludes>
+                    <includes>
+                        <include>**/*.java</include>
+                        <include>**/*.xml</include>
+                    </includes>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>check-headers</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>format</goal>
+                        </goals>
                     </execution>
                 </executions>
             </plugin>

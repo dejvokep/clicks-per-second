@@ -1,5 +1,5 @@
-name: ClicksPerSecond
-version: 2.5
+name: ${project.name}
+version: ${project.version}
 author: dejvokep
 main: dev.dejvokep.clickspersecond.ClicksPerSecond
 api-version: 1.13
