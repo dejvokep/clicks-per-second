@@ -17,7 +17,13 @@
 #    - {name}: player's name, or unknown if not available
 #    - {id}: player's name, or UUID if not available
 # 2. Info:
-#    -
+#    - {cps_best}: best CPS
+#    - {cps_best_date}: formatted date at which the best CPS were achieved (or unknown if best CPS are 0)
+#    - {cps_best_date_millis}: date in millis at which the best CPS were achieved (or unknown if best CPS are 0)
+#    - {cps_best_date_formatted}: alias for {cps_best_date}
+# 3. All:
+#    - {cps_now}: current CPS
+#    - placeholders from player and info groups
 #
 # Config version:
 # - IMPORTANT >> Do NOT change unless you know what you are doing. Changing this might break the plugin.
