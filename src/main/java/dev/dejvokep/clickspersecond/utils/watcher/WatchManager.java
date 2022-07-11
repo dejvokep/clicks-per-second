@@ -6,7 +6,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 import java.util.function.Consumer;
 
 /**
@@ -23,7 +22,7 @@ public class WatchManager {
      *
      * @param watcher the watcher
      * @param watched the watched player
-     * @return previously watched player
+     * @return previously watched player, if any
      */
     @Nullable
     public Player start(@NotNull Player watcher, @NotNull Player watched) {
@@ -37,7 +36,7 @@ public class WatchManager {
      * did not watch anyone.
      *
      * @param watcher the watcher
-     * @return the watched player
+     * @return the watched player, if any
      */
     @Nullable
     public Player stop(@NotNull Player watcher) {

@@ -78,7 +78,7 @@ public class Messenger {
     /**
      * Sends message to the given sender.
      *
-     * @param sender    the sender
+     * @param sender    the sender to send to
      * @param messageId ID of the message to send
      */
     public void send(@NotNull CommandSender sender, @NotNull String messageId) {
@@ -99,7 +99,7 @@ public class Messenger {
     /**
      * Sends message to the given sender. If provided, applies the given replacer to the message.
      *
-     * @param sender    the sender
+     * @param sender    the sender to send to
      * @param messageId ID of the message to send
      * @param replacer  replacer to apply to the message
      */

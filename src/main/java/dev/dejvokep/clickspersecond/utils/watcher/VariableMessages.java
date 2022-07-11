@@ -76,8 +76,8 @@ public class VariableMessages<T> {
     }
 
     /**
-     * Initializes from the given information. The given section must contain keys <code>normal</code> and
-     * <code>watching</code>; color codes will automatically be translated.
+     * Initializes from the given information. The given section must contain <code>normal</code> and
+     * <code>watching</code> keys; color codes will automatically be translated.
      *
      * @param plugin  the plugin
      * @param section the section to obtain the messages from

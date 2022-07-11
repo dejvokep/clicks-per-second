@@ -122,7 +122,7 @@ public class PlayerInfo {
      * Returns the time at which the {@link #getCPS() best CPS} were achieved, or <code>0</code> if <code>{@link
      * #getCPS()} == 0</code>.
      *
-     * @return the time at which the record was achieved
+     * @return the time at which the record was achieved, or <code>0</code> if <code>{@link #getCPS()} == 0</code>
      */
     public long getTime() {
         return time;
