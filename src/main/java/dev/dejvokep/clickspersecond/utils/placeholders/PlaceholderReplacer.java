@@ -44,7 +44,7 @@ import java.util.UUID;
  *     <li>
  *         <b>Info</b>
  *         <ul>
- *             <li><code>{cps_best}</code> - best CPS</li>
+ *             <li><code>{cps_best}</code> - the best CPS</li>
  *             <li><code>{cps_best_date}</code> - formatted date (according to {@link #getDateFormat()}) at which the best CPS were achieved (or {@link #getUnknownValue() unknown} if {@link PlayerInfo#isEmpty()})</li>
  *             <li><code>{cps_best_date_millis}</code> - date in millis at which the best CPS were achieved (or {@link #getUnknownValue() unknown} if {@link PlayerInfo#isEmpty()})</li>
  *             <li><code>{cps_best_date_formatted}</code> - alias for <code>{cps_best_date}</code></li>

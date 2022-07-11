@@ -17,13 +17,14 @@
 #    - {name}: player's name, or unknown if not available
 #    - {id}: player's name, or UUID if not available
 # 2. Info:
-#    - {cps_best}: best CPS
-#    - {cps_best_date}: formatted date at which the best CPS were achieved (or unknown if best CPS are 0)
-#    - {cps_best_date_millis}: date in millis at which the best CPS were achieved (or unknown if best CPS are 0)
+#    - {cps_best}: the best CPS
+#    - {cps_best_date}: formatted date at which the best CPS were achieved (or unknown if the best CPS are 0)
+#    - {cps_best_date_millis}: date in millis at which the best CPS were achieved (or unknown if the best CPS are 0)
 #    - {cps_best_date_formatted}: alias for {cps_best_date}
+#    - placeholders from the player group
 # 3. All:
 #    - {cps_now}: current CPS
-#    - placeholders from player and info groups
+#    - placeholders from the player and info groups
 #
 # Config version:
 # - IMPORTANT >> Do NOT change unless you know what you are doing. Changing this might break the plugin.
@@ -103,7 +104,7 @@ display:
     # Style (see https://hub.spigotmc.org/javadocs/spigot/org/bukkit/boss/BarStyle.html):
     style: SOLID
     # Flags (see https://hub.spigotmc.org/javadocs/spigot/org/bukkit/boss/BarFlag.html):
-    flags: []
+    flags: [ ]
     # Progress (between 0 = empty and 1 = full):
     progress: 1
     # Messages:
@@ -161,19 +162,20 @@ placeholder:
   date-format: "yyyy/MM/dd HH:mm"
 #
 # Sampling rate in ticks:
-# - INFO >> The lower sampling rate, the higher demands on server processing power. Rate of 0 indicates immediate
+# - INFO >> The lower sampling rate, the higher the demands for server processing power. Rate of 0 indicates immediate
 #           sampling, which will compute CPS non-stop according to your clicks (the best user experience). Rates 1 and
 #           higher represent rated sampling, which simply divides time into periods (each equally long according to the
 #           rate) and then computes CPS from the amount of times you've clicked during that period.
 # - IMPORTANT >> Use of values between 0 and 20 will lead to imprecise calculations, you should avoid those rates. Use
-#                only 0, 20 or higher.
+#                only 0, 20 or higher. Make sure to update the display refresh rates, so they do not bottleneck the
+#                sampling capabilities.
 sampling-rate: 20
 #
 # If to only count clicks at another entity (during combat...):
 # - INFO >> The server has no specific way to register when a player clicks, so it must only be assumed from the events.
 #           With that being said, if there's an entity at the edge of your reach, and you click on it, that click is
 #           counted twice. Set to true to avoid this behaviour at the cost of only entity clicks being registered.
-#           However, enabling this is also good for PvP servers if you only want to show CPS from combat only.
+#           However, enabling this is also good for PvP servers if you only want to show CPS from combat.
 entity-clicks-only: false
 #
 # Messages:
