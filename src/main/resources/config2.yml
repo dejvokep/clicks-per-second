@@ -1,144 +1,229 @@
-#┌------┐ ┌--┐ ┌--┐         ┌--┐              ┌------┐                 ┌-----┐                                     ┌--┐
-#|  ┌┐  | |  | └--┘         |  |              |  ┌┐  |                 |   ┌-┘                                     |  |
-#|  |└--┘ |  | ┌--┐ ┌-----┐ |  | ┌--┐ ┌-----┐ |  └┘  | ┌-----┐ ┌-----┐ |   └-┐ ┌-----┐ ┌-----┐ ┌-----┐ ┌------┐ ┌--┘  |
-#|  |     |  | |  | |  ┌--┘ |  └┘  /  |  ---| |  ┌---┘ |  -  | |  ┌--┘ └--┐  | |  -  | |  ┌--┘ | ┌-┐ | |  ┌┐  | | ┌-┐ |
-#|  |┌--┐ |  | |  | |  |    |  ┌┐  \  └--┐  | |  |     | ┌---┘ |  |       |  | | ┌---┘ |  |    | | | | |  ||  | | | | |
-#|  └┘  | |  | |  | |  └--┐ |  |\   \ ┌--┘  | |  |     | └---┐ |  |    ┌--┘  | | └---┐ |  └--┐ | └-┘ | |  ||  | | └-┘ |
-#└------┘ └--┘ └--┘ └-----┘ └--┘ └--┘ └-----┘ └--┘     └-----┘ └--┘    └-----┘ └-----┘ └-----┘ └-----┘ └--┘└--┘ └-----┘
-#Plugin made by davidcubesvk.
 #
-# ► Don't understand / know how to set up (wanna know how actions work)?
-# All terms and setup process are available on my website. Link is in all of my plugins' descriptions.
+#  ██████╗██╗     ██╗ ██████╗██╗  ██╗███████╗██████╗ ███████╗██████╗ ███████╗███████╗ ██████╗ ██████╗ ███╗   ██╗██████╗
+# ██╔════╝██║     ██║██╔════╝██║ ██╔╝██╔════╝██╔══██╗██╔════╝██╔══██╗██╔════╝██╔════╝██╔════╝██╔═══██╗████╗  ██║██╔══██╗
+# ██║     ██║     ██║██║     █████╔╝ ███████╗██████╔╝█████╗  ██████╔╝███████╗█████╗  ██║     ██║   ██║██╔██╗ ██║██║  ██║
+# ██║     ██║     ██║██║     ██╔═██╗ ╚════██║██╔═══╝ ██╔══╝  ██╔══██╗╚════██║██╔══╝  ██║     ██║   ██║██║╚██╗██║██║  ██║
+# ╚██████╗███████╗██║╚██████╗██║  ██╗███████║██║     ███████╗██║  ██║███████║███████╗╚██████╗╚██████╔╝██║ ╚████║██████╔╝
+#  ╚═════╝╚══════╝╚═╝ ╚═════╝╚═╝  ╚═╝╚══════╝╚═╝     ╚══════╝╚═╝  ╚═╝╚══════╝╚══════╝ ╚═════╝ ╚═════╝ ╚═╝  ╚═══╝╚═════╝
+#
+# Plugin made by dejvokep (https://dejvokep.dev/).
+#
 # ► Need any help?
-# Contact me through any of listed methods on my website, I'd like to help!
+# Join the Discord server (https://discord.com/invite/BbhADEy) and we will more than happily help you :)
 #
-# NOTE! If using 1.7 server version, titles are not supported.
+# ► Placeholders (unknown replacement can be configured under placeholder.unknown-value):
+# 1. Player:
+#    - {uuid}: player's UUID
+#    - {name}: player's name, or unknown if not available
+#    - {id}: player's name, or UUID if not available
+# 2. Info:
+#    -
 #
+# Config version:
+# - IMPORTANT >> Do NOT change unless you know what you are doing. Changing this might break the plugin.
 config-version: 1
-#Updater:
-updates:
-  check: true
-  delay: 1
-  message: ""
+# Storage type:
+# - FILE: saves to player-data.yml file
+# - DATABASE: saves to a remote database (make sure to configure database below)
 storage: FILE
-display:
-  title:
-    enabled: false
-    normal:
-      title: ""
-      subtitle: "&b{cps_now} CPS"
-    watching:
-      title: ""
-      subtitle: "&b{cps_now} CPS &7(watching {name})"
-    refresh: 20
-  action-bar:
-    enabled: true
-    message:
-      normal: "&b{cps_now} CPS"
-      watching: "&b{cps_now} CPS &7(watching {name})"
-    refresh: 20
-  boss-bar:
-    enabled: false
-    color: WHITE
-    style: SOLID
-    message:
-      normal: "&b{cps_now} CPS"
-      watching: "&b{cps_now} CPS &7(watching {name})"
-    refresh: 20
-data:
-  sync-rate: 5
-  leaderboard:
-    expiration: 6000
-    limit: 20
-  fetch:
-    # Fetch expiration (the time for which player's cache will be valid before it is needed to be fetched again):
-    expiration: 1200
-    # Request triggering:
-    batch:
-      # Fetch all queued requests when there is at least this amount of them:
-      # - Please note that this is also the amount of requests that can be fetched at once. It is not recommended making
-      #   this any lower, avoiding network round trip.
-      # - This should be equal to the average number of players joining the server per the delay configured below. That is,
-      #   if the delay below is set to 5 and each 5s the server is joined by
-      size: 10
-      # Fetch all queued requests (at maximum) after this delay since the last request:
-      # - The delay can be shorter if the size trigger invokes fetching earlier. This is just a safety check if your
-      #   server does not have big enough network for the trigger above.
-      rate: 5
-
-placeholder:
-  allow-placeholder-api: false
-  unknown-value: "?"
-  date-format: "yyyy/MM/dd HH:mm"
-
-sampling-rate: 20
-# /cps stats <uuid|name>
-# /cps leaderboard [-f] [page]
-# /cps delete [uuid|name|all]
-# /cps reload
-# /cps help
-
+# Database:
+# - INFO >> Needed to configure only if storage is DATABASE.
 database:
+  # Host:
   host: ""
+  # Port:
   port: 3306
+  # Username:
   username: ""
+  # Password:
   password: ""
+  # Database:
   database: ""
+  # Table:
   table: ""
+  # Advanced configuration:
   encoding: "utf8"
   max-pool-size: 10
   connection-timeout:
     request: 30000
     keep-alive: 0
     lifetime: 1800000
-
-
-#-------------------------------------------------------------------------------------------------------
-#                                          COMMAND MESSAGES
-#-------------------------------------------------------------------------------------------------------
-messages:
-  players-only: "&7[&bCPS&7] &cCommand only for players."
-  no-permission: "&cI'm sorry, but you do not have permission to perform this command. Please contact the server administrators if you believe that this is an error."
-  # {name}
-  invalid-name: "&7[&bCPS&7] &cCould not obtain UUID from player '{name}', has he played on the server already?"
-  data-request:
-    pending: "&7[&bCPS&7] &cData request already pending, please try again in a moment..."
-    sent: "&7[&bCPS&7] &7Data request was sent, please wait..."
-    error: "&7[&bCPS&7] &cSomething went wrong, check the console for more details."
-  confirm:
-    required: "&7[&bCPS&7] &7Confirmation required! Please use &b/cps confirm &7within &b20 seconds &7to confirm the operation."
-    not-pending: "&7[&bCPS&7] &cThere are not any pending confirmations."
-  stats:
-    # {uuid}
-    # {name}
-    not-found: "&7[&bCPS&7] &cNo data found for player identified by {name} ({uuid})."
-    # {name} (name or unknown)
-    # {cps_now}
-    # {cps_best}
-    # {cps_best_date_millis} / {cps_best_date_formatted}
-    offline: "&7[&bCPS&7] &7Statistics of player &b{id}&7: best &b{cps_best} CPS &7at {cps_best_date_formatted}"
-    online: "&7[&bCPS&7] &7Statistics of player &b{name}&7: now &b{cps_now} CPS&7, best &b{cps_best} CPS &7at {cps_best_date_formatted}"
+#
+# Display:
+# - PLACEHOLDERS >> All placeholders are available in the title, subtitle and messages. PlaceholderAPI placeholders can
+#                   also be enabled under placeholder.allow-placeholder-api.
+display:
+  # Title display:
+  # - IMPORTANT >> If on 1.8, ProtocolLib is required to run this display.
+  title:
+    # Enabled:
+    enabled: false
+    # Title to send during normal gameplay:
+    normal:
+      title: ""
+      subtitle: "&b{cps_now} CPS"
+    # Title to send while watching someone else (placeholders will be translated against the watched player):
+    watching:
+      title: ""
+      subtitle: "&b{cps_now} CPS &7(watching {name})"
+    # Refresh rate in ticks (delay between update):
+    refresh: 20
+  # Action bar display:
+  # - IMPORTANT >> If on 1.8 or 1.9, ProtocolLib is required to run this display.
+  action-bar:
+    # Enabled:
+    enabled: true
+    # Messages:
+    message:
+      # Message to send during normal gameplay:
+      normal: "&b{cps_now} CPS"
+      # Message to send while watching someone else (placeholders will be translated against the watched player):
+      watching: "&b{cps_now} CPS &7(watching {name})"
+    # Refresh rate in ticks (delay between update):
+    refresh: 20
+  # Boss bar display:
+  # - IMPORTANT >> If on 1.8, this display is not available.
+  boss-bar:
+    # Enabled:
+    enabled: false
+    # Color (see https://hub.spigotmc.org/javadocs/spigot/org/bukkit/boss/BarColor.html)
+    color: WHITE
+    # Style (see https://hub.spigotmc.org/javadocs/spigot/org/bukkit/boss/BarStyle.html)
+    style: SOLID
+    # Messages:
+    message:
+      # Message to send during normal gameplay:
+      normal: "&b{cps_now} CPS"
+      # Message to send while watching someone else (placeholders will be translated against the watched player):
+      watching: "&b{cps_now} CPS &7(watching {name})"
+    # Refresh rate in ticks (delay between update):
+    refresh: 20
+#
+# Data:
+# - IMPORTANT >> If you need help with any of the settings, contact us.
+data:
+  # Delay between each sync in ticks:
+  # - INFO >> Data are uploaded (= synced) with the chosen data storage in batches to improve performance. This value
+  #           indicates the delay between each such request. Minimum value is 1 (tick).
+  sync-rate: 5
+  # Leaderboard fetching:
   leaderboard:
-    # {page}, {pages}
+    # Expiration of the cached leaderboard in ticks (delay between re-fetching):
+    expiration: 6000
+    # Limit (amount of places) of the fetched leaderboard:
+    # - INFO >> If you're using FILE storage, this is ignored. The cached leaderboard is used for all placeholders
+    #           and also the command (unless the flag is used). With that being said, set this appropriately to how many
+    #           top places you want to allow players to see, or how many of them you want to display, for example, on a
+    #           hologram.
+    limit: 20
+  # Fetching:
+  fetch:
+    # Expiration of fetched player profiles in ticks (delay between re-fetching):
+    expiration: 1200
+    # Batched fetch triggering:
+    # - INFO >> Data are fetched in batches to improve performance.
+    batch:
+      # Fetch all queued profiles when there's at least (= exactly) this amount of them:
+      # - IMPORTANT >> For relatively low traffic servers, you can set this to 1 (fetch everytime someone joins the
+      #                server and their profile is not cached). Otherwise, this should be approximately equal to the
+      #                amount of players joining the server per the rate configured below (if the rate is 5 ticks=0.25s.
+      #                and during those 0.25s on average 10 players join the server, this should be set to 10).
+      size: 10
+      # Fetch all queued profiles (at maximum) after this delay in ticks since the last request:
+      # - INFO >> The delay can be shorter if the size trigger invokes fetching earlier. This is just a safety check if
+      #           your server does not have big enough network for the trigger above. Set to 0 to disable and only rely
+      #           on the size trigger (potentially dangerous in terms of fetch times).
+      rate: 5
+#
+# Placeholders:
+placeholder:
+  # Allow PlaceholderAPI placeholder translations in displayed messages:
+  allow-placeholder-api: false
+  # Replacement for unknown data:
+  unknown-value: "?"
+  # Date format (see https://docs.oracle.com/javase/7/docs/api/java/text/SimpleDateFormat.html)
+  date-format: "yyyy/MM/dd HH:mm"
+#
+# Sampling rate in ticks:
+# - INFO >> The lower sampling rate, the higher demands on server processing power. Rate of 1 indicates immediate
+#           sampling, which will compute CPS non-stop according to your clicks (the best user experience). Rates 2 and higher
+#           represent rated sampling, which simply divides time into periods (each equally long according to the rate)
+#           and then computes CPS from the amount of times you've clicked during that period.
+# - IMPORTANT >> Use of values between 1 and 20 will lead to imprecise calculations, you should avoid those rates. Use
+#                only 1, 20 or higher.
+sampling-rate: 20
+#
+# Messages:
+messages:
+  # Players only:
+  players-only: "&7[&bCPS&7] &cCommand only for players."
+  # No permission (recommended not to change):
+  no-permission: "&cI'm sorry, but you do not have permission to perform this command. Please contact the server administrators if you believe that this is an error."
+  # Invalid name (when name has been used as the parameter but the referenced player has not yet played on the server):
+  # - PLACEHOLDERS >> {name}: the provided name
+  invalid-name: "&7[&bCPS&7] &cCould not obtain UUID from player '{name}', has he played on the server already?"
+  # Data request:
+  data-request:
+    # Pending:
+    pending: "&7[&bCPS&7] &cData request already pending, please try again in a moment..."
+    # Sent:
+    sent: "&7[&bCPS&7] &7Data request was sent, please wait..."
+    # Error:
+    error: "&7[&bCPS&7] &cSomething went wrong, check the console for more details."
+  # /cps confirm:
+  confirm:
+    # Confirmation required:
+    required: "&7[&bCPS&7] &7Confirmation required! Please use &b/cps confirm &7within &b20 seconds &7to confirm the operation."
+    # No confirmation pending:
+    not-pending: "&7[&bCPS&7] &cThere are not any pending confirmations."
+  # /cps stats [uuid|name]:
+  stats:
+    # If there are no data:
+    # - PLACEHOLDERS >> player group
+    not-found: "&7[&bCPS&7] &cNo data found for player identified by {name} ({uuid})."
+    # If the target player is offline:
+    # - PLACEHOLDERS >> player, info groups
+    offline: "&7[&bCPS&7] &7Statistics of player &b{id}&7: best &b{cps_best} CPS &7at {cps_best_date_formatted}"
+    # If the target player is online:
+    # - PLACEHOLDERS >> all group
+    online: "&7[&bCPS&7] &7Statistics of player &b{name}&7: now &b{cps_now} CPS&7, best &b{cps_best} CPS &7at {cps_best_date_formatted}"
+  # /cps leaderboard [page] -fetch -refresh:
+  leaderboard:
+    # Invalid page:
+    # - PLACEHOLDERS >> {page}: the requested page, {pages}: amount of pages available
     invalid-page: "&7[&bCPS&7] &cPage number {page} does not exist. There are {pages} pages only."
+    # Entries to display per page:
     entries-per-page: 20
-    # {page}, {pages}
+    # Header:
+    # - PLACEHOLDERS >> {page}: the requested page, {pages}: amount of pages available
     header: "-- &bCPS leaderboard &7({page}/{pages}) --"
-    # {place}, {name}, {uuid}, {cps_best_date_millis}, {cps_best_date_formatted}
+    # Entry message:
+    # - PLACEHOLDERS >> player, info groups for each entry data, {place}: place in the leaderboard
     entry: "&7{place}. &b{id}&7: &b{cps_best} &7CPS"
-    # {page}, {pages}
+    # Footer:
+    # - PLACEHOLDERS >> {page}: the requested page, {pages}: amount of pages available
     footer: "&7---------- ({page}/{pages}) ----------"
+  # /cps watch [name]:
   watch:
+    # Error:
     error:
-      # {name}
+      # Attempting to watch an offline player:
+      # - PLACEHOLDERS >> {name}: the provided name
       player-offline: "&7[&bCPS&7] &cPlayer {name} is offline."
+      # Attempting to watch yourself:
       yourself: "&7[&bCPS&7] &cYou cannot watch yourself."
+      # Attempting to stop, but not watching anyone:
       not-watching: "&7[&bCPS&7] &cYou are not watching anyone."
-    # player
+    # Started watching:
+    # - PLACEHOLDERS >> player group
     start: "&7[&bCPS&7] &bStarted &7watching player &b{name}&7. Use this command again to toggle off."
-    # player
+    # Stopped watching:
+    # - PLACEHOLDERS >> player group
     stop: "&7[&bCPS&7] &bStopped &7watching player &b{name}&7."
-    # player
+    # Automatically stopped watching because the player disconnected:
+    # - PLACEHOLDERS >> player group
     disconnected: "&7[&bCPS&7] &bStopped &7watching player &b{name} &7- player disconnected."
+  # /cps delete <name|uuid|all>:
   delete: "&7[&bCPS&7] &7Deleted the requested data."
+  # /cps reload:
   reload: "&7[&bCPS&7] &7Plugin reloaded."
