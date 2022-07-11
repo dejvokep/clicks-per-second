@@ -18,8 +18,10 @@ public class ImmediateSampler extends Sampler {
 
     @Nullable
     public PlayerInfo addClick() {
+        // Time
+        long time = System.currentTimeMillis();
         // Add click
-        queue.add(System.currentTimeMillis());
+        queue.add(time);
 
         // Store
         int prev = previous;
@@ -28,7 +30,7 @@ public class ImmediateSampler extends Sampler {
 
         // If going down from peak and the peak was more than the best
         if (queue.size() < prev && prev > info.getCPS())
-            return setInfo(info.setCPS(prev, System.currentTimeMillis()));
+            return setInfo(info.setCPS(prev, time));
 
         // Nothing new
         return null;
@@ -45,7 +47,8 @@ public class ImmediateSampler extends Sampler {
     }
 
     public void clear() {
-        while (queue.size() > 0 && queue.peek() < System.currentTimeMillis() - 1000)
+        long time = System.currentTimeMillis() - 1000;
+        while (queue.size() > 0 && queue.peek() < time)
             queue.poll();
     }
 
