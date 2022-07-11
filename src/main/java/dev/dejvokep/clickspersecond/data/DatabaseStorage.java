@@ -24,8 +24,8 @@ public class DatabaseStorage extends DataStorage {
     private static final String SQL_SYNC = "INSERT INTO %s(uuid, cps, t, toggle) VALUES (?, ?, ?, ?) ON DUPLICATE KEY UPDATE cps = CASE WHEN cps < VALUES(cps) THEN VALUES(cps) ELSE cps END, t = CASE WHEN cps < VALUES(cps) THEN VALUES(t) ELSE t END, toggle = VALUES(toggle)";
     private static final String SQL_FETCH = "SELECT * FROM %s WHERE uuid=?";
     private static final String SQL_FETCH_ALL = "SELECT * FROM %s WHERE uuid IN (%s)";
-    private static final String SQL_LEADERBOARD_LIMITED = "SELECT * FROM %s ORDER BY cps LIMIT ?";
-    private static final String SQL_LEADERBOARD_LIMITLESS = "SELECT * FROM %s ORDER BY cps";
+    private static final String SQL_LEADERBOARD_LIMITED = "SELECT * FROM %s ORDER BY cps DESC LIMIT ?";
+    private static final String SQL_LEADERBOARD_LIMITLESS = "SELECT * FROM %s ORDER BY cps DESC";
     private static final long CACHE_CLEAR_DELAY = 20L;
 
     private final HikariDataSource dataSource;
@@ -297,8 +297,6 @@ public class DatabaseStorage extends DataStorage {
                 return null;
             }
 
-            // Sort
-            leaderboard.sort(Comparator.comparingInt(PlayerInfo::getCPS).reversed());
             // Return
             return leaderboard;
         });
