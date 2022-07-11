@@ -9,6 +9,7 @@ import org.jetbrains.annotations.Nullable;
  */
 public abstract class Sampler {
 
+    // Cached info
     protected PlayerInfo info;
 
     /**

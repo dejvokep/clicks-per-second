@@ -16,7 +16,9 @@ import java.util.UUID;
  */
 public abstract class ClickHandler<T extends Sampler> implements PlayerContainer {
 
+    // Samplers
     private final Map<UUID, T> samplers;
+    // Plugin
     private final ClicksPerSecond plugin;
 
     /**
@@ -48,7 +50,7 @@ public abstract class ClickHandler<T extends Sampler> implements PlayerContainer
         PlayerInfo info = samplers.remove(player.getUniqueId()).close();
         // Update
         if (info != null)
-            plugin.getDataStorage().update(info);
+            plugin.getDataStorage().sync(info);
     }
 
     /**
@@ -108,7 +110,7 @@ public abstract class ClickHandler<T extends Sampler> implements PlayerContainer
             return;
 
         // Update
-        plugin.getDataStorage().update(updated);
+        plugin.getDataStorage().sync(updated);
     }
 
     /**

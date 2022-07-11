@@ -30,12 +30,15 @@ public class BossBarDisplay implements Display {
      */
     private static final boolean BOSS_BAR_UNAVAILABLE = Bukkit.getBukkitVersion().contains("1.8");
 
+    // Players
     private final Map<Player, BossBar> bossBars = new HashMap<>();
-    private final ClicksPerSecond plugin;
 
+    // Internals
+    private final ClicksPerSecond plugin;
     private BukkitTask task;
     private VariableMessages<String> message;
 
+    // Properties
     private BarColor color;
     private BarStyle style;
     private BarFlag[] flags;

@@ -16,6 +16,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public class EventListener implements Listener {
 
+    // Plugin
     private final ClicksPerSecond plugin;
 
     /**

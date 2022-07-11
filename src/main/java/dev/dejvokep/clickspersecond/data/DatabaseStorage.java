@@ -16,28 +16,68 @@ import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.logging.Level;
 
+/**
+ * Implementation of {@link DataStorage} for databases (MySQL).
+ */
 public class DatabaseStorage extends DataStorage {
 
+    /**
+     * Statement for creating the database table.
+     */
     private static final String SQL_CREATE_TABLE = "CREATE TABLE IF NOT EXISTS %s(uuid CHAR(36), cps INT, t BIGINT(20) UNSIGNED, toggle BOOLEAN, PRIMARY KEY(uuid))";
+    /**
+     * Statement for deleting all data.
+     */
     private static final String SQL_DELETE_ALL = "DELETE FROM %s";
+    /**
+     * Statement for deleting specific data.
+     */
     private static final String SQL_DELETE = "DELETE FROM %s WHERE uuid=?";
+    /**
+     * Statement for syncing data.
+     */
     private static final String SQL_SYNC = "INSERT INTO %s(uuid, cps, t, toggle) VALUES (?, ?, ?, ?) ON DUPLICATE KEY UPDATE cps = CASE WHEN cps < VALUES(cps) THEN VALUES(cps) ELSE cps END, t = CASE WHEN cps < VALUES(cps) THEN VALUES(t) ELSE t END, toggle = VALUES(toggle)";
+    /**
+     * Statement for fetching specific data.
+     */
     private static final String SQL_FETCH = "SELECT * FROM %s WHERE uuid=?";
+    /**
+     * Statement for fetching all (multiple) data.
+     */
     private static final String SQL_FETCH_ALL = "SELECT * FROM %s WHERE uuid IN (%s)";
+    /**
+     * Statement for fetching limited leaderboard data.
+     */
     private static final String SQL_LEADERBOARD_LIMITED = "SELECT * FROM %s ORDER BY cps DESC LIMIT ?";
-    private static final String SQL_LEADERBOARD_LIMITLESS = "SELECT * FROM %s ORDER BY cps DESC";
+    /**
+     * Statement for fetching unlimited leaderboard data.
+     */
+    private static final String SQL_LEADERBOARD_UNLIMITED = "SELECT * FROM %s ORDER BY cps DESC";
+    /**
+     * Cache clear delay in ticks.
+     */
     private static final long CACHE_CLEAR_DELAY = 20L;
 
+    // Data source
     private final HikariDataSource dataSource;
     private final String table;
+
+    // Fetching
     private final long fetchExpiration, fetchRate;
     private final int fetchSize;
 
+    // Caching
     private final Map<UUID, PlayerInfo> cache = new HashMap<>();
     private final Queue<PlayerInfo> expirationQueue = new LinkedList<>();
 
+    // Fetch queue
     private Set<UUID> fetch = new HashSet<>();
 
+    /**
+     * Initializes the data storage.
+     *
+     * @param plugin the plugin
+     */
     public DatabaseStorage(@NotNull ClicksPerSecond plugin) {
         // Call
         super(plugin, "database");
@@ -117,12 +157,15 @@ public class DatabaseStorage extends DataStorage {
         });
     }
 
+    @Override
     public void queueFetch(@NotNull UUID uuid) {
+        // If cached
         if (cache.containsKey(uuid)) {
             passToSampler(cache.get(uuid));
             return;
         }
 
+        // Queue
         fetch.add(uuid);
 
         // If to fetch immediately or if passed the trigger
@@ -130,12 +173,13 @@ public class DatabaseStorage extends DataStorage {
             fetchAll();
     }
 
+    @Override
     public void skipFetch(@NotNull UUID uuid) {
         fetch.remove(uuid);
     }
 
-    @NotNull
     @Override
+    @NotNull
     public CompletableFuture<PlayerInfo> fetchSingle(@NotNull UUID uuid) {
         // If cached
         if (cache.containsKey(uuid))
@@ -163,8 +207,8 @@ public class DatabaseStorage extends DataStorage {
         });
     }
 
-    @NotNull
     @Override
+    @NotNull
     public CompletableFuture<Boolean> delete(@NotNull UUID uuid) {
         // Delete from cache
         cache.remove(uuid);
@@ -184,8 +228,8 @@ public class DatabaseStorage extends DataStorage {
         });
     }
 
-    @NotNull
     @Override
+    @NotNull
     public CompletableFuture<Boolean> deleteAll() {
         // Clear caches
         cache.clear();
@@ -204,25 +248,17 @@ public class DatabaseStorage extends DataStorage {
         });
     }
 
+    /**
+     * Fetches all queued requests.
+     */
     private void fetchAll() {
+        // Nothing to fetch
+        if (fetch.size() == 0)
+            return;
+
         // Replace
         Set<UUID> queued = fetch;
         fetch = new HashSet<>();
-
-        // Iterate
-        Iterator<UUID> iterator = queued.iterator();
-        while (iterator.hasNext()) {
-            // If cached
-            PlayerInfo info = cache.get(iterator.next());
-            if (info != null) {
-                passToSampler(info);
-                iterator.remove();
-            }
-        }
-
-        // Nothing to fetch
-        if (queued.size() == 0)
-            return;
 
         Bukkit.getScheduler().runTaskAsynchronously(getPlugin(), () -> {
             // Build the expression
@@ -260,13 +296,12 @@ public class DatabaseStorage extends DataStorage {
         });
     }
 
-    @NotNull
     @Override
+    @NotNull
     public CompletableFuture<List<PlayerInfo>> fetchLeaderboard(int limit) {
         return CompletableFuture.supplyAsync(() -> {
             // SQL statement
-            String sql = String.format(limit <= 0 ? SQL_LEADERBOARD_LIMITLESS : SQL_LEADERBOARD_LIMITED, table);
-
+            String sql = String.format(limit <= 0 ? SQL_LEADERBOARD_UNLIMITED : SQL_LEADERBOARD_LIMITED, table);
             // List
             List<PlayerInfo> leaderboard = new ArrayList<>();
 
@@ -313,6 +348,11 @@ public class DatabaseStorage extends DataStorage {
         return false;
     }
 
+    /**
+     * Refreshes the given info by caching it and {@link #passToSampler(PlayerInfo) passing to the sampler}.
+     *
+     * @param info the info to refresh
+     */
     private void refresh(@NotNull PlayerInfo info) {
         // Cache only if enabled
         if (fetchExpiration > 0) {

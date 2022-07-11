@@ -14,6 +14,7 @@ import java.util.HashMap;
  */
 public class RatedHandler extends ClickHandler<RatedSampler> {
 
+    // Rate in ticks
     private final int rate;
 
     /**
@@ -32,7 +33,7 @@ public class RatedHandler extends ClickHandler<RatedSampler> {
             PlayerInfo updated = sampler.reset();
             // Update
             if (updated != null)
-                plugin.getDataStorage().update(updated);
+                plugin.getDataStorage().sync(updated);
         }), rate, rate);
     }
 

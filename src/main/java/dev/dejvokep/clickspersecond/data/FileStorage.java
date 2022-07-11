@@ -18,11 +18,19 @@ import java.util.concurrent.CompletableFuture;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
 
+/**
+ * Implementation of {@link DataStorage} for files.
+ */
 public class FileStorage extends DataStorage {
 
     // File
     private YamlDocument file;
 
+    /**
+     * Initializes the data storage.
+     *
+     * @param plugin the plugin
+     */
     public FileStorage(@NotNull ClicksPerSecond plugin) {
         // Call
         super(plugin, "player-data.yml file");
@@ -39,8 +47,7 @@ public class FileStorage extends DataStorage {
 
     @Override
     public void sync(@NotNull Set<PlayerInfo> queued) {
-        // For each
-        // Note: No need to worry about delayed sync as fetching is immediate.
+        // For each (no need to worry about delayed sync as fetching is immediate)
         queued.forEach(info -> file.set(info.getUniqueId().toString(), info));
 
         // Save
@@ -61,14 +68,14 @@ public class FileStorage extends DataStorage {
         // Unused
     }
 
-    @NotNull
     @Override
+    @NotNull
     public CompletableFuture<PlayerInfo> fetchSingle(@NotNull UUID uuid) {
         return CompletableFuture.completedFuture(file.getAs(uuid.toString(), PlayerInfo.class, PlayerInfo.empty(uuid)));
     }
 
-    @NotNull
     @Override
+    @NotNull
     public CompletableFuture<Boolean> delete(@NotNull UUID uuid) {
         // Delete
         file.remove(uuid.toString());
@@ -85,8 +92,8 @@ public class FileStorage extends DataStorage {
         return CompletableFuture.completedFuture(true);
     }
 
-    @NotNull
     @Override
+    @NotNull
     public CompletableFuture<Boolean> deleteAll() {
         // Clear
         file.clear();
@@ -103,8 +110,8 @@ public class FileStorage extends DataStorage {
         return CompletableFuture.completedFuture(true);
     }
 
-    @NotNull
     @Override
+    @NotNull
     public CompletableFuture<List<PlayerInfo>> fetchLeaderboard(int limit) {
         return CompletableFuture.completedFuture(file.getStoredValue().values().stream().map(block -> (PlayerInfo) block.getStoredValue()).sorted(Comparator.comparingInt(PlayerInfo::getCPS).reversed()).collect(Collectors.toList()));
     }

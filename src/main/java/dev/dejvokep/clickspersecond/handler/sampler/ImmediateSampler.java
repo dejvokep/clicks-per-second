@@ -12,7 +12,9 @@ import java.util.concurrent.LinkedBlockingQueue;
  */
 public class ImmediateSampler extends Sampler {
 
+    // Click queue (by time)
     private final Queue<Long> queue = new LinkedBlockingQueue<>();
+    // Previous CPS
     private int previous = 0;
 
     /**

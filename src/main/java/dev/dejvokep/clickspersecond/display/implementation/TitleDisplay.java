@@ -29,9 +29,11 @@ public class TitleDisplay implements Display {
      */
     private static final boolean USE_PACKETS = Bukkit.getBukkitVersion().contains("1.8");
 
+    // Players
     private final Set<Player> players = new HashSet<>();
-    private final ClicksPerSecond plugin;
 
+    // Internals
+    private final ClicksPerSecond plugin;
     private BukkitTask task;
     private VariableMessages<TitleMessages> message;
     private int refresh;

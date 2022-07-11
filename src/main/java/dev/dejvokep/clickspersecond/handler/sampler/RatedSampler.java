@@ -9,7 +9,9 @@ import org.jetbrains.annotations.Nullable;
  */
 public class RatedSampler extends Sampler {
 
+    // Clicks
     private int clicks = 0, cps = 0, previous = 0;
+    // Rate in seconds
     private final double rate;
 
     /**

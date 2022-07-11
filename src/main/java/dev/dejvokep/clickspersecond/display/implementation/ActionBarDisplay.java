@@ -36,9 +36,11 @@ public class ActionBarDisplay implements Display {
      */
     private static final long MAX_REFRESH_RATE = 35L;
 
+    // Players
     private final Set<Player> players = new HashSet<>();
-    private final ClicksPerSecond plugin;
 
+    // Internals
+    private final ClicksPerSecond plugin;
     private BukkitTask task;
     private VariableMessages<String> message;
 
