@@ -76,7 +76,7 @@ public class EventListeners implements Listener {
 
     @EventHandler
     public void onClick(PlayerInteractEvent event) {
-        if (event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK && entityClicksOnly)
+        if (event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK && !entityClicksOnly)
             plugin.getClickHandler().processClick(event.getPlayer().getUniqueId());
     }
 
