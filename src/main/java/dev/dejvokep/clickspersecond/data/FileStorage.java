@@ -136,7 +136,7 @@ public class FileStorage extends DataStorage {
             @NotNull
             @Override
             public PlayerInfo deserialize(@NotNull Map<Object, Object> map) {
-                return PlayerInfo.from((UUID) map.get("uuid"), (int) map.get("cps"), (long) map.get("time"), (boolean) map.get("toggle"));
+                return PlayerInfo.from((UUID) map.get("uuid"), (int) map.get("cps"), (long) map.get("time"));
             }
         });
         StandardSerializer.getDefault().register("cps:player-info", PlayerInfo.class);

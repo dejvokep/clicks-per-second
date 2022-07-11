@@ -151,7 +151,7 @@ public class DatabaseStorage extends DataStorage {
                 ResultSet resultSet = statement.executeQuery();
 
                 // Info
-                PlayerInfo info = resultSet.next() ? PlayerInfo.from(uuid, resultSet.getInt(2), resultSet.getLong(3), resultSet.getBoolean(4)) : PlayerInfo.empty(uuid);
+                PlayerInfo info = resultSet.next() ? PlayerInfo.from(uuid, resultSet.getInt(2), resultSet.getLong(3)) : PlayerInfo.empty(uuid);
                 // Refresh
                 Bukkit.getScheduler().runTask(getPlugin(), () -> refresh(info));
                 return info;
@@ -249,7 +249,7 @@ public class DatabaseStorage extends DataStorage {
                     UUID uuid = UUID.fromString(resultSet.getString(1));
                     queued.remove(uuid);
                     // Construct
-                    fetched.add(PlayerInfo.from(uuid, resultSet.getInt(2), resultSet.getLong(3), resultSet.getBoolean(4)));
+                    fetched.add(PlayerInfo.from(uuid, resultSet.getInt(2), resultSet.getLong(3)));
                 }
 
                 // Refresh sync
@@ -284,7 +284,7 @@ public class DatabaseStorage extends DataStorage {
                 // While there's anything available
                 while (resultSet.next()) {
                     // Info
-                    PlayerInfo info = PlayerInfo.from(UUID.fromString(resultSet.getString(1)), resultSet.getInt(2), resultSet.getLong(3), resultSet.getBoolean(4));
+                    PlayerInfo info = PlayerInfo.from(UUID.fromString(resultSet.getString(1)), resultSet.getInt(2), resultSet.getLong(3));
                     // Refresh
                     fetched.add(info);
                     leaderboard.add(info);
