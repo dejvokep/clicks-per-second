@@ -26,6 +26,7 @@ import dev.dejvokep.clickspersecond.utils.placeholders.PlaceholderReplacer;
 import dev.dejvokep.clickspersecond.utils.placeholders.StatsExpansion;
 import dev.dejvokep.clickspersecond.utils.updater.Updater;
 import dev.dejvokep.clickspersecond.utils.watcher.WatchManager;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -125,6 +126,12 @@ public class ClicksPerSecond extends JavaPlugin implements Listener {
                 }
             });
         });
+
+        // If enabled
+        if (config.getBoolean("metrics")) {
+            getLogger().info("Initializing metrics.");
+            new Metrics(this, 15733);
+        }
     }
 
     @Override

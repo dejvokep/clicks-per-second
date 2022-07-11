@@ -55,6 +55,12 @@ database:
     keep-alive: 0
     lifetime: 1800000
 #
+# Enable metrics:
+# - Anonymous data sending including but not limited to country in which is the server hosted, number of cores, amount
+#   of players online. These statistics are used to determine the usage of the plugin and are freely viewable online.
+# - When changed, to take effect server restart is needed.
+metrics: true
+#
 # Display:
 # - PLACEHOLDERS >> All placeholders are available in the title, subtitle and messages. PlaceholderAPI placeholders can
 #                   also be enabled under placeholder.allow-placeholder-api.

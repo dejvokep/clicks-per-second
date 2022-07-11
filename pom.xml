@@ -42,6 +42,10 @@
                             <pattern>io.leangen.geantyref</pattern>
                             <shadedPattern>dev.dejvokep.clickspersecond.libs.io.leangen.geantyref</shadedPattern> <!-- Replace this -->
                         </relocation>
+                        <relocation>
+                            <pattern>org.bstats</pattern>
+                            <shadedPattern>dev.dejvokep.clickspersecond.libs.org.bstats</shadedPattern>
+                        </relocation>
                     </relocations>
                 </configuration>
                 <executions>
@@ -121,6 +125,13 @@
             <groupId>com.zaxxer</groupId>
             <artifactId>HikariCP</artifactId>
             <version>4.0.3</version>
+        </dependency>
+        <!-- bStats -->
+        <dependency>
+            <groupId>org.bstats</groupId>
+            <artifactId>bstats-bukkit</artifactId>
+            <version>3.0.0</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 
