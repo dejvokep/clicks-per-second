@@ -165,6 +165,12 @@ placeholder:
 #                only 0, 20 or higher.
 sampling-rate: 20
 #
+# If to only count clicks at another entity (during combat...):
+# - INFO >> The server has no specific way to register when a player clicks, so it must only be assumed from the events.
+#           With that being said, if there's an entity at the edge of your reach, and you click on it, that click is
+#           counted twice. Set to true to avoid this behaviour at the cost of only entity clicks being registered.
+entity-clicks-only: false
+#
 # Messages:
 messages:
   # Players only:

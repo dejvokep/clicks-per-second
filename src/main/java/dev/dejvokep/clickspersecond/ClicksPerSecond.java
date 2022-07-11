@@ -29,7 +29,7 @@ import dev.dejvokep.clickspersecond.display.implementation.TitleDisplay;
 import dev.dejvokep.clickspersecond.handler.ClickHandler;
 import dev.dejvokep.clickspersecond.handler.ImmediateHandler;
 import dev.dejvokep.clickspersecond.handler.RatedHandler;
-import dev.dejvokep.clickspersecond.listener.EventListener;
+import dev.dejvokep.clickspersecond.listener.EventListeners;
 import dev.dejvokep.boostedyaml.YamlDocument;
 import dev.dejvokep.boostedyaml.dvs.versioning.BasicVersioning;
 import dev.dejvokep.boostedyaml.settings.dumper.DumperSettings;
@@ -74,6 +74,7 @@ public class ClicksPerSecond extends JavaPlugin implements Listener {
     private ClickHandler<?> clickHandler;
     private PlaceholderReplacer placeholderReplacer;
     private WatchManager watchManager;
+    private EventListeners listeners;
     private Messenger messenger;
 
     @Override
@@ -132,7 +133,7 @@ public class ClicksPerSecond extends JavaPlugin implements Listener {
             // Back to sync
             Bukkit.getScheduler().runTask(this, () -> {
                 // Register listeners
-                Bukkit.getScheduler().runTask(this, () -> Bukkit.getPluginManager().registerEvents(new EventListener(this), this));
+                Bukkit.getScheduler().runTask(this, () -> Bukkit.getPluginManager().registerEvents(listeners = new EventListeners(this), this));
 
                 // Add all online players
                 for (Player player : Bukkit.getOnlinePlayers()) {
@@ -213,6 +214,15 @@ public class ClicksPerSecond extends JavaPlugin implements Listener {
     @NotNull
     public WatchManager getWatchManager() {
         return watchManager;
+    }
+
+    /**
+     * Returns the event listeners.
+     *
+     * @return the event listeners
+     */
+    public EventListeners getListeners() {
+        return listeners;
     }
 
     /**

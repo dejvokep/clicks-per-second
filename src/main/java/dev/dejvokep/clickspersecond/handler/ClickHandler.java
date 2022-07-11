@@ -113,13 +113,18 @@ public abstract class ClickHandler<T extends Sampler> implements PlayerContainer
     }
 
     /**
-     * Processes the given player's click.
+     * Processes click of {@link Player} represented by the given ID.
      *
-     * @param player the player
+     * @param uuid the ID
      */
-    public void processClick(@NotNull Player player) {
+    public void processClick(@NotNull UUID uuid) {
+        // Sampler
+        Sampler sampler = samplers.get(uuid);
+        // If null
+        if (sampler == null)
+            return;
         // Add click
-        PlayerInfo updated = samplers.get(player.getUniqueId()).addClick();
+        PlayerInfo updated = sampler.addClick();
         // No update
         if (updated == null)
             return;

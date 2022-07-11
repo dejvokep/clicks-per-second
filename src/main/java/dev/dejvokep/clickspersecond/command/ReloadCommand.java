@@ -52,6 +52,7 @@ public class ReloadCommand {
                     plugin.getDataStorage().reload();
                     plugin.getPlaceholderReplacer().reload();
                     plugin.getDisplays().forEach(Display::reload);
+                    plugin.getListeners().reload();
 
                     // Success
                     plugin.getMessenger().send(context, MESSAGE_PREFIX + "reload");
