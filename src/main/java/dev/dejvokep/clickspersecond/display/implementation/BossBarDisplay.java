@@ -20,22 +20,32 @@ import java.util.Objects;
 import java.util.function.Supplier;
 import java.util.logging.Level;
 
+/**
+ * Boss bar display.
+ */
 public class BossBarDisplay implements Display {
 
+    /**
+     * Indicates whether the boss bar feature is unavailable.
+     */
     private static final boolean BOSS_BAR_UNAVAILABLE = Bukkit.getBukkitVersion().contains("1.8");
 
+    private final Map<Player, BossBar> bossBars = new HashMap<>();
     private final ClicksPerSecond plugin;
 
-    private final Map<Player, BossBar> bossBars = new HashMap<>();
-
     private BukkitTask task;
+    private VariableMessages<String> message;
 
     private BarColor color;
     private BarStyle style;
     private BarFlag[] flags;
     private double progress;
-    private VariableMessages<String> message;
 
+    /**
+     * Initializes the display. Automatically calls {@link #reload()}.
+     *
+     * @param plugin the plugin
+     */
     public BossBarDisplay(@NotNull ClicksPerSecond plugin) {
         this.plugin = plugin;
         reload();
@@ -74,10 +84,6 @@ public class BossBarDisplay implements Display {
     }
 
     @Override
-    public void removeAll() {
-        bossBars.keySet().forEach(this::remove);
-    }
-
     public void reload() {
         // Config
         Section config = plugin.getConfiguration().getSection("display.boss-bar");
@@ -94,16 +100,26 @@ public class BossBarDisplay implements Display {
 
         // Set
         message = VariableMessages.of(plugin, config.getSection("message"));
-        color = map(() -> BarColor.valueOf(config.getString("color").toUpperCase()), BarColor.WHITE, "Boss bar color is invalid!");
-        style = map(() -> BarStyle.valueOf(config.getString("style").toUpperCase()), BarStyle.SOLID, "Boss bar style is invalid!");
-        flags = config.getStringList("flags").stream().map(flag -> map(() -> BarFlag.valueOf(flag.toUpperCase()), null, "Bar flag is invalid!")).filter(Objects::nonNull).toArray(BarFlag[]::new);
+        color = get(() -> BarColor.valueOf(config.getString("color").toUpperCase()), BarColor.WHITE, "Boss bar color is invalid!");
+        style = get(() -> BarStyle.valueOf(config.getString("style").toUpperCase()), BarStyle.SOLID, "Boss bar style is invalid!");
+        flags = config.getStringList("flags").stream().map(flag -> get(() -> BarFlag.valueOf(flag.toUpperCase()), null, "Bar flag is invalid!")).filter(Objects::nonNull).toArray(BarFlag[]::new);
         progress = clamp(config.getDouble("progress"), 0, 1);
         // Schedule
-        task = Bukkit.getScheduler().runTaskTimer(plugin, () -> bossBars.forEach((player, bossBar) -> bossBar.setTitle(message.get(player, (message, target) -> plugin.getPlaceholderReplacer().api(target, message)))), 0L, Math.max(config.getInt("refresh"), plugin.getClickHandler().getDisplayRate()));
+        task = Bukkit.getScheduler().runTaskTimer(plugin, () -> bossBars.forEach((player, bossBar) -> bossBar.setTitle(message.get(player, (message, target) -> plugin.getPlaceholderReplacer().api(target, message)))), 0L, Math.max(config.getInt("refresh"), plugin.getClickHandler().getMinDisplayRate()));
     }
 
+    /**
+     * Returns the value from the supplier, or the provided default if an {@link Exception exception} is thrown. In such
+     * case it is logged with the given message.
+     *
+     * @param supplier supplier of the value
+     * @param def      default value
+     * @param message  error message
+     * @param <T>      type of the value
+     * @return the value, or default as described above
+     */
     @Nullable
-    private <T> T map(@NotNull Supplier<T> supplier, @Nullable T def, @NotNull String message) {
+    private <T> T get(@NotNull Supplier<T> supplier, @Nullable T def, @NotNull String message) {
         // Try
         try {
             return supplier.get();
@@ -115,6 +131,19 @@ public class BossBarDisplay implements Display {
         return def;
     }
 
+    /**
+     * Clamps the value between the provided boundaries. More formally, if:
+     * <ul>
+     *     <li><code>value < min</code>, returns <code>min</code>,</li>
+     *     <li><code>min <= value <= max</code>, returns <code>value</code>,</li>
+     *     <li><code>value > max</code>, returns <code>max</code>.</li>
+     * </ul>
+     *
+     * @param value the value to clamp
+     * @param min   the min boundary
+     * @param max   the max boundary
+     * @return the clamped value
+     */
     private double clamp(double value, double min, double max) {
         return value < min ? min : Math.min(value, max);
     }

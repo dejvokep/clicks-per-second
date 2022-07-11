@@ -21,9 +21,20 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Level;
 
+/**
+ * Action bar display.
+ */
 public class ActionBarDisplay implements Display {
 
+    /**
+     * Indicates if to use packets to send action bar messages.
+     */
     private static final boolean USE_PACKETS = Bukkit.getBukkitVersion().contains("1.8") || Bukkit.getBukkitVersion().contains("1.9");
+
+    /**
+     * The max refresh rate (delay between each refresh).
+     */
+    private static final long MAX_REFRESH_RATE = 35L;
 
     private final Set<Player> players = new HashSet<>();
     private final ClicksPerSecond plugin;
@@ -31,6 +42,11 @@ public class ActionBarDisplay implements Display {
     private BukkitTask task;
     private VariableMessages<String> message;
 
+    /**
+     * Initializes the display. Automatically calls {@link #reload()}.
+     *
+     * @param plugin the plugin
+     */
     public ActionBarDisplay(@NotNull ClicksPerSecond plugin) {
         this.plugin = plugin;
         reload();
@@ -57,10 +73,6 @@ public class ActionBarDisplay implements Display {
     }
 
     @Override
-    public void removeAll() {
-        players.forEach(this::remove);
-    }
-
     public void reload() {
         // Config
         Section config = plugin.getConfiguration().getSection("display.action-bar");
@@ -78,10 +90,17 @@ public class ActionBarDisplay implements Display {
         // Set
         message = VariableMessages.of(plugin, config.getSection("message"));
         // Schedule
-        task = Bukkit.getScheduler().runTaskTimer(plugin, () -> players.forEach(player -> send(player, message.get(player, (message, target) -> plugin.getPlaceholderReplacer().api(target, message)))), 0L, Math.max(config.getInt("refresh"), plugin.getClickHandler().getDisplayRate()));
+        task = Bukkit.getScheduler().runTaskTimer(plugin, () -> players.forEach(player -> send(player, message.get(player, (message, target) -> plugin.getPlaceholderReplacer().api(target, message)))), 0L, Math.min(MAX_REFRESH_RATE, Math.max(config.getInt("refresh"), plugin.getClickHandler().getMinDisplayRate())));
     }
 
+    /**
+     * Sends the message to the given player.
+     *
+     * @param player  the player to send to
+     * @param message the message to send
+     */
     private void send(@NotNull Player player, @NotNull String message) {
+        // If not to use packets
         if (!USE_PACKETS) {
             player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(message));
             return;
@@ -98,7 +117,7 @@ public class ActionBarDisplay implements Display {
             // Send
             ProtocolLibrary.getProtocolManager().sendServerPacket(player, packet);
         } catch (InvocationTargetException ex) {
-            plugin.getLogger().log(Level.SEVERE, "Failed to send action bar!", ex);
+            plugin.getLogger().log(Level.SEVERE, "Failed to send an action bar message!", ex);
         }
     }
 }

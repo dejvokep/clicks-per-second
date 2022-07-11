@@ -19,18 +19,28 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Level;
 
+/**
+ * Title display.
+ */
 public class TitleDisplay implements Display {
 
+    /**
+     * Indicates if to use packets to send titles instead of the server API.
+     */
     private static final boolean USE_PACKETS = Bukkit.getBukkitVersion().contains("1.8");
 
     private final Set<Player> players = new HashSet<>();
-
     private final ClicksPerSecond plugin;
 
     private BukkitTask task;
     private VariableMessages<TitleMessages> message;
     private int refresh;
 
+    /**
+     * Initializes the display. Automatically calls {@link #reload()}.
+     *
+     * @param plugin the plugin
+     */
     public TitleDisplay(@NotNull ClicksPerSecond plugin) {
         this.plugin = plugin;
         reload();
@@ -38,27 +48,13 @@ public class TitleDisplay implements Display {
 
     @Override
     public void add(@NotNull Player player) {
-        // If the task is not running
-        if (task == null)
-            return;
-        // Add
         players.add(player);
     }
 
     @Override
     public void remove(@NotNull Player player) {
-        // If the task is not running
-        if (task == null)
-            return;
-
-        // Remove
         if (players.remove(player))
             clear(player);
-    }
-
-    @Override
-    public void removeAll() {
-        players.forEach(this::remove);
     }
 
     @Override
@@ -67,10 +63,8 @@ public class TitleDisplay implements Display {
         Section config = plugin.getConfiguration().getSection("display.title");
 
         // Cancel
-        if (task != null) {
+        if (task != null)
             task.cancel();
-            task = null;
-        }
 
         // If disabled
         if (!config.getBoolean("enabled") || (USE_PACKETS && !Bukkit.getPluginManager().isPluginEnabled("ProtocolLib")))
@@ -78,18 +72,34 @@ public class TitleDisplay implements Display {
 
         // Set
         message = VariableMessages.of(plugin, new TitleMessages(config.getSection("normal")), new TitleMessages(config.getSection("watching")));
-        refresh = Math.max(config.getInt("refresh"), plugin.getClickHandler().getDisplayRate());
+        refresh = Math.max(config.getInt("refresh"), plugin.getClickHandler().getMinDisplayRate());
         // Schedule
         task = Bukkit.getScheduler().runTaskTimer(plugin, () -> players.forEach(this::send), 0L, refresh);
     }
 
-    @SuppressWarnings("deprecation")
+    /**
+     * Sends the configured title to the given player.
+     *
+     * @param player the player to send to
+     */
     public void send(@NotNull Player player) {
-        // Replace
+        // Messages
         TitleMessages messages = message.get(player);
         String title = messages.getTitle(player);
         String subtitle = messages.getSubtitle(player);
+        // Send
+        send(player, title, subtitle);
+    }
 
+    /**
+     * Sends the given title to the given player.
+     *
+     * @param player   the player to send to
+     * @param title    the title to send
+     * @param subtitle the subtitle to send
+     */
+    @SuppressWarnings("deprecation")
+    public void send(@NotNull Player player, @NotNull String title, @NotNull String subtitle) {
         // If to not use packets
         if (!USE_PACKETS) {
             // Send
@@ -113,24 +123,49 @@ public class TitleDisplay implements Display {
         }
     }
 
-    @SuppressWarnings("deprecation")
+    /**
+     * Clears title for the specified player
+     *
+     * @param player the player to clear for
+     */
     public void clear(@NotNull Player player) {
-        player.sendTitle("", "");
+        send(player, "", "");
     }
 
+    /**
+     * Class used to store title messages (title + subtitle).
+     */
     private class TitleMessages {
         private final String title, subtitle;
 
-        private TitleMessages(@NotNull Section config) {
-            title = ChatColor.translateAlternateColorCodes('&', config.getString("title"));
-            subtitle = ChatColor.translateAlternateColorCodes('&', config.getString("subtitle"));
+        /**
+         * Initializes the title messages from the given section. The section must contain <code>title</code> and
+         * <code>subtitle</code>; color codes will automatically be translated.
+         *
+         * @param section the section to obtain the messages from
+         */
+        private TitleMessages(@NotNull Section section) {
+            title = ChatColor.translateAlternateColorCodes('&', section.getString("title"));
+            subtitle = ChatColor.translateAlternateColorCodes('&', section.getString("subtitle"));
         }
 
+        /**
+         * Returns the title to show to the given player. Placeholders are automatically translated.
+         *
+         * @param player the player to return for
+         * @return the title to show to the player
+         */
         @NotNull
         public String getTitle(@NotNull Player player) {
             return plugin.getPlaceholderReplacer().api(player, title);
         }
 
+        /**
+         * Returns the subtitle to show to the given player. Placeholders are automatically translated.
+         *
+         * @param player the player to return for
+         * @return the subtitle to show to the player
+         */
         @NotNull
         public String getSubtitle(@NotNull Player player) {
             return plugin.getPlaceholderReplacer().api(player, subtitle);
