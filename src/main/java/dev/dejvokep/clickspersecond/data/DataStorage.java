@@ -18,6 +18,7 @@ public abstract class DataStorage {
 
     private List<PlayerInfo> leaderboard = Collections.emptyList();
     private int leaderboardLimit;
+    private long leaderboardExpiration;
 
     private boolean ready = false;
 
@@ -37,6 +38,7 @@ public abstract class DataStorage {
 
         // Set
         this.leaderboardLimit = Math.max(plugin.getConfiguration().getInt("data.leaderboard.limit"), 1);
+        this.leaderboardExpiration = Math.max(plugin.getConfiguration().getLong("data.leaderboard.expiration"), 1L);
 
         // Schedule sync task
         syncTask = Bukkit.getScheduler().runTaskTimer(plugin, () -> {
@@ -53,14 +55,8 @@ public abstract class DataStorage {
             Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> sync(queued));
         }, 0L, Math.max(plugin.getConfiguration().getInt("data.sync-rate"), 1));
 
-        // Schedule leaderboard task
-        leaderboardTask = Bukkit.getScheduler().runTaskTimer(plugin, () -> {
-            // Not ready
-            if (!ready)
-                return;
-
-            fetchBoard(leaderboardLimit);
-        }, 0L, Math.max(plugin.getConfiguration().getLong("data.leaderboard.expiration"), 1L));
+        // Fetch leaderboard
+        fetchBoard();
     }
 
     protected void passToSampler(@NotNull PlayerInfo info) {
@@ -91,7 +87,16 @@ public abstract class DataStorage {
         // Fetch
         CompletableFuture<List<PlayerInfo>> board = fetchLeaderboard(limit);
         // Run internal logic
-        board.whenComplete((data, ex) -> Bukkit.getScheduler().runTask(plugin, () -> leaderboard = data == null ? Collections.emptyList() : data));
+        board.whenComplete((data, ex) -> Bukkit.getScheduler().runTask(plugin, () -> {
+            leaderboard = data == null ? Collections.emptyList() : data;
+            leaderboardTask = Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                // Not ready
+                if (!ready)
+                    return;
+
+                fetchBoard();
+            }, leaderboardExpiration);
+        }));
 
         // Return
         return board;
