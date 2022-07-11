@@ -24,6 +24,7 @@ import dev.dejvokep.boostedyaml.settings.updater.UpdaterSettings;
 import dev.dejvokep.clickspersecond.utils.messaging.Messenger;
 import dev.dejvokep.clickspersecond.utils.placeholders.PlaceholderReplacer;
 import dev.dejvokep.clickspersecond.utils.placeholders.StatsExpansion;
+import dev.dejvokep.clickspersecond.utils.updater.Updater;
 import dev.dejvokep.clickspersecond.utils.watcher.WatchManager;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -76,6 +77,7 @@ public class ClicksPerSecond extends JavaPlugin implements Listener {
         placeholderReplacer = new PlaceholderReplacer(this);
         watchManager = new WatchManager();
         messenger = new Messenger(this);
+        Updater.watch(this);
 
         // Handlers
         int samplingRate = Math.max(config.getInt("sampling-rate"), 0);
