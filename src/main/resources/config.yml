@@ -98,10 +98,14 @@ display:
   boss-bar:
     # Enabled:
     enabled: false
-    # Color (see https://hub.spigotmc.org/javadocs/spigot/org/bukkit/boss/BarColor.html)
+    # Color (see https://hub.spigotmc.org/javadocs/spigot/org/bukkit/boss/BarColor.html):
     color: WHITE
-    # Style (see https://hub.spigotmc.org/javadocs/spigot/org/bukkit/boss/BarStyle.html)
+    # Style (see https://hub.spigotmc.org/javadocs/spigot/org/bukkit/boss/BarStyle.html):
     style: SOLID
+    # Flags (see https://hub.spigotmc.org/javadocs/spigot/org/bukkit/boss/BarFlag.html):
+    flags: []
+    # Progress (between 0 = empty and 1 = full):
+    progress: 1
     # Messages:
     message:
       # Message to send during normal gameplay:
