@@ -39,7 +39,7 @@ public abstract class Sampler {
     /**
      * Resets the {@link #getInfo() cached info} and all CPS counters.
      */
-    public void reset() {
+    public void wipe() {
         info = PlayerInfo.empty(info.getUniqueId());
         resetCPS();
     }

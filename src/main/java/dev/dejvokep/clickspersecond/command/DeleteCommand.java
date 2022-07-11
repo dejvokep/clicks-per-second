@@ -59,7 +59,7 @@ public class DeleteCommand {
                     // Delete all
                     if (target.equals("*") || target.equals("all")) {
                         plugin.getMessenger().send(context, MESSAGE_REQUEST_SENT);
-                        plugin.getClickHandler().getSamplers().values().forEach(Sampler::reset);
+                        plugin.getClickHandler().getSamplers().values().forEach(Sampler::wipe);
                         plugin.getDataStorage().deleteAll().whenComplete((result, exception) -> handleResult(result, context));
                         return;
                     }
@@ -74,7 +74,7 @@ public class DeleteCommand {
                     // Delete
                     Sampler sampler = plugin.getClickHandler().getSampler(uuid);
                     if (sampler != null)
-                        sampler.reset();
+                        sampler.wipe();
                     plugin.getDataStorage().delete(uuid).whenComplete((result, exception) -> handleResult(result, context));
                 }).build());
     }
