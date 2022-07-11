@@ -54,7 +54,7 @@ public class ClicksPerSecond extends JavaPlugin implements Listener {
     private DataStorage dataStorage;
 
     // Internals
-    private ClickHandler clickHandler;
+    private ClickHandler<?> clickHandler;
     private PlaceholderReplacer placeholderReplacer;
     private WatchManager watchManager;
     private Messenger messenger;
@@ -157,7 +157,7 @@ public class ClicksPerSecond extends JavaPlugin implements Listener {
      * @return the click handler
      */
     @NotNull
-    public ClickHandler getClickHandler() {
+    public ClickHandler<?> getClickHandler() {
         return clickHandler;
     }
 

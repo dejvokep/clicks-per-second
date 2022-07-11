@@ -12,8 +12,17 @@ import java.util.concurrent.TimeUnit;
 import static dev.dejvokep.clickspersecond.utils.messaging.Messenger.MESSAGE_CONFIRM_NO_PENDING;
 import static dev.dejvokep.clickspersecond.utils.messaging.Messenger.MESSAGE_CONFIRM_REQUIRED;
 
+/**
+ * Handler for the <code>/cps confirm</code> command.
+ */
 public class ConfirmCommand {
 
+    /**
+     * Registers the command to the given manager.
+     *
+     * @param plugin  the plugin
+     * @param manager the manager
+     */
     public ConfirmCommand(@NotNull ClicksPerSecond plugin, @NotNull CommandManager<CommandSender> manager) {
         // Confirmation manager
         CommandConfirmationManager<CommandSender> confirmationManager = new CommandConfirmationManager<>(20L, TimeUnit.SECONDS, context ->

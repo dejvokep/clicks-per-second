@@ -12,8 +12,17 @@ import java.util.logging.Level;
 
 import static dev.dejvokep.clickspersecond.utils.messaging.Messenger.MESSAGE_PREFIX;
 
+/**
+ * Handler for the <code>/cps reload</code> command.
+ */
 public class ReloadCommand {
 
+    /**
+     * Registers the command to the given manager.
+     *
+     * @param plugin  the plugin
+     * @param manager the manager
+     */
     public ReloadCommand(@NotNull ClicksPerSecond plugin, @NotNull CommandManager<CommandSender> manager) {
         // Register
         manager.command(manager.commandBuilder("cps", "clickspersecond").literal("reload").permission("cps.reload")

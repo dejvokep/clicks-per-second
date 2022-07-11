@@ -13,8 +13,17 @@ import org.jetbrains.annotations.NotNull;
 import static dev.dejvokep.clickspersecond.utils.messaging.Messenger.MESSAGE_PLAYERS_ONLY;
 import static dev.dejvokep.clickspersecond.utils.messaging.Messenger.MESSAGE_PREFIX;
 
+/**
+ * Handler for the <code>/cps watch</code> command.
+ */
 public class WatchCommand {
 
+    /**
+     * Registers the command to the given manager.
+     *
+     * @param plugin  the plugin
+     * @param manager the manager
+     */
     public WatchCommand(@NotNull ClicksPerSecond plugin, @NotNull CommandManager<CommandSender> manager) {
         Messenger messenger = plugin.getMessenger();
 

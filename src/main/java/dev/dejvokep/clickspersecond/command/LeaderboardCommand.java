@@ -17,11 +17,21 @@ import java.util.function.Function;
 
 import static dev.dejvokep.clickspersecond.utils.messaging.Messenger.*;
 
+/**
+ * Handler for the <code>/cps leaderboard</code> command.
+ */
 public class LeaderboardCommand {
 
+    // Utilities
     private final ClicksPerSecond plugin;
     private final Messenger messenger;
 
+    /**
+     * Registers the command to the given manager.
+     *
+     * @param plugin  the plugin
+     * @param manager the manager
+     */
     public LeaderboardCommand(@NotNull ClicksPerSecond plugin, @NotNull CommandManager<CommandSender> manager) {
         this.plugin = plugin;
         this.messenger = plugin.getMessenger();
@@ -81,6 +91,18 @@ public class LeaderboardCommand {
                 }).build());
     }
 
+    /**
+     * Displays the leaderboard for the sender of the provided context.
+     *
+     * @param context      the command context
+     * @param board        the leaderboard
+     * @param perPage      how many entries to display per page
+     * @param page         page to display, greater than <code>0</code>
+     * @param pages        total amount of pages available
+     * @param pageReplacer page placeholders replacer
+     * @return if the leaderboard was displayed, <code>false</code> otherwise, indicating that the page number is out of
+     * range
+     */
     private boolean displayBoard(CommandContext<CommandSender> context, List<PlayerInfo> board, int perPage, int page, int pages, Function<String, String> pageReplacer) {
         // Invalid page number
         if (page > pages)

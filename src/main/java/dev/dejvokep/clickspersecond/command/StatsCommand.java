@@ -15,8 +15,17 @@ import java.util.UUID;
 
 import static dev.dejvokep.clickspersecond.utils.messaging.Messenger.*;
 
+/**
+ * Handler for the <code>/cps stats</code> command.
+ */
 public class StatsCommand {
 
+    /**
+     * Registers the command to the given manager.
+     *
+     * @param plugin  the plugin
+     * @param manager the manager
+     */
     public StatsCommand(@NotNull ClicksPerSecond plugin, @NotNull CommandManager<CommandSender> manager) {
         Messenger messenger = plugin.getMessenger();
 

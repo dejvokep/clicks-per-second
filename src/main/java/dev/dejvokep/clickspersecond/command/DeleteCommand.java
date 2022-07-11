@@ -15,10 +15,20 @@ import java.util.UUID;
 
 import static dev.dejvokep.clickspersecond.utils.messaging.Messenger.*;
 
+/**
+ * Handler for the <code>/cps delete</code> command.
+ */
 public class DeleteCommand {
 
+    // Plugin
     private final ClicksPerSecond plugin;
 
+    /**
+     * Registers the command to the given manager.
+     *
+     * @param plugin  the plugin
+     * @param manager the manager
+     */
     public DeleteCommand(@NotNull ClicksPerSecond plugin, @NotNull CommandManager<CommandSender> manager) {
         this.plugin = plugin;
 
@@ -49,17 +59,14 @@ public class DeleteCommand {
                 }).build());
     }
 
+    /**
+     * Handles the result by sending the appropriate message to the sender of the given context.
+     *
+     * @param result  the result of the operation
+     * @param context the command context
+     */
     private void handleResult(boolean result, CommandContext<CommandSender> context) {
-        Bukkit.getScheduler().runTask(plugin, () -> {
-            // If an error
-            if (!result) {
-                plugin.getMessenger().send(context, MESSAGE_REQUEST_ERROR);
-                return;
-            }
-
-            // Success
-            plugin.getMessenger().send(context, MESSAGE_PREFIX + "delete");
-        });
+        Bukkit.getScheduler().runTask(plugin, () -> plugin.getMessenger().send(context, result ? MESSAGE_PREFIX + "delete" : MESSAGE_REQUEST_ERROR));
     }
 
 }
