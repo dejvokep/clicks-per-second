@@ -195,9 +195,9 @@ public class DatabaseStorage extends DataStorage {
 
     @Override
     @NotNull
-    public CompletableFuture<PlayerInfo> fetchSingle(@NotNull UUID uuid) {
+    public CompletableFuture<PlayerInfo> fetchSingle(@NotNull UUID uuid, boolean skipCache) {
         // If cached
-        if (cache.containsKey(uuid))
+        if (cache.containsKey(uuid) && !skipCache)
             return CompletableFuture.completedFuture(cache.get(uuid));
 
         // Supply
@@ -308,6 +308,9 @@ public class DatabaseStorage extends DataStorage {
             } catch (SQLException ex) {
                 getPlugin().getLogger().log(Level.SEVERE, "Failed to fetch player information!", ex);
             }
+
+            // Refresh the remaining
+            Bukkit.getScheduler().runTask(getPlugin(), () -> queued.forEach(uuid -> refresh(PlayerInfo.empty(uuid))));
         });
     }
 

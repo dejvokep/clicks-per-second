@@ -206,11 +206,12 @@ public abstract class DataStorage {
      * <i>The returned future will not contain any exceptions under normal circumstances, so it is redundant to process
      * them.</i>
      *
-     * @param uuid the ID to fetch for
+     * @param uuid      the ID to fetch for
+     * @param skipCache if to skip cache checking, if any
      * @return the fetched info
      */
     @NotNull
-    public abstract CompletableFuture<PlayerInfo> fetchSingle(@NotNull UUID uuid);
+    public abstract CompletableFuture<PlayerInfo> fetchSingle(@NotNull UUID uuid, boolean skipCache);
 
     /**
      * Deletes a single info. Returns if the operation was successful.
