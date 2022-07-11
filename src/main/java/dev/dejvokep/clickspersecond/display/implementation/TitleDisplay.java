@@ -135,8 +135,8 @@ public class TitleDisplay implements Display {
             ProtocolLibrary.getProtocolManager().sendServerPacket(player, timings);
             // Send title via the API
             player.sendTitle(title, subtitle);
-        } catch (InvocationTargetException ex) {
-            plugin.getLogger().log(Level.SEVERE, "Failed to send title!", ex);
+        } catch (Exception ex) {
+            plugin.getLogger().log(Level.SEVERE, "Failed to send a title!", ex);
         }
     }
 

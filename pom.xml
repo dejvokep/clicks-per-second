@@ -23,7 +23,7 @@
 
     <!-- Artifact data -->
     <groupId>dev.dejvokep</groupId>
-    <artifactId>ClicksPerSecond</artifactId>
+    <artifactId>clicks-per-second</artifactId>
     <version>2.6</version>
     <developers>
         <developer>
@@ -33,9 +33,12 @@
             <url>https://dejvokep.dev</url>
         </developer>
     </developers>
+    <name>ClicksPerSecond</name>
+    <description>A fun way to measure player CPS, which competitively engages and entertains your community.</description>
 
     <!-- Build configuration -->
     <build>
+        <finalName>${project.name}-${project.version}</finalName>
         <resources>
             <resource>
                 <targetPath>.</targetPath>
@@ -179,7 +182,8 @@
         <dependency>
             <groupId>com.comphenix.protocol</groupId>
             <artifactId>ProtocolLib</artifactId>
-            <version>4.8.0</version>
+            <version>5.0.0-SNAPSHOT</version>
+            <scope>provided</scope>
         </dependency>
         <!-- HikariCP (4.0.3 is for JRE 8) -->
         <dependency>

@@ -133,7 +133,7 @@ public class ActionBarDisplay implements Display {
             packet.getChatComponents().write(0, WrappedChatComponent.fromText(message));
             // Send
             ProtocolLibrary.getProtocolManager().sendServerPacket(player, packet);
-        } catch (InvocationTargetException ex) {
+        } catch (Exception ex) {
             plugin.getLogger().log(Level.SEVERE, "Failed to send an action bar message!", ex);
         }
     }
