@@ -162,9 +162,9 @@ placeholder:
 #
 # Sampling rate in ticks:
 # - INFO >> The lower sampling rate, the higher demands on server processing power. Rate of 0 indicates immediate
-#           sampling, which will compute CPS non-stop according to your clicks (the best user experience). Rates 1 and higher
-#           represent rated sampling, which simply divides time into periods (each equally long according to the rate)
-#           and then computes CPS from the amount of times you've clicked during that period.
+#           sampling, which will compute CPS non-stop according to your clicks (the best user experience). Rates 1 and
+#           higher represent rated sampling, which simply divides time into periods (each equally long according to the
+#           rate) and then computes CPS from the amount of times you've clicked during that period.
 # - IMPORTANT >> Use of values between 0 and 20 will lead to imprecise calculations, you should avoid those rates. Use
 #                only 0, 20 or higher.
 sampling-rate: 20
