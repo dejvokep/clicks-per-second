@@ -15,9 +15,12 @@
  */
 package dev.dejvokep.clickspersecond.command;
 
+import cloud.commandframework.ArgumentDescription;
 import cloud.commandframework.CommandManager;
 import cloud.commandframework.arguments.standard.StringArgument;
 import cloud.commandframework.meta.CommandMeta;
+import cloud.commandframework.permission.CommandPermission;
+import cloud.commandframework.permission.Permission;
 import dev.dejvokep.clickspersecond.ClicksPerSecond;
 import dev.dejvokep.clickspersecond.utils.messaging.Messenger;
 import dev.dejvokep.clickspersecond.utils.player.UUIDFactory;
@@ -47,11 +50,14 @@ public class StatsCommand {
 
         manager.command(manager.commandBuilder("cps", "clickspersecond").literal("stats").permission("cps.stats")
                 .argument(StringArgument.optional("name|uuid"))
+                .flag(manager.flagBuilder("refresh").withAliases("r").withDescription(ArgumentDescription.of("initiate refresh")).withPermission(Permission.of("cps.stats.refresh")))
                 .meta(CommandMeta.DESCRIPTION, "Displays player statistics either by name or UUID.")
                 .handler(context -> {
                     // ID
                     String id = context.getOrDefault("name|uuid", null);
                     UUID uuid;
+                    // Refresh
+                    boolean refresh = context.flags().isPresent("refresh");
 
                     // ID not provided
                     if (id == null) {
@@ -73,7 +79,7 @@ public class StatsCommand {
                     // Sampler
                     Sampler sampler = plugin.getClickHandler().getSampler(uuid);
                     // Online
-                    if (sampler != null) {
+                    if (sampler != null && !refresh) {
                         // Loading
                         if (sampler.getInfo().isLoading()) {
                             messenger.send(context, MESSAGE_REQUEST_PENDING);
@@ -92,14 +98,14 @@ public class StatsCommand {
                     }
 
                     // If not instant fetch and no permission
-                    if (!plugin.getDataStorage().isInstantFetch() && !context.hasPermission("cps.stats.fetch")) {
+                    if (!refresh && !plugin.getDataStorage().isInstantFetch() && !context.hasPermission("cps.stats.fetch")) {
                         messenger.send(context, MESSAGE_PREFIX + "stats.not-found", message -> plugin.getPlaceholderReplacer().player(uuid, message));
                         return;
                     }
 
                     // Fetch
                     messenger.send(context, MESSAGE_REQUEST_SENT);
-                    plugin.getDataStorage().fetchSingle(uuid).whenComplete((info, exception) -> Bukkit.getScheduler().runTask(plugin, () -> {
+                    plugin.getDataStorage().fetchSingle(uuid, refresh).whenComplete((info, exception) -> Bukkit.getScheduler().runTask(plugin, () -> {
                         // If an error
                         if (info == null) {
                             messenger.send(context, MESSAGE_REQUEST_ERROR);
