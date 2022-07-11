@@ -169,6 +169,7 @@ sampling-rate: 20
 # - INFO >> The server has no specific way to register when a player clicks, so it must only be assumed from the events.
 #           With that being said, if there's an entity at the edge of your reach, and you click on it, that click is
 #           counted twice. Set to true to avoid this behaviour at the cost of only entity clicks being registered.
+#           However, enabling this is also good for PvP servers if you only want to show CPS from combat only.
 entity-clicks-only: false
 #
 # Messages:
