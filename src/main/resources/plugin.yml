@@ -1,13 +1,9 @@
-name: ClicksPerSecond
-version: 2.5
-author: davidcubesvk
-main: com.davidcubesvk.clicksPerSecond.ClicksPerSecond
+name: ${project.name}
+version: ${project.version}
+author: dejvokep
+main: dev.dejvokep.clickspersecond.ClicksPerSecond
+description: ${project.description}
 api-version: 1.13
 softdepend:
   - PlaceholderAPI
-depend:
   - ProtocolLib
-commands:
-  cps:
-    description: "Main command of ClicksPerSecond plugin."
-    usage: /cps
