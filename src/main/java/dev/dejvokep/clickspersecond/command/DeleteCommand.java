@@ -34,11 +34,11 @@ public class DeleteCommand {
 
         // Register
         manager.command(manager.commandBuilder("cps", "clickspersecond").literal("delete").permission("cps.delete")
-                .argument(StringArgument.single("target"))
+                .argument(StringArgument.single("name|uuid|all"))
                 .meta(CommandMeta.DESCRIPTION, "Deletes all or individual player data (identified by name or UUID) from the currently used data source.")
                 .meta(CommandConfirmationManager.META_CONFIRMATION_REQUIRED, true).handler(context -> {
                     // The target
-                    String target = context.get("target");
+                    String target = context.get("name|uuid|all");
 
                     // Delete all
                     if (target.equals("*") || target.equals("all")) {

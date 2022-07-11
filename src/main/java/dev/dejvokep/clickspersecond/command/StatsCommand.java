@@ -9,6 +9,7 @@ import dev.dejvokep.clickspersecond.utils.player.UUIDFactory;
 import dev.dejvokep.clickspersecond.handler.sampler.Sampler;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
@@ -30,15 +31,28 @@ public class StatsCommand {
         Messenger messenger = plugin.getMessenger();
 
         manager.command(manager.commandBuilder("cps", "clickspersecond").literal("stats").permission("cps.stats")
-                .argument(StringArgument.single("id"))
+                .argument(StringArgument.optional("name|uuid"))
                 .meta(CommandMeta.DESCRIPTION, "Displays player statistics either by name or UUID.")
                 .handler(context -> {
-                    // Parse UUID
-                    String id = context.get("id");
-                    UUID uuid = UUIDFactory.fromArgument(id);
-                    if (uuid == null) {
-                        messenger.send(context, MESSAGE_INVALID_NAME, message -> message.replace("{name}", id));
-                        return;
+                    // ID
+                    String id = context.getOrDefault("name|uuid", null);
+                    UUID uuid;
+
+                    // ID not provided
+                    if (id == null) {
+                        // Not a player
+                        if (!(context.getSender() instanceof Player)) {
+                            messenger.send(context, MESSAGE_PLAYERS_ONLY);
+                            return;
+                        }
+                        uuid = ((Player) context.getSender()).getUniqueId();
+                    } else {
+                        // Parse UUID
+                        uuid = UUIDFactory.fromArgument(id);
+                        if (uuid == null) {
+                            messenger.send(context, MESSAGE_INVALID_NAME, message -> message.replace("{name}", id));
+                            return;
+                        }
                     }
 
                     // Sampler
