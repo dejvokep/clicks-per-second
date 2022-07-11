@@ -43,7 +43,7 @@ public class ImmediateHandler extends ClickHandler<ImmediateSampler> {
                 while (true)
                     getSamplers().forEach((player, sampler) -> sampler.clear());
             }
-        }.runTask(plugin);
+        }.runTaskAsynchronously(plugin);
     }
 
     @Override
