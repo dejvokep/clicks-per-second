@@ -12,7 +12,7 @@ import java.util.Map;
 import java.util.UUID;
 
 /**
- * Abstract class for click and CPS handlers.
+ * An abstract class for click and CPS handlers.
  */
 public abstract class ClickHandler<T extends Sampler> implements PlayerContainer {
 

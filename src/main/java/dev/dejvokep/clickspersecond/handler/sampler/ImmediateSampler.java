@@ -7,15 +7,24 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Queue;
 import java.util.concurrent.LinkedBlockingQueue;
 
+/**
+ * Implementation of {@link Sampler} which has instant CPS sampling with queues.
+ */
 public class ImmediateSampler extends Sampler {
 
     private final Queue<Long> queue = new LinkedBlockingQueue<>();
     private int previous = 0;
 
+    /**
+     * Initializes the sampler with the given initial info.
+     *
+     * @param info the initial info
+     */
     public ImmediateSampler(@NotNull PlayerInfo info) {
         super(info);
     }
 
+    @Override
     @Nullable
     public PlayerInfo addClick() {
         // Time
@@ -42,10 +51,14 @@ public class ImmediateSampler extends Sampler {
         return previous > info.getCPS() ? info.setCPS(previous, System.currentTimeMillis()) : null;
     }
 
+    @Override
     public int getCPS() {
         return queue.size();
     }
 
+    /**
+     * Removes outdated clicks (older than 1 second) from the click queue.
+     */
     public void clear() {
         long time = System.currentTimeMillis() - 1000;
         while (queue.size() > 0 && queue.peek() < time)

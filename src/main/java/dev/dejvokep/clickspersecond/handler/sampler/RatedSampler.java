@@ -4,16 +4,26 @@ import dev.dejvokep.clickspersecond.utils.player.PlayerInfo;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * Implementation of {@link Sampler} which has rated CPS sampling.
+ */
 public class RatedSampler extends Sampler {
 
     private int clicks = 0, cps = 0, previous = 0;
     private final double rate;
 
+    /**
+     * Initializes the sampler.
+     *
+     * @param tickRate sampling rate (length of each sampling period) in ticks
+     * @param info     the initial info
+     */
     public RatedSampler(int tickRate, @NotNull PlayerInfo info) {
         super(info);
         rate = (double) tickRate / 20;
     }
 
+    @Override
     @Nullable
     public PlayerInfo addClick() {
         // Add click
@@ -28,10 +38,20 @@ public class RatedSampler extends Sampler {
         return previous > info.getCPS() ? info.setCPS(previous, System.currentTimeMillis()) : null;
     }
 
+    @Override
     public int getCPS() {
         return cps;
     }
 
+    /**
+     * Resets the sampler to new sampling period.
+     * <p>
+     * If current CPS are lower than the previous, but higher than the record, {@link #setInfo(PlayerInfo) sets} and
+     * returns the new info, which should be uploaded to the data storage. If there are no updates, returns
+     * <code>null</code>.
+     *
+     * @return the information to upload, if any
+     */
     @Nullable
     public PlayerInfo reset() {
         // Store

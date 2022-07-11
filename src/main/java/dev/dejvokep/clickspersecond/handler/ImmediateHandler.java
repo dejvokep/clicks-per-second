@@ -9,8 +9,16 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * Implementation of {@link ClickHandler} which has instant CPS sampling with queues.
+ */
 public class ImmediateHandler extends ClickHandler<ImmediateSampler> {
 
+    /**
+     * Initializes the handler.
+     *
+     * @param plugin the plugin
+     */
     public ImmediateHandler(@NotNull ClicksPerSecond plugin) {
         super(plugin, new ConcurrentHashMap<>());
 

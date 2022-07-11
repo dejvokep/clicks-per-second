@@ -9,10 +9,19 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 
+/**
+ * Implementation of {@link ClickHandler} which has rated CPS sampling.
+ */
 public class RatedHandler extends ClickHandler<RatedSampler> {
 
     private final int rate;
 
+    /**
+     * Initializes the handler.
+     *
+     * @param plugin the plugin
+     * @param rate   the sampling rate
+     */
     public RatedHandler(@NotNull ClicksPerSecond plugin, int rate) {
         super(plugin, new HashMap<>());
         this.rate = rate;
