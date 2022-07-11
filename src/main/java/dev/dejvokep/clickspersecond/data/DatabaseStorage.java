@@ -316,8 +316,11 @@ public class DatabaseStorage extends DataStorage {
     }
 
     private void refresh(@NotNull PlayerInfo info) {
-        cache.put(info.getUniqueId(), info);
-        expirationQueue.add(info);
+        // Cache only if enabled
+        if (fetchExpiration > 0) {
+            cache.put(info.getUniqueId(), info);
+            expirationQueue.add(info);
+        }
         passToSampler(info);
     }
 }
