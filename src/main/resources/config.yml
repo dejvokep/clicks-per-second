@@ -169,8 +169,6 @@ sampling-rate: 20
 messages:
   # Players only:
   players-only: "&7[&bCPS&7] &cCommand only for players."
-  # No permission (recommended not to change):
-  no-permission: "&cI'm sorry, but you do not have permission to perform this command. Please contact the server administrators if you believe that this is an error."
   # Invalid name (when name has been used as the parameter but the referenced player has not yet played on the server):
   # - PLACEHOLDERS >> {name}: the provided name
   invalid-name: "&7[&bCPS&7] &cCould not obtain UUID from player '{name}', has he played on the server already?"
@@ -188,7 +186,7 @@ messages:
     required: "&7[&bCPS&7] &7Confirmation required! Please use &b/cps confirm &7within &b20 seconds &7to confirm the operation."
     # No confirmation pending:
     not-pending: "&7[&bCPS&7] &cThere are not any pending confirmations."
-  # /cps stats [uuid|name]:
+  # /cps stats [uuid|name] [-refresh]:
   stats:
     # If there are no data:
     # - PLACEHOLDERS >> player group
@@ -199,7 +197,7 @@ messages:
     # If the target player is online:
     # - PLACEHOLDERS >> all group
     online: "&7[&bCPS&7] &7Statistics of player &b{name}&7: now &b{cps_now} CPS&7, best &b{cps_best} CPS &7at {cps_best_date_formatted}"
-  # /cps leaderboard [page] -fetch -refresh:
+  # /cps leaderboard [page] [-fetch] [-refresh]:
   leaderboard:
     # Invalid page:
     # - PLACEHOLDERS >> {page}: the requested page, {pages}: amount of pages available
@@ -208,7 +206,7 @@ messages:
     entries-per-page: 20
     # Header:
     # - PLACEHOLDERS >> {page}: the requested page, {pages}: amount of pages available
-    header: "-- &bCPS leaderboard &7({page}/{pages}) --"
+    header: "&7-- &bCPS leaderboard &7({page}/{pages}) --"
     # Entry message:
     # - PLACEHOLDERS >> player, info groups for each entry data, {place}: place in the leaderboard
     entry: "&7{place}. &b{id}&7: &b{cps_best} &7CPS"

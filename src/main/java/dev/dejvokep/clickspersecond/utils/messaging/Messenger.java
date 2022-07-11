@@ -34,11 +34,6 @@ public class Messenger {
      * Message path prefix.
      */
     public static final String MESSAGE_PREFIX = "messages.";
-
-    /**
-     * "No permission" message path.
-     */
-    public static final String MESSAGE_NO_PERMISSION = MESSAGE_PREFIX + "no-permission";
     /**
      * "Players only" message path.
      */
