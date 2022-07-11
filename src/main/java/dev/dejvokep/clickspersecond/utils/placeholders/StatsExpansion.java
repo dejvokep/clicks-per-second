@@ -13,11 +13,19 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Expansion for PlaceholderAPI.
+ */
 public class StatsExpansion extends PlaceholderExpansion {
 
     private final ClicksPerSecond plugin;
     private final PlaceholderReplacer replacer;
 
+    /**
+     * Initializes (but does not register) the statistics expansion.
+     *
+     * @param plugin the plugin
+     */
     public StatsExpansion(@NotNull ClicksPerSecond plugin) {
         this.plugin = plugin;
         this.replacer = plugin.getPlaceholderReplacer();
@@ -30,17 +38,20 @@ public class StatsExpansion extends PlaceholderExpansion {
         params = params.toLowerCase();
 
         // Requesting current CPS
-        if (params.equals("now"))
-            return player.isOnline() ? convertToUnknown(plugin.getClickHandler().getCPS((Player) player), -1) : replacer.getUnknownValue();
+        if (params.equals("now") && player != null)
+            return player instanceof Player ? convertToUnknown(plugin.getClickHandler().getCPS((Player) player), -1) : replacer.getUnknownValue();
 
         // Requesting best CPS
-        if (params.startsWith("best")) {
+        if (params.startsWith("best") && player != null) {
             PlayerInfo info = Objects.requireNonNull(plugin.getClickHandler().getInfo(player.getUniqueId()));
             if (info.isLoading())
                 return replacer.getUnknownValue();
 
             if (params.equals("best_cps"))
                 return String.valueOf(info.getCPS());
+            if (info.isEmpty())
+                return replacer.getUnknownValue();
+
             if (params.equals("best_date_millis"))
                 return String.valueOf(info.getTime());
             if (params.equals("best_date") || params.equals("best_date_formatted"))
@@ -109,6 +120,15 @@ public class StatsExpansion extends PlaceholderExpansion {
         return replacer.getUnknownValue();
     }
 
+    /**
+     * Converts the given value to {@link PlaceholderReplacer#getUnknownValue() unknown}, if it equals the condition or
+     * is <code>null</code>.
+     *
+     * @param value     value to convert, if needed
+     * @param condition condition
+     * @param <T>       type of the value and condition
+     * @return the string representation of the value, or {@link PlaceholderReplacer#getUnknownValue() unknown}
+     */
     private <T> String convertToUnknown(@Nullable T value, @NotNull T condition) {
         return value == null || value.equals(condition) ? replacer.getUnknownValue() : value.toString();
     }

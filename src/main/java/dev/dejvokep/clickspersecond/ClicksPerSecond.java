@@ -93,6 +93,7 @@ public class ClicksPerSecond extends JavaPlugin implements Listener {
             getLogger().info("Registered plugin's placeholders to PlaceholderAPI.");
         }
 
+        // Commands
         try {
             CommandManager<CommandSender> commandManager = new BukkitCommandManager<>(this, CommandExecutionCoordinator.simpleCoordinator(), Function.identity(), Function.identity());
             new StatsCommand(this, commandManager);

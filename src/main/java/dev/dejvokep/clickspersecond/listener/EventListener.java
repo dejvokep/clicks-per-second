@@ -11,10 +11,18 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Class containing event listeners necessary for the plugin.
+ */
 public class EventListener implements Listener {
 
     private final ClicksPerSecond plugin;
 
+    /**
+     * Initializes (but does not register) this event listener.
+     *
+     * @param plugin the plugin
+     */
     public EventListener(@NotNull ClicksPerSecond plugin) {
         this.plugin = plugin;
     }

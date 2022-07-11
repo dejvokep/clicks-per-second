@@ -57,11 +57,6 @@ public class RatedHandler implements ClickHandler {
     }
 
     @Override
-    public void removeAll() {
-        samplers.forEach((uuid, sampler) -> remove(Objects.requireNonNull(Bukkit.getPlayer(uuid))));
-    }
-
-    @Override
     public void setFetchedInfo(@NotNull PlayerInfo info) {
         Sampler sampler = samplers.get(info.getUniqueId());
         if (sampler != null)
