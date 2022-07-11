@@ -73,6 +73,12 @@ public class ImmediateSampler extends Sampler {
         return queue.size();
     }
 
+    @Override
+    public void resetCPS() {
+        queue.clear();
+        previous = 0;
+    }
+
     /**
      * Removes outdated clicks (older than 1 second) from the click queue.
      */

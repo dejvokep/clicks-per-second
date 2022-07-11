@@ -21,6 +21,7 @@ import cloud.commandframework.context.CommandContext;
 import cloud.commandframework.extra.confirmation.CommandConfirmationManager;
 import cloud.commandframework.meta.CommandMeta;
 import dev.dejvokep.clickspersecond.ClicksPerSecond;
+import dev.dejvokep.clickspersecond.handler.sampler.Sampler;
 import dev.dejvokep.clickspersecond.utils.player.UUIDFactory;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -58,6 +59,7 @@ public class DeleteCommand {
                     // Delete all
                     if (target.equals("*") || target.equals("all")) {
                         plugin.getMessenger().send(context, MESSAGE_REQUEST_SENT);
+                        plugin.getClickHandler().getSamplers().values().forEach(Sampler::reset);
                         plugin.getDataStorage().deleteAll().whenComplete((result, exception) -> handleResult(result, context));
                         return;
                     }
@@ -69,7 +71,10 @@ public class DeleteCommand {
                         return;
                     }
 
-                    // Delete single
+                    // Delete
+                    Sampler sampler = plugin.getClickHandler().getSampler(uuid);
+                    if (sampler != null)
+                        sampler.reset();
                     plugin.getDataStorage().delete(uuid).whenComplete((result, exception) -> handleResult(result, context));
                 }).build());
     }

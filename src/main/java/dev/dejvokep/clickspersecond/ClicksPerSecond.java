@@ -29,6 +29,7 @@ import dev.dejvokep.clickspersecond.display.implementation.TitleDisplay;
 import dev.dejvokep.clickspersecond.handler.ClickHandler;
 import dev.dejvokep.clickspersecond.handler.ImmediateHandler;
 import dev.dejvokep.clickspersecond.handler.RatedHandler;
+import dev.dejvokep.clickspersecond.handler.sampler.Sampler;
 import dev.dejvokep.clickspersecond.listener.EventListeners;
 import dev.dejvokep.boostedyaml.YamlDocument;
 import dev.dejvokep.boostedyaml.dvs.versioning.BasicVersioning;
@@ -71,7 +72,7 @@ public class ClicksPerSecond extends JavaPlugin implements Listener {
     private DataStorage dataStorage;
 
     // Internals
-    private ClickHandler<?> clickHandler;
+    private ClickHandler<? extends Sampler> clickHandler;
     private PlaceholderReplacer placeholderReplacer;
     private WatchManager watchManager;
     private EventListeners listeners;
@@ -182,7 +183,7 @@ public class ClicksPerSecond extends JavaPlugin implements Listener {
      * @return the click handler
      */
     @NotNull
-    public ClickHandler<?> getClickHandler() {
+    public ClickHandler<? extends Sampler> getClickHandler() {
         return clickHandler;
     }
 

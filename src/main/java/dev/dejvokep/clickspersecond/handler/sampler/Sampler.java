@@ -37,6 +37,14 @@ public abstract class Sampler {
     }
 
     /**
+     * Resets the {@link #getInfo() cached info} and all CPS counters.
+     */
+    public void reset() {
+        info = PlayerInfo.empty(info.getUniqueId());
+        resetCPS();
+    }
+
+    /**
      * Adds click to the sampler and returns new information needed to upload to the data storage, if any.
      *
      * @return the information to upload, if any
@@ -58,6 +66,11 @@ public abstract class Sampler {
      * @return the sampled CPS
      */
     public abstract int getCPS();
+
+    /**
+     * Resets currently sampled CPS.
+     */
+    protected abstract void resetCPS();
 
     /**
      * Sets the given info for the sampler and returns it.

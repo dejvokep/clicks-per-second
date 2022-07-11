@@ -157,7 +157,7 @@ public abstract class ClickHandler<T extends Sampler> implements PlayerContainer
      *
      * @return the samplers
      */
-    protected Map<UUID, T> getSamplers() {
+    public Map<UUID, T> getSamplers() {
         return samplers;
     }
 

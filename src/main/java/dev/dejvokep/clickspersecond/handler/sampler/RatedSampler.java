@@ -60,6 +60,11 @@ public class RatedSampler extends Sampler {
         return cps;
     }
 
+    @Override
+    public void resetCPS() {
+        clicks = cps = previous = 0;
+    }
+
     /**
      * Resets the sampler to new sampling period.
      * <p>
