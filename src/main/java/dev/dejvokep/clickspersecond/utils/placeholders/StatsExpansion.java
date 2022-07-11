@@ -58,8 +58,8 @@ public class StatsExpansion extends PlaceholderExpansion {
 
         // Requesting best CPS
         if (params.startsWith("best") && player != null) {
-            PlayerInfo info = Objects.requireNonNull(plugin.getClickHandler().getInfo(player.getUniqueId()));
-            if (info.isLoading())
+            PlayerInfo info = plugin.getClickHandler().getInfo(player.getUniqueId());
+            if (info == null || info.isLoading())
                 return replacer.getUnknownValue();
 
             if (params.equals("best_cps"))
